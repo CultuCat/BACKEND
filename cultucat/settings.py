@@ -76,11 +76,14 @@ WSGI_APPLICATION = 'cultucat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': ‘<db_name>’,
-        'USER': '<db_username>',
-        'PASSWORD': '<password>',
-        'HOST': '<db_hostname_or_ip>',
+        'NAME': 'cultucatbd',
+        'USER': 'admin',
+        'PASSWORD': 'pes04',
+        'HOST': '147.83.148.217',
         'PORT': '40390',
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
     }
 }
 
