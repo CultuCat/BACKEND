@@ -77,13 +77,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'cultucatbd',
-        'USER': 'admin',
+        'USER': 'postgres',
         'PASSWORD': 'pes04',
-        'HOST': '147.83.148.217',
-        'PORT': '40390',
-        'OPTIONS': {
-            'sslmode': 'require',
-        }
+        'HOST': "147.83.148.217",
+        'PORT': '40393'
     }
 }
 

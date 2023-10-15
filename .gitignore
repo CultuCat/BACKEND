@@ -1,0 +1,7 @@
+
+#Ignora todo los archivos con extension .pyc (/__pycache__)
+*.pyc
+*/pyc
+
+#Ignora el directorio /.vscode
+.vscode/
