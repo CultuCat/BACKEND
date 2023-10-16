@@ -41,7 +41,7 @@ def create_django_app_structure(app_name):
         'tests/views_test.py': [
             'from django.test import TestCase',
         ],
-        'tests/+serializers_test.py': [
+        'tests/serializers_test.py': [
             'from django.test import TestCase',
         ],
     }
