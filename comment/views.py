@@ -1,27 +1,27 @@
-from rest_framework import status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-
-
-from django.shortcuts import get_object_or_404
-
+from django_filters.rest_framework import DjangoFilterBackend
+#from usuaris import permissions
 from .models import Comment
 from .serializers import CommentSerializer
 
-class CommentViewSet():
+
+class CommentsView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsPerfil]
 
-    def perform_create(self, serializer):
-        # When a comment is created, associate it with the authenticated user
-        #serializer.save(user=self.request.user)
-        serializer.save()
+    # filter_backends = [DjangoFilterBackend, ]
+    # filterset_fields = {
+    #     'esdeveniment__codi': ['exact', 'in'],
+    #     'creador__user__id': ['exact', 'in']
+    # }
 
-
-    def get_queryset(self):
-        # Customize the queryset for retrieving comments, e.g., filter by event
-        event_id = self.request.query_params.get('event_id')
-        if event_id:
-            return Comment.objects.filter(event=event_id)
-        return Comment.objects.all()
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['creador_id'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

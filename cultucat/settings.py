@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'events',
+    'comment',
 ]
 
 MIDDLEWARE = [
