@@ -1,14 +1,16 @@
 from django.db import models
 
-from config import settings
-from api.bookings.models import Bookings
-from api.users.models import Users
+# from config import settings
+# from apps.bookings.models import Events
+# from apps.users.models import Users
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
-    booking = models.ForeignKey(Bookings, on_delete=models.CASCADE, null=True, blank=True)  
-    comment = models.TextField(null=True, blank=True)
+    #user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    #event = models.ForeignKey(Events, on_delete=models.CASCADE, null=False, blank=False)  
+    user = models.TextField(null=False, blank=False, max_length=560)
+    event = models.TextField(null=False, blank=False, max_length=560)
+    text = models.TextField(null=False, blank=False, max_length=560)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
