@@ -5,7 +5,7 @@ def create_django_app_structure(app_name):
     project_root = os.path.dirname(os.path.abspath(__file__))
 
     # Crea el directorio de la nueva aplicación
-    app_directory = os.path.join(project_root, 'apps', app_name)
+    app_directory = os.path.join(project_root, app_name)
     os.mkdir(app_directory)
 
     # Crea el archivo __init__.py en la raíz de la aplicación
@@ -26,6 +26,10 @@ def create_django_app_structure(app_name):
         ],
         'admin.py': [
             'from django.contrib import admin',
+        ],
+        'urls.py': [
+            'from rest_framework import routers',
+            'from . import views',
         ],
         'models.py': [
             'from django.db import models',
