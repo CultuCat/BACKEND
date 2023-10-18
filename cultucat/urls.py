@@ -33,5 +33,5 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('events/', include('events.urls'), name='Esdeveniments'),
-    path('comment/', include('comment.urls'), name='Comments')
+    path('comments/', include('comment.urls'), name='Comments')
 ]
