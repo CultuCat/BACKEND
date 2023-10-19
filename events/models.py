@@ -10,4 +10,7 @@ class Event(models.Model):
     horaris = models.TextField()
     enllac = models.URLField()
     adreca = models.CharField(max_length=255)
-    imatge = models.ImageField(upload_to='~/images/')
+    imatge = models.CharField()
+    latitud = models.FloatField()
+    longitud = models.FloatField()
+    espai = models.ForeignKey(Space)
