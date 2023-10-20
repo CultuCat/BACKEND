@@ -1,20 +1,18 @@
 from django.db import models
 
 
-# from config import settings
-# from apps.bookings.models import Events
-# from apps.users.models import Users
+from events.models import Event
+from user.models import User
 
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
-    #user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
-    #event = models.ForeignKey(Events, on_delete=models.CASCADE, null=False, blank=False)  
-    user = models.TextField(null=False, blank=False, max_length=560)
-    event = models.TextField(null=False, blank=False, max_length=560)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False, blank=False)  
+    #user = models.TextField(null=False, blank=False, max_length=560)
+    #event = models.TextField(null=False, blank=False, max_length=560)
     text = models.TextField(null=False, blank=False, max_length=560)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    def __str__(self):
+    def _str_(self):
         return f"Comment by {self.user} on {self.event} at {self.created_at}"
-
