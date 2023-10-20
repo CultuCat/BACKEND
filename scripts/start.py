@@ -1,5 +1,5 @@
 from datetime import date
-from . import refresh 
+from scripts import refresh
 
 def run():
     today = date.today()

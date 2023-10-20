@@ -1,8 +1,17 @@
 import requests
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+import os
+import django
+from django.conf import settings
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cultucat.settings")
+
+django.setup()
+
 from events.models import Event
+from spaces.models import Space
 
 def run():
     getEventsDadesObertes()
@@ -27,7 +36,7 @@ def getEspai(r, event):
 def getEventsDadesObertes(where=None):
     if not where:
         yesterday = datetime.today() - timedelta(days=1)
-        y_code = yesterday.strftime(%Y%m%d) + '000'
+        y_code = yesterday.strftime('%Y%m%d') + '000'
         where = 'codi>=' + y_code
     url = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json?"
     response = requests.get(url)
