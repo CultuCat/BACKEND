@@ -9,8 +9,6 @@ class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False, blank=False)  
-    #user = models.TextField(null=False, blank=False, max_length=560)
-    #event = models.TextField(null=False, blank=False, max_length=560)
     text = models.TextField(null=False, blank=False, max_length=560)
     created_at = models.DateTimeField(auto_now_add=True)
     
