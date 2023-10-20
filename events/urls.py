@@ -1,6 +1,7 @@
 from rest_framework import routers
-from . import views
+from .views import EventView
 
 router = routers.DefaultRouter()
+router.register(r'', EventView, basename='esdeveniments')
 
 urlpatterns = router.urls
