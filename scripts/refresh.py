@@ -30,7 +30,7 @@ def getEspai(r, event):
    lon = r['longitud']
    if e:
         event.save()
-        espai, created = Espai.objects.get_or_create(nom=e, latitud=lat, longitud=lon)
+        espai, created = Space.objects.get_or_create(nom=e, latitud=lat, longitud=lon)
         event.espai = espai
     
 def getEventsDadesObertes(where=None):
