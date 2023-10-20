@@ -1,11 +1,10 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action, api_view, permission_classes
 
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 
 from .models import Perfil
 from .serializers import PerfilSerializer
@@ -17,3 +16,60 @@ from django.conf import settings
 from requests.exceptions import HTTPError
 
 
+
+class PerfilView(viewsets.ModelViewSet):
+    queryset = Perfil.objects.all()
+    serializer_class = PerfilSerializer
+
+    @action(methods=['GET', 'PUT'], detail=False)
+    def profile(self, request):
+
+        if self.request.auth is None:
+            return Response(status=400, data={'error': "El token d'autentificació no ha sigut donat."})
+
+        user = Token.objects.get(key=self.request.auth.key).user
+
+        if request.method == 'PUT':
+            newPassword = request.data.get('password', None)
+            newImage = request.data.get('imatge', None)
+            newBio = request.data.get('bio', None)
+
+            if newPassword is not None:
+                user.set_password(newPassword)
+            if newImage is not None:
+                user.perfil.imatge = newImage
+            if newBio is not None:
+                user.perfil.bio = newBio
+            user.save()
+            user.perfil.save()
+
+        serializer = PerfilSerializer(user.perfil)
+        return Response(status=200, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@psa()
+def SignIn_Google(request, backend):
+    token = request.POST.get('access_token', None)
+    if token is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': "El token d'accés no ha sigut donat."})
+    try:
+        user = request.backend.do_auth(token)
+        print(request)
+    except HTTPError as e:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': {'token': "Token invalid", 'detail': str(e)}})
+
+
+    if user:
+        if user.is_active:
+            token, created = Token.objects.get_or_create(user=user)
+            if user.perfil is None:
+                Perfil.objects.create(user=user)
+            serializer = PerfilSerializer(user.perfil)
+            return Response(status=status.HTTP_200_OK, data={**serializer.data, 'token': token.key, 'created': created})
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': "L'usuari ha esborrat el seu compte o ha sigut banejat per l'administrador"})
+
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': {'token': "Token invalid"}})
