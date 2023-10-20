@@ -1,2 +1,7 @@
 from rest_framework import routers
-from . import views
+from .views import SpaceView
+
+router = routers.DefaultRouter()
+router.register(r'', SpaceView, basename='espais')
+
+urlpatterns = router.urls

@@ -1,4 +1,5 @@
 from django.db import models
+from spaces.models import Space
 
 class Event(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -11,6 +12,6 @@ class Event(models.Model):
     enllac = models.URLField()
     adreca = models.CharField(max_length=255)
     imatge = models.CharField()
-    latitud = models.FloatField()
-    longitud = models.FloatField()
-    espai = models.ForeignKey(Space)
+    latitud = models.FloatField(default=None)
+    longitud = models.FloatField(default=None)
+    espai = models.ForeignKey(Space, on_delete=models.CASCADE, default=None)
