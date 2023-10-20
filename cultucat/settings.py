@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'events',
+    'spaces',
     'user',
 ]
 

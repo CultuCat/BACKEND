@@ -1,4 +1,5 @@
 from django.db import models
+from spaces.models import Space
 
 class Event(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -10,4 +11,7 @@ class Event(models.Model):
     horaris = models.TextField()
     enllac = models.URLField()
     adreca = models.CharField(max_length=255)
-    imatge = models.ImageField(upload_to='~/images/')
+    imatge = models.CharField()
+    latitud = models.FloatField(default=None)
+    longitud = models.FloatField(default=None)
+    espai = models.ForeignKey(Space, on_delete=models.CASCADE, default=None)
