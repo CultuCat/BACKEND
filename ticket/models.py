@@ -1,12 +1,10 @@
 from django.db import models
-#from .models import User
-#from .models import Event
+from events.models import Event
+from user.models import User
 
 class Ticket(models.Model):
-    #user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    user = models.TextField(null=False, blank=False, max_length=560)
-    event = models.TextField(null=False, blank=False, max_length=560)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='tickets/', default='images/qr.png')
 
 

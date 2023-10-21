@@ -1,19 +1,26 @@
-from rest_framework import generics
-from rest_framework import status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Ticket
 from .serializers import TicketSerializer
+from user.permissions import IsAuthenticated 
+from django_filters.rest_framework import DjangoFilterBackend
 
-class TicketDetailView(generics.RetrieveAPIView):
+class TicketsView(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+    permission_classes = [IsAuthenticated]
 
-    def retrieve(self, request, event_id, *args, **kwargs):
-        # Check if a ticket exists for the currently logged-in user and the specified event
-        user = self.request.user
-        try:
-            ticket = Ticket.objects.get(event=event_id, user=user)
-            serializer = TicketSerializer(ticket)
-            return Response(serializer.data)
-        except Ticket.DoesNotExist:
-            return Response({'detail': 'No ticket found for this event.'}, status=status.HTTP_404_NOT_FOUND)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = {
+        'event__id': ['exact', 'in'],
+        'user__id': ['exact', 'in']
+    }
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['user'] = request.user.id #1
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

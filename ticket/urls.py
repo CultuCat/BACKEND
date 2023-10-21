@@ -1,6 +1,8 @@
-from django.urls import path
+from rest_framework import routers
 from . import views
+from django.urls import path
 
-urlpatterns = [
-    path('event/<int:event_id>/ticket/', views.TicketDetailView.as_view(), name='event-ticket'),
-]
+router = routers.DefaultRouter()
+router.register(r'', views.TicketsView, basename='tickets')
+
+urlpatterns = router.urls
