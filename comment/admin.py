@@ -7,5 +7,3 @@ class CommentAdmin(admin.ModelAdmin):
         ('Comment Information', {'fields': ['user', 'event', 'text']}),
     ]
     list_display = ('id', 'user', 'event', 'text', 'created_at')
-
-#admin.site.register(Comment, CommentAdmin)

@@ -6,8 +6,3 @@ router = routers.DefaultRouter()
 router.register(r'', views.CommentsView, basename='comments')
 
 urlpatterns = router.urls
-
-# urlpatterns = [
-#     path('post_comment/', views.post_comment, name='post_comment'),
-#     path('comments/<int:event_id>/', views.get_comments_for_event, name='get_comments_for_event'),
-# ]
