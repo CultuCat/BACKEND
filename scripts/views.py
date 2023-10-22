@@ -5,8 +5,8 @@ import os
 import subprocess
 
 def scr_refresh(request):
-    project_path = os.path.dirname(os.path.abspath(__file__))  # Ruta al directorio del script actual
-    python_path = sys.executable  # Ruta al intérprete de Python
+    project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    python_path = sys.executable
 
     command = [python_path, os.path.join(project_path, 'manage.py'), 'runscript', 'refresh']
     try:
