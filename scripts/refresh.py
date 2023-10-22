@@ -29,16 +29,17 @@ def getEspai(r, event):
    lat = r['latitud']
    lon = r['longitud']
    if e:
-        event.save()
         espai, created = Space.objects.get_or_create(nom=e, latitud=lat, longitud=lon)
         event.espai = espai
+        event.save()
     
 def getEventsDadesObertes(where=None):
     if not where:
         yesterday = datetime.today() - timedelta(days=1)
         y_code = yesterday.strftime('%Y%m%d') + '000'
         where = 'codi>=' + y_code
-    url = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json?"
+    url = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json?" \
+          "$where=" + where
     response = requests.get(url)
     resp = response.json()
 
