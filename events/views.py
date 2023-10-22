@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from user.permissions import IsAdmin
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import filters
+from django.db.models import F
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -15,6 +17,9 @@ class EventView(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     pagination_class.page_size = 10
     permission_classes = [IsAdmin]
+    filter_backends = [filters.OrderingFilter]  # Habilita el filtro de ordenación
+
+    ordering_fields = ['dataIni']
 
     def create(self, request, *args, **kwargs):
         event = request.data.copy()
