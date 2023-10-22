@@ -1,7 +1,7 @@
 from rest_framework import generics, viewsets, status
 from .models import Event
 from spaces.models import Space
-from .serializers import EventSerializer
+from .serializers import EventSerializer, EventListSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,14 +12,18 @@ from django.db.models import F
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
-    serializer_class = EventSerializer
     models = Event
     pagination_class = PageNumberPagination
     pagination_class.page_size = 10
     permission_classes = [IsAdmin]
-    filter_backends = [filters.OrderingFilter]  # Habilita el filtro de ordenación
+    filter_backends = [filters.OrderingFilter]
 
     ordering_fields = ['dataIni']
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return EventListSerializer
+        return EventSerializer
 
     def create(self, request, *args, **kwargs):
         event = request.data.copy()
