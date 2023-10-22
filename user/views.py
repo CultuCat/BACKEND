@@ -45,6 +45,8 @@ class PerfilView(viewsets.ModelViewSet):
 
         serializer = PerfilSerializer(user.perfil)
         return Response(status=200, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+    
+
 
 
 

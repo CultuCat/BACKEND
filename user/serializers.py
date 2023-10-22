@@ -40,7 +40,7 @@ def checkCorrectLogin(data):
         raise serializers.ValidationError("Contrasenya incorrecta.")
     return user
 
-def creacioLogin(data, user):
+def createLogin(data, user):
     token, created = Token.objects.get_or_create(user=user)
     data['token'] = token.key
     data['created'] = created
