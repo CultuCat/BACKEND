@@ -16,16 +16,12 @@ class SpaceFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         latitud = request.query_params.get('latitud')
         longitud = request.query_params.get('longitud')
-        distancia_km = request.query_params.get('distancia')
+        num_objs = request.query_params.get('num_objs')
 
-        if latitud and longitud and distancia_km:
+        if latitud and longitud and num_objs:
             latitud = float(latitud)
             longitud = float(longitud)
-            distancia_km = float(distancia_km)
-
-            # Convertir la distancia en kilómetros a grados utilizando la fórmula de Haversine
-            earth_radius = 6378  # Radio medio de la Tierra en kilómetros
-            km_to_deg = distancia_km / (earth_radius * 2 * 3.14159265359 / 360.0)
+            num_objs = int(num_objs)
 
             queryset = queryset.annotate(
                 lat_diff=ExpressionWrapper(
@@ -47,12 +43,13 @@ class SpaceFilter(filters.BaseFilterBackend):
                     output_field=FloatField()
                 ),
                 distancia=ExpressionWrapper(
-                    earth_radius * F('c'),
+                    6378 * F('c'),  # Usar radio de la Tierra de 6378 km
                     output_field=FloatField()
                 )
-            ).filter(distancia__lte=km_to_deg).order_by('distancia')
+            ).order_by('distancia')[:num_objs]
 
         return queryset
+
 
 class SpaceView(viewsets.ModelViewSet):
     queryset = Space.objects.all()
