@@ -6,12 +6,14 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from user.permissions import IsAdmin
-
+from rest_framework.pagination import PageNumberPagination
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     models = Event
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 10
     permission_classes = [IsAdmin]
 
     def create(self, request, *args, **kwargs):
