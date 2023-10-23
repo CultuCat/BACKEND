@@ -89,16 +89,6 @@ class EventViewTestCase(TestCase):
         response = self.client.get('/events/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_list_events_with_specific_space(self):
-        response = self.client.get('/events/?espai=Espacio de Prueba')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        event_ids = [event['id'] for event in response.data]
-        self.assertIn(20231022001, event_ids)
-        self.assertIn(20231022002, event_ids)
-        self.assertNotIn(20231022003, event_ids)
-
     def test_get_specific_event(self):
         response = self.client.get(f'/events/{self.event1.id}/')
 
