@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from .models import Perfil, Trofeu
 from spaces.serializers import SpaceSerializer
 
@@ -8,18 +7,16 @@ from rest_framework.authtoken.models import Token
 
 
 class PerfilSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(source = "user.email", read_only=True)
-    username = serializers.CharField(source = "user.username", read_only=True)
-    nom = serializers.CharField(source = "user.nom", read_only=True)
-    password = serializers.CharField(source="user.password", required=False, write_only=True)
-    trofeus = serializers.PrimaryKeyRelatedField(many=True, queryset=Trofeu.objects.all())
-    llocs_favorits = SpaceSerializer(many=True, read_only=True) 
+
+    #trofeus = serializers.PrimaryKeyRelatedField(many=True, queryset=Trofeu.objects.all())
+    #llocs_favorits = SpaceSerializer(many=True, read_only=True) 
+    #amics = serializers.SlugRelatedField(many=True, slug_field='user', read_only=True)
     
 
     class Meta:
         model = Perfil
-        fields = ('user','email','username', 'nom', 'password', 'imatge','bio','puntuacio','isBlocked','wantsToTalk','isVisible', 'trofeus', 'llocs_favorits')
-
+        fields = ('email','username', 'nom', 'password', 'imatge','bio','puntuacio','isBlocked','wantsToTalk','isVisible')
+        # 'trofeus', 'llocs_favorits', 'amics'
         
 def checkCorrectLogin(data):
     user_act = data.get("user", None)
@@ -31,8 +28,8 @@ def checkCorrectLogin(data):
         password_act = data.get("password", None)
 
     try:
-        user = User.objects.get(username=username_act)
-    except User.DoesNotExist:
+        user = Perfil.objects.get(username=username_act)
+    except Perfil.DoesNotExist:
         raise serializers.ValidationError("No existeix un usuari amb aquest username.")
 
     if not user.is_active:
