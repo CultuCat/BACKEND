@@ -12,11 +12,11 @@ def create_django_app_structure(app_name):
     open(os.path.join(app_directory, '__init__.py'), 'a').close()
 
     # Crea los directorios y archivos necesarios en la nueva aplicación
-    subdirectories = ['migrations', 'tests']
+    subdirectories = ['migrations']
     for subdirectory in subdirectories:
         subdirectory_path = os.path.join(app_directory, subdirectory)
         os.mkdir(subdirectory_path)
-        # Crea el archivo __init__.py en los directorios de migrations y tests
+        # Crea el archivo __init__.py en los directorios de migrations 
         open(os.path.join(subdirectory_path, '__init__.py'), 'a').close()
 
     # Definir importaciones base para cada tipo de archivo
@@ -42,10 +42,7 @@ def create_django_app_structure(app_name):
             'from rest_framework.response import Response',
             'from rest_framework.views import APIView',
         ],
-        'tests/views_test.py': [
-            'from django.test import TestCase',
-        ],
-        'tests/serializers_test.py': [
+        'tests.py': [
             'from django.test import TestCase',
         ],
     }
