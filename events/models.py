@@ -22,6 +22,7 @@ class Event(models.Model):
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     espai = models.ForeignKey(Space, on_delete=models.CASCADE, null=True, blank=True)
+    isAdminCreated = models.BooleanField(null=False, default=False, blank=True)
 
     def get_enllac(self):
         return split_colon(self.enllac)
