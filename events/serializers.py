@@ -7,4 +7,11 @@ class EventSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Event
-        fields = '__all__'
+        exclude = ['enllac', 'imatge']
+
+class EventListSerializer(serializers.ModelSerializer):
+    imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
+    
+    class Meta:
+        model = Event
+        fields = ['id', 'nom', 'dataIni', 'imatges_list', 'espai', 'preu']

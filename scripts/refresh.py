@@ -5,6 +5,8 @@ from datetime import date, timedelta, datetime
 import os
 import django
 from django.conf import settings
+from scripts import clean
+import subprocess
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cultucat.settings")
 
@@ -29,16 +31,17 @@ def getEspai(r, event):
    lat = r['latitud']
    lon = r['longitud']
    if e:
-        event.save()
-        espai, created = Space.objects.get_or_create(nom=e, latitud=lat, longitud=lon)
+        espai = Space.objects.get_or_create(nom=e, latitud=lat, longitud=lon)
         event.espai = espai
+        event.save()
     
 def getEventsDadesObertes(where=None):
     if not where:
         yesterday = datetime.today() - timedelta(days=1)
         y_code = yesterday.strftime('%Y%m%d') + '000'
         where = 'codi>=' + y_code
-    url = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json?"
+    url = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json?" \
+          "$where=" + where
     response = requests.get(url)
     resp = response.json()
 
@@ -65,3 +68,4 @@ def getEventsDadesObertes(where=None):
                 print("L'esdeveniment " + r['codi'] + " no s'ha pogut carregar")
             except:
                 print("L'esdeveniment no s'ha pogut carregar")
+    subprocess.run(['python', 'clean.py'])
