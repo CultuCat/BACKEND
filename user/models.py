@@ -4,10 +4,19 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from cultucat import settings
+from spaces.models import Space
 
 
 def get_default_imatge():
     return settings.DEFAULT_IMATGE_PERFIL
+
+
+class Trofeu(models.Model):
+    nom = models.CharField(max_length=100)
+    descripcio = models.TextField()
+
+    def __str__(self):
+        return self.nombre
 
 
 class Perfil(models.Model):
@@ -19,4 +28,11 @@ class Perfil(models.Model):
     wantsToTalk = models.BooleanField(default=True, verbose_name=_('La resta dels usuaris poden parlar amb ell'))
     isVisible = models.BooleanField(default=True,verbose_name=_('La resta dels usuaris el poden trobar'))
     isAdmin = models.BooleanField(default=False,verbose_name=_("L'usuari es administrador"))
+    trofeus = models.ManyToManyField(Trofeu, blank=True, verbose_name=_('Trofeus'))
+    llocs_favorits = models.ManyToManyField(Space, blank=True, verbose_name=_('Llocs Favorits'))
+    #falta tags favorits
+
+    def calcular_puntuacio(self):
+        return self.trofeus.count()
+
 

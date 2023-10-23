@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Perfil
+from .models import Perfil, Trofeu
+from spaces.serializers import SpaceSerializer
 
 from django.contrib.auth.hashers import check_password
 from rest_framework.authtoken.models import Token
@@ -11,10 +12,13 @@ class PerfilSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source = "user.username", read_only=True)
     nom = serializers.CharField(source = "user.nom", read_only=True)
     password = serializers.CharField(source="user.password", required=False, write_only=True)
+    trofeus = serializers.PrimaryKeyRelatedField(many=True, queryset=Trofeu.objects.all())
+    llocs_favorits = SpaceSerializer(many=True, read_only=True) 
+    
 
     class Meta:
         model = Perfil
-        fields = ('user','email','username', 'nom', 'password', 'imatge','bio','puntuacio','isBlocked','wantsToTalk','isVisible')
+        fields = ('user','email','username', 'nom', 'password', 'imatge','bio','puntuacio','isBlocked','wantsToTalk','isVisible', 'trofeus', 'llocs_favorits')
 
         
 def checkCorrectLogin(data):
