@@ -38,6 +38,7 @@ class EventView(viewsets.ModelViewSet):
             id = 99999999999
         event['id'] = id
         Space.get_or_create(nom = event['espai'], latitud = event['latitud'], longitud = event['longitud'])
+        event['isAdminCreated'] = True
         serializer = self.get_serializer(data=event)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

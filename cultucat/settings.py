@@ -64,7 +64,10 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",  # Agrega aquí tus orígenes permitidos
+    "https://cultucat.netlify.app"
 ]
+
+
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 CORS_ALLOW_HEADERS = ['Content-Type']
