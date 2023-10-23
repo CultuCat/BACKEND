@@ -15,7 +15,7 @@ class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     models = Event
     pagination_class = PageNumberPagination
-    pagination_class.page_size = 10
+    pagination_class.page_size = 50
     permission_classes = [IsAdmin]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
