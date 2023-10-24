@@ -2,9 +2,9 @@ name: Django Tests
 
 on:
   push:
-    branches:
-      - master
-      - run-tests-auto
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   test:
@@ -30,4 +30,4 @@ jobs:
       - name: Run Django Tests
         run: |
           echo "Running Django tests..."
-          python manage.py test
+          coverage run manage.py test && coverage report --fail-under=20
