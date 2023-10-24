@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Perfil, Trofeu
+from .models import Perfil
 from spaces.serializers import SpaceSerializer
 
 from django.contrib.auth.hashers import check_password
@@ -15,7 +15,7 @@ class PerfilSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Perfil
-        fields = ('email','username', 'nom', 'password', 'imatge','bio','puntuacio','isBlocked','wantsToTalk','isVisible')
+        fields = ('id','email','username', 'first_name','last_name', 'password', 'imatge','bio','puntuacio','isBlocked','wantsToTalk','isVisible','isAdmin')
         # 'trofeus', 'llocs_favorits', 'amics'
         
 def checkCorrectLogin(data):
