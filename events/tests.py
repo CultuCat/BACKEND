@@ -34,7 +34,6 @@ class EventViewTestCase(TestCase):
             espai=self.event1.espai
         )
 
-        # Crea otro evento con un espacio diferente
         self.event3 = Event.objects.create(
             id = 20231022003,
             dataIni='2023-10-24T12:00:00Z',
@@ -104,7 +103,6 @@ class EventViewTestCase(TestCase):
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba'
         }
-        self.client.force_authenticate(user=self.admin_user)
         response = self.client.post('/events/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
