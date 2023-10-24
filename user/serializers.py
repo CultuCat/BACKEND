@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Perfil, Trofeu
+from .models import Perfil
 from spaces.serializers import SpaceSerializer
 
 from django.contrib.auth.hashers import check_password

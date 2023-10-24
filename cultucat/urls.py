@@ -38,5 +38,6 @@ urlpatterns = [
     path('comments/', include('comment.urls'), name='Comments'),
     path('docswagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('spaces/', include('spaces.urls'), name='Espais'),
+    path('users/', include('user.urls'), name='Usuaris'),
     path('refresh/', scr_refresh, name='Refresh'),
 ]

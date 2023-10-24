@@ -1,17 +1,17 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.decorators import action, api_view, permission_classes
 
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 
-from .models import Perfil
-from .serializers import PerfilSerializer
+from user.models import Perfil
+from ticket.models import Ticket
+from user.serializers import PerfilSerializer
+from ticket.serializers import TicketSerializer
+from user.permissions import IsAuthenticated
 
 from social_django.utils import psa
-
-from django.conf import settings
 
 from requests.exceptions import HTTPError
 
@@ -83,3 +83,19 @@ def SignIn_Google(request, backend):
 
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': {'token': "Token invalid"}})
+    
+
+#get users by ticket
+class TicketUsersView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, ticket_id=None):
+        try:
+            ticket = Ticket.objects.get(id=ticket_id)
+        except Ticket.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'Ticket no trobat'})
+
+        users_with_ticket = Perfil.objects.filter(ticket=ticket.event)
+        serializer = PerfilSerializer(users_with_ticket, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
