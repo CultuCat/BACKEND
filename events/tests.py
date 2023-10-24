@@ -88,25 +88,16 @@ class EventViewTestCase(TestCase):
         response = self.client.get('/events/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_create_event_espai_existent(self):
-        data = {
-            'dataIni': '2023-10-22T10:00:00Z',
-            'dataFi': '2023-10-22T14:00:00Z',
-            'nom': 'Evento de Prueba',
-            'descripcio': 'Descripción del evento de prueba',
-            'preu': 'Gratis',
-            'horaris': '10:00 AM - 2:00 PM',
-            'enllac': 'https://ejemplo.com',
-            'adreca': 'Dirección del evento',
-            'imatge': 'https://imagen.com/imagen.jpg',
-            'latitud': 41.7128,
-            'longitud': -74.1060,
-            'espai': 'Espacio de Prueba'
-        }
-        response = self.client.post('/events/', data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Event.objects.count(), 4)
-        self.assertEqual(Space.objects.count(), 2)
+    def test_list_events_by_espai(self):
+        espai_name = 'Otro Espacio'
+        response = self.client.get(f'/events/?espai={espai_name}')
+
+        self.assertEqual(response.status_code, 200)
+        events = response.data['results']
+        self.assertTrue(events)
+
+        event_in_response = next((event for event in events if event['id'] == self.event3.id), None)
+        self.assertIsNotNone(event_in_response) 
     
     def test_get_specific_event(self):
         response = self.client.get(f'/events/{self.event1.id}/')
