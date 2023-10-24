@@ -11,5 +11,5 @@ router.register('perfils', PerfilView, 'Perfils')
 urlpatterns = [
     *router.urls,
     re_path('sign_in/(?P<backend>[^/]+)/$', SignIn_Google),
-    re_path(r'tickets/(?P<ticket_id>\d+)/users/', TicketUsersView.as_view({'get': 'list'}), name='ticket-users-list'),
+    re_path('tickets/<int:event_id>/users/', TicketUsersView.as_view({'get': 'list'}), name='ticket-users-list'),
 ]

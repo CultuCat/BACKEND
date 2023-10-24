@@ -56,8 +56,6 @@ class PerfilView(viewsets.ModelViewSet):
     
 
 
-
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @psa()
@@ -89,13 +87,14 @@ def SignIn_Google(request, backend):
 class TicketUsersView(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
-    def list(self, request, ticket_id=None):
-        try:
-            ticket = Ticket.objects.get(id=ticket_id)
-        except Ticket.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'Ticket no trobat'})
+    def list(self, request, event_id=None):
+        tickets_for_event = Ticket.objects.filter(event=event_id)
 
-        users_with_ticket = Perfil.objects.filter(ticket=ticket.event)
-        serializer = PerfilSerializer(users_with_ticket, many=True)
+        users_for_event = Perfil.objects.filter(ticket__in=tickets_for_event)
+
+        if not users_for_event:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'No hi ha usuaris per a aquest event'})
+
+        serializer = PerfilSerializer(users_for_event, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
