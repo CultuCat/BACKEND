@@ -16,12 +16,17 @@ class EventView(viewsets.ModelViewSet):
     models = Event
     pagination_class = PageNumberPagination
     pagination_class.page_size = 50
-    permission_classes = [IsAdmin]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
     ordering_fields = ['dataIni']
 
     filterset_fields = ['espai']
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [IsAdmin()]
+        else:
+            return []
 
     def get_serializer_class(self):
         if self.action == 'list':
