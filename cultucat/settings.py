@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'django_filters',
     'corsheaders',
     'drf_yasg',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'events',
+    'ticket',
     'spaces',
     'comment',
     'user',
@@ -62,7 +64,10 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",  # Agrega aquí tus orígenes permitidos
+    "https://cultucat.netlify.app"
 ]
+
+
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 CORS_ALLOW_HEADERS = ['Content-Type']
@@ -138,6 +143,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -160,4 +166,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_IMATGE_PERFIL = 'backend/apps/user/CultuCat.png'
+DEFAULT_IMATGE_PERFIL = 'backend/imatges/CultuCat.png'

@@ -6,6 +6,3 @@ from . import models
 class Perfil(admin.ModelAdmin):
     pass
 
-@admin.register(models.Administrador)
-class Administrador(admin.ModelAdmin):
-    pass
