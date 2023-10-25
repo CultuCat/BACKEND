@@ -17,7 +17,7 @@ class CommentsView(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['event']
     
-    apply_permissions = True
+    apply_permissions = False
 
     def get_permissions(self):
         if self.action == 'create' and self.apply_permissions:
