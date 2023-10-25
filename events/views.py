@@ -9,7 +9,6 @@ from user.permissions import IsAdmin
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from django.db.models import F
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -22,8 +21,10 @@ class EventView(viewsets.ModelViewSet):
 
     filterset_fields = ['espai']
 
+    apply_permissions = True
+
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == 'create' and self.apply_permissions:
             return [IsAdmin()]
         else:
             return []
