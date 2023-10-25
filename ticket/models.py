@@ -3,9 +3,9 @@ from events.models import Event
 from user.models import User
 
 class Ticket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='tickets/', default='images/qr.png')
+    image = models.ImageField(default='images/qr.jpg')
 
 
     class Meta:
