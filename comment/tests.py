@@ -1,7 +1,5 @@
 from django.test import TestCase
-from django.urls import reverse, resolve
 from rest_framework import status
-from rest_framework.test import force_authenticate, APIRequestFactory
 from rest_framework.test import APIClient
 from user.models import Perfil
 from events.models import Event
@@ -52,12 +50,17 @@ class TestCommentsPost(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_list_comments_by_event(self):
+        event_id = 1
         self.comment2 = Comment.objects.create(
             text = 'comentario de prueba 2',
             user = self.user,
             event = self.esdeveniment1
         )
-        event_id = 1
+        self.comment3 = Comment.objects.create( #comentario asociado a otro evento diferente
+            text = 'comentario de prueba 3',
+            user = self.user,
+            event = self.esdeveniment2
+        )
         response = self.client.get(f'/comments/?event={event_id}')
 
         self.assertEqual(response.status_code, 200)

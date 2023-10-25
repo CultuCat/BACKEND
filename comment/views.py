@@ -27,7 +27,7 @@ class CommentsView(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         comment = request.data.copy()
-        comment['user'] = 1 #request.user.id #1
+        comment['user'] = 1 #request.user #1
         serializer = self.get_serializer(data=comment)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
