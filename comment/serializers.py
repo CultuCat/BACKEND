@@ -5,4 +5,4 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         username = serializers.CharField(source="user.username", read_only=True)
-        fields = '__all__'
+        fields = ['id', 'text', 'created_at']
