@@ -53,22 +53,22 @@ class TestTicketsPost(TestCase):
         self.assertEqual(Ticket.objects.count(), 3)
         TicketsView.apply_permissions = True
         
-    # def test_get_specific_ticket(self):
-    #     #hacemos get de ticket1
-    #     response = self.client.get(f'/tickets/?event={self.ticket1.event.id}&user={self.ticket1.user.username}')
+    def test_get_specific_ticket(self):
+        #hacemos get de ticket1
+        response = self.client.get(f'/tickets/?event={self.ticket1.event.id}&user={self.ticket1.user.id}')
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(len(response.data), 1)
-    #     self.assertEqual(response.data[0]['event'], self.ticket1.event.id) #2 2
-    #     self.assertEqual(response.data[0]['user'], self.ticket1.user.username) #1 2
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['event'], self.ticket1.event.id) #2 2
+        self.assertEqual(response.data[0]['user'], self.ticket1.user.id) #1 2
         
-    #     #hacemos get de ticket2
-    #     response = self.client.get(f'/tickets/?event={self.ticket2.event}&user={self.ticket2.user.username}')
+        #hacemos get de ticket2
+        response = self.client.get(f'/tickets/?event={self.ticket2.event.id}&user={self.ticket2.user.id}')
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(len(response.data), 1)
-    #     self.assertEqual(response.data[0]['event'], self.ticket2.event.id)
-    #     self.assertEqual(response.data[0]['user'], self.ticket2.user.id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['event'], self.ticket2.event.id)
+        self.assertEqual(response.data[0]['user'], self.ticket2.user.id)
         
     def test_list_tickets(self):
         response = self.client.get('/tickets/')

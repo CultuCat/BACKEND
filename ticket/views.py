@@ -12,7 +12,7 @@ class TicketsView(viewsets.ModelViewSet):
     #permission_classes = [IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['event__id', 'user__username']
+    filterset_fields = ['event', 'user']
     
     apply_permissions = True
 
