@@ -9,19 +9,25 @@ from user.permissions import IsAdmin
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from django.db.models import F
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     models = Event
     pagination_class = PageNumberPagination
     pagination_class.page_size = 50
-    permission_classes = [IsAdmin]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
     ordering_fields = ['dataIni']
 
     filterset_fields = ['espai']
+
+    apply_permissions = True
+
+    def get_permissions(self):
+        if self.action == 'create' and self.apply_permissions:
+            return [IsAdmin()]
+        else:
+            return []
 
     def get_serializer_class(self):
         if self.action == 'list':

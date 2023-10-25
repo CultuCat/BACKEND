@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Event
 from spaces.models import Space
+from .views import EventView
 
 class EventViewTestCase(TestCase):
     def setUp(self):
@@ -34,7 +35,6 @@ class EventViewTestCase(TestCase):
             espai=self.event1.espai
         )
 
-        # Crea otro evento con un espacio diferente
         self.event3 = Event.objects.create(
             id = 20231022003,
             dataIni='2023-10-24T12:00:00Z',
@@ -46,6 +46,7 @@ class EventViewTestCase(TestCase):
         )
 
     def test_create_event(self):
+        EventView.apply_permissions = False
         data = {
             'dataIni': '2023-10-22T10:00:00Z',
             'dataFi': '2023-10-22T14:00:00Z',
@@ -63,9 +64,10 @@ class EventViewTestCase(TestCase):
         response = self.client.post('/events/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
-        self.assertEqual(Space.objects.count(), 3)
+        self.assertEqual(Space.objects.count(), 3)  
 
     def test_create_event_espai_existent(self):
+        EventView.apply_permissions = False
         data = {
             'dataIni': '2023-10-22T10:00:00Z',
             'dataFi': '2023-10-22T14:00:00Z',
@@ -85,10 +87,24 @@ class EventViewTestCase(TestCase):
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(Space.objects.count(), 2)
 
+    def tearDown(self):
+        EventView.apply_permissions = True
+    
     def test_list_events(self):
         response = self.client.get('/events/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_list_events_by_espai(self):
+        espai_name = 'Otro Espacio'
+        response = self.client.get(f'/events/?espai={espai_name}')
+
+        self.assertEqual(response.status_code, 200)
+        events = response.data['results']
+        self.assertTrue(events)
+
+        event_in_response = next((event for event in events if event['id'] == self.event3.id), None)
+        self.assertIsNotNone(event_in_response) 
+    
     def test_get_specific_event(self):
         response = self.client.get(f'/events/{self.event1.id}/')
 
