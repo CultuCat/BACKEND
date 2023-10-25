@@ -3,18 +3,17 @@ from django.urls import reverse, resolve
 from rest_framework import status
 from rest_framework.test import force_authenticate, APIRequestFactory
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
-from user.models import User, Perfil
+from user.models import Perfil
 from events.models import Event
 from .models import Comment
+from .views import CommentsView
 
 
 class TestCommentsPost(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         
-        self.user = User.objects.create(id=1,username='test_user', is_active=True)
-        self.perfil = Perfil.objects.create(user=self.user)
+        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
         self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1")
         self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2")
         self.comment1 = Comment.objects.create(
@@ -25,7 +24,6 @@ class TestCommentsPost(TestCase):
 
     def test_creations_self(self):
         self.assertEqual(Event.objects.count(), 2)
-        self.assertEqual(User.objects.count(), 1)
         self.assertEqual(Perfil.objects.count(), 1)
         self.assertEqual(Comment.objects.count(), 1)
         
@@ -34,9 +32,11 @@ class TestCommentsPost(TestCase):
             'text': 'test_comment',
             'event': 1
         }
+        CommentsView.apply_permissions = False
         response = self.client.post('/comments/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Comment.objects.count(), 2)
+        CommentsView.apply_permissions = True
         
     def test_get_specific_event(self):
         response = self.client.get(f'/comments/{self.comment1.id}/')

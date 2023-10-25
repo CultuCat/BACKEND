@@ -12,10 +12,18 @@ class CommentsView(viewsets.ModelViewSet):
     models = Comment
     pagination_class = PageNumberPagination
     pagination_class.page_size = 10
-    permission_classes = [IsAuthenticated]
+    #permission_classes = True#[IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['event']
+    
+    apply_permissions = True
+
+    def get_permissions(self):
+        if self.action == 'create' and self.apply_permissions:
+            return [IsAuthenticated]
+        else:
+            return []
 
     def create(self, request, *args, **kwargs):
         comment = request.data.copy()
