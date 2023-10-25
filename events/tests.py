@@ -91,12 +91,12 @@ class EventViewTestCase(TestCase):
         EventView.apply_permissions = True
     
     def test_list_events(self):
-        response = self.client.get('/events/')
+        response = self.client.get('/events/?ordering=-dataIni')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_list_events_by_espai(self):
         espai_name = 'Otro Espacio'
-        response = self.client.get(f'/events/?espai={espai_name}')
+        response = self.client.get(f'/events/?ordering=-dataIni&espai={espai_name}')
 
         self.assertEqual(response.status_code, 200)
         events = response.data['results']
