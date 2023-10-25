@@ -43,12 +43,25 @@ class PerfilViewTests(TestCase):
         self.assertFalse(permission.has_permission(request))
 """
     def test_profile_update(self):
-        url = '/users/perfils/1/profile'
+        request = APIRequestFactory().get('')
+        request.user = self.user
+        permission = permissions.IsAuthenticated()
+        url = '/users/1/'
         data = {'password': 'newpassword', 'imatge': 'newimage.jpg', 'bio': 'New bio'}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
         self.assertEqual(self.user.check_password('newpassword'), True)
+        self.assertEqual(self.user.perfil.imatge, 'newimage.jpg')
+        self.assertEqual(self.user.perfil.bio, 'New bio')
+
+
+        url = '/users/1/'  # Ajusta la URL según tu configuración
+        data = {'password': 'newpassword', 'imatge': 'newimage.jpg', 'bio': 'New bio'}
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password('newpassword'))
         self.assertEqual(self.user.perfil.imatge, 'newimage.jpg')
         self.assertEqual(self.user.perfil.bio, 'New bio')
 
