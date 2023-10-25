@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Event
 from spaces.models import Space
+from .views import EventView
 
 class EventViewTestCase(TestCase):
     def setUp(self):
@@ -45,6 +46,7 @@ class EventViewTestCase(TestCase):
         )
 
     def test_create_event(self):
+        EventView.apply_permissions = False
         data = {
             'dataIni': '2023-10-22T10:00:00Z',
             'dataFi': '2023-10-22T14:00:00Z',
@@ -62,9 +64,10 @@ class EventViewTestCase(TestCase):
         response = self.client.post('/events/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
-        self.assertEqual(Space.objects.count(), 3)
+        self.assertEqual(Space.objects.count(), 3)  
 
     def test_create_event_espai_existent(self):
+        EventView.apply_permissions = False
         data = {
             'dataIni': '2023-10-22T10:00:00Z',
             'dataFi': '2023-10-22T14:00:00Z',
@@ -84,6 +87,9 @@ class EventViewTestCase(TestCase):
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(Space.objects.count(), 2)
 
+    def tearDown(self):
+        EventView.apply_permissions = True
+    
     def test_list_events(self):
         response = self.client.get('/events/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
