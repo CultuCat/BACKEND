@@ -8,10 +8,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 class TicketsView(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+    models = Ticket
     #permission_classes = [IsAuthenticated]
 
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['event__id', 'user__id']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['event__id', 'user__username']
     
     apply_permissions = True
 
@@ -24,10 +25,6 @@ class TicketsView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         ticket = request.data.copy()
         ticket['user'] = 1 #request.user.id #1
-        print("\n")
-        print(ticket["event"])
-        print(ticket["user"])
-        print("\n")
         serializer = self.get_serializer(data=ticket)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
