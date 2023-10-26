@@ -21,7 +21,7 @@ class EventView(viewsets.ModelViewSet):
 
     filterset_fields = ['espai']
 
-    apply_permissions = True
+    apply_permissions = False
 
     def get_permissions(self):
         if self.action == 'create' and self.apply_permissions:

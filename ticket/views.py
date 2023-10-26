@@ -8,19 +8,26 @@ from django_filters.rest_framework import DjangoFilterBackend
 class TicketsView(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
-    permission_classes = [IsAuthenticated]
+    models = Ticket
+    #permission_classes = [IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = {
-        'event__id': ['exact', 'in'],
-        'user__id': ['exact', 'in']
-    }
+    filterset_fields = ['event', 'user']
+    
+    apply_permissions = False
+
+    def get_permissions(self):
+        if self.action == 'create' and self.apply_permissions:
+            return [IsAuthenticated]
+        else:
+            return []
 
     def create(self, request, *args, **kwargs):
-        data = request.data.copy()
-        data['user'] = request.user.id #1
-        serializer = self.get_serializer(data=data)
+        ticket = request.data.copy()
+        ticket['user'] = 1 #request.user.id #1
+        serializer = self.get_serializer(data=ticket)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
