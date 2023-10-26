@@ -3,12 +3,8 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from cultucat import settings
 from spaces.models import Space
 
-
-def get_default_imatge():
-    return settings.DEFAULT_IMATGE_PERFIL
 
 """
 class Trofeu(models.Model):
@@ -20,7 +16,7 @@ class Trofeu(models.Model):
 """
 
 class Perfil(User):
-    imatge = models.ImageField(null=True, blank=True, default=get_default_imatge(), verbose_name=_('Imatge de perfil'))
+    imatge = models.ImageField(default='/images/CultuCat.jpg', verbose_name=_('Imatge de perfil'))
     bio = models.CharField(max_length=200, default="", null=True, blank=True, verbose_name=_('Bio'))
     puntuacio = models.IntegerField(null=False, default=0, verbose_name=_('Puntuacio'))
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
