@@ -5,7 +5,6 @@ from comment.serializers import CommentSerializer
 class EventSerializer(serializers.ModelSerializer):
     enllacos_list = serializers.ListField(read_only=True, required=False, source='get_enllac')
     imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
-    comments = CommentSerializer(many=True, read_only=True, source='comment_set') 
     class Meta:
         model = Event
         exclude = ['enllac', 'imatge']
