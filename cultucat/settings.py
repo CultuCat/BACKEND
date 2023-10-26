@@ -175,4 +175,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_IMATGE_PERFIL = 'backend/imatges/CultuCat.png'
