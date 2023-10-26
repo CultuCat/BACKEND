@@ -19,11 +19,16 @@ class TestCommentsPost(TestCase):
             user = self.user,
             event = self.esdeveniment1
         )
+        self.comment2 = Comment.objects.create(
+            text = 'comentario de prueba 2',
+            user = self.user,
+            event = self.esdeveniment1
+        )
 
     def test_creations_self(self):
         self.assertEqual(Event.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 1)
-        self.assertEqual(Comment.objects.count(), 1)
+        self.assertEqual(Comment.objects.count(), 2)
         
     def test_post_comment(self):
         data = {
@@ -33,17 +38,17 @@ class TestCommentsPost(TestCase):
         CommentsView.apply_permissions = False
         response = self.client.post('/comments/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Comment.objects.count(), 2)
+        self.assertEqual(Comment.objects.count(), 3)
         CommentsView.apply_permissions = True
         
     def test_get_specific_event(self):
-        response = self.client.get(f'/comments/{self.comment1.id}/')
+        response = self.client.get(f'/comments/{self.comment2.id}/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(response.data['text'], self.comment1.text)
-        self.assertEqual(response.data['event'], self.comment1.event.id)
-        self.assertEqual(response.data['user'], self.comment1.user.id)
+        self.assertEqual(response.data['text'], self.comment2.text)
+        self.assertEqual(response.data['event'], self.comment2.event.id)
+        self.assertEqual(response.data['user'], self.comment2.user.id)
         
     def test_list_comments(self):
         response = self.client.get('/comments/')
