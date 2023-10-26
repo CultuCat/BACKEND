@@ -16,7 +16,7 @@ class Trofeu(models.Model):
 """
 
 class Perfil(User):
-    imatge = models.ImageField(default='/images/CultuCat.png', verbose_name=_('Imatge de perfil'))
+    imatge = models.CharField(default='https://www.calfruitos.com/es/fotos/pr_223_20190304145434.png')    
     bio = models.CharField(max_length=200, default="", null=True, blank=True, verbose_name=_('Bio'))
     puntuacio = models.IntegerField(null=False, default=0, verbose_name=_('Puntuacio'))
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
