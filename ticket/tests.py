@@ -13,8 +13,8 @@ class TestTicketsPost(TestCase):
         
         self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
         self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True)
-        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1")
-        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2")
+        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni="2023-11-01 01:00:00+01")
+        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni="2024-11-01 01:00:00+01") #esdeveniment2 es posterior a esdeveniment1
         #creamos ticket para user 1 en evento 2
         self.ticket1 = Ticket.objects.create(
             user = self.user,
@@ -69,6 +69,25 @@ class TestTicketsPost(TestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['event'], self.ticket2.event.id)
         self.assertEqual(response.data[0]['user'], self.ticket2.user.id)
+        
+    def test_get_tickets_by_user(self):
+        self.ticket3 = Ticket.objects.create(
+            user = self.user2,
+            event = self.esdeveniment1
+        )
+        response = self.client.get(f'/tickets/?user={self.ticket3.user.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]['event'], self.ticket3.event.id) #primero aparece el que tiene dataIni más peq, es decir el evento1, osea ticket3
+        self.assertEqual(response.data[1]['event'], self.ticket2.event.id) #1
+        
+        #hacemos get de ticket2
+        response = self.client.get(f'/tickets/?user={self.ticket1.user.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['event'], self.ticket1.event.id)
         
     def test_list_tickets(self):
         response = self.client.get('/tickets/')
