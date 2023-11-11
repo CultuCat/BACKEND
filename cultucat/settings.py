@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'spaces',
     'comment',
     'user',
+    'trophy',
     'discount',
 ]
 
