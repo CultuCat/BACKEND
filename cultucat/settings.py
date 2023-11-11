@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'events',
-    'ticket',
-    'spaces',
-    'comment',
     'user',
+    'ticket',
+    'comment',
+    'spaces',
+    'tags',
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,6 @@
 from django.db import models
 from spaces.models import Space
+from tags.models import Tag
 from django.utils.translation import gettext_lazy as _
 
 def split_colon(obj):
@@ -22,6 +23,7 @@ class Event(models.Model):
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     espai = models.ForeignKey(Space, on_delete=models.CASCADE, null=True, blank=True)
+    tags = models.ManyToManyField(Tag)
     isAdminCreated = models.BooleanField(null=False, default=False, blank=True)
 
     def get_enllac(self):
