@@ -24,7 +24,7 @@ def insertar_trofeos():
         },
         {
             'nom':"Reviwer",
-            'descripcio':"Quantes comentaris has escrit",
+            'descripcio':"Quants comentaris has escrit",
             'punts_nivell1':'10',
             'punts_nivell2':'50',
             'punts_nivell3':'100'
