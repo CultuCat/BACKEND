@@ -36,7 +36,7 @@ class CommentsView(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         
-        verificar_y_otorgar_descuento(comment['user'], "Reviwer", Comment.objects.filter(user='1').count())  
+        verificar_y_otorgar_descuento(comment['user'], "Reviwer", Comment.objects.filter(user= comment['user']).count())  
         
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     

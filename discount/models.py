@@ -10,5 +10,5 @@ class Discount(models.Model):
         (3, '3'),
     )
     nivellTrofeu = models.IntegerField(choices=NIVELL_CHOICES, null=False, blank=False)
-    nomTrofeu = models.DateTimeField(null=False, blank=False)
+    nomTrofeu = models.CharField(null=False, blank=False)
     usat = models.BooleanField(default=False)

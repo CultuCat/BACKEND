@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'user',
     'trophy',
     'discount',
+    'utility',
 ]
 
 MIDDLEWARE = [
