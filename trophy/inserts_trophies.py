@@ -23,13 +23,33 @@ def insertar_trofeos():
             'punts_nivell3':'100'
         },
         {
-            'nom':"Vigilant",
-            'descripcio':"Quantes vegades has entrat a l'aplicació",
+            'nom':"Reviwer",
+            'descripcio':"Quantes comentaris has escrit",
             'punts_nivell1':'10',
             'punts_nivell2':'50',
             'punts_nivell3':'100'
         },
-        # Agrega más trofeos según sea necesario
+        {
+            'nom':"Més esdeveniments",
+            'descripcio':"Quants esdeveniments has assist",
+            'punts_nivell1':'10',
+            'punts_nivell2':'50',
+            'punts_nivell3':'100'
+        },
+        {
+            'nom':"El més amigable",
+            'descripcio':"Quants amics tens",
+            'punts_nivell1':'10',
+            'punts_nivell2':'50',
+            'punts_nivell3':'100'
+        },
+        {
+            'nom':"Coleccionista",
+            'descripcio':"Quant trofeus tens",
+            'punts_nivell1':'1',
+            'punts_nivell2':'3',
+            'punts_nivell3':'4'
+        },
     ]
 
     for trofeo_data in trofeos:
@@ -37,4 +57,5 @@ def insertar_trofeos():
 
 
 if __name__ == "__main__":
+    Trophy.objects.all().delete()
     insertar_trofeos()
