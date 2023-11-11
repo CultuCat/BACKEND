@@ -41,4 +41,5 @@ urlpatterns = [
     path('spaces/', include('spaces.urls'), name='Espais'),
     path('users/', include('user.urls'), name='Usuaris'),
     path('refresh/', scr_refresh, name='Refresh'),
+    path('discounts/', include('discount.urls'), name='Discounts'),
 ]
