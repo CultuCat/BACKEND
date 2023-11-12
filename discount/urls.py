@@ -1,8 +1,6 @@
-from rest_framework import routers
-from . import views
 from django.urls import path
+from . import views
 
-router = routers.DefaultRouter()
-router.register(r'', views.DiscountsView, basename='discounts')
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('verificar-descuento/', views.DescuentoView.as_view(), name='verificar_descuento'),
+]

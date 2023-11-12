@@ -42,5 +42,5 @@ urlpatterns = [
     path('users/', include('user.urls'), name='Usuaris'),
     path('refresh/', scr_refresh, name='Refresh'),
     path('trophies/', include('trophy.urls'), name='Trophies'),
-    #path('discounts/', include('discount.urls'), name='Discounts'),
+    path('verificar_discount/', include('discount.urls'), name='Discounts'),
 ]

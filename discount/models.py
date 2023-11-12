@@ -12,3 +12,6 @@ class Discount(models.Model):
     nivellTrofeu = models.IntegerField(choices=NIVELL_CHOICES, null=False, blank=False)
     nomTrofeu = models.CharField(null=False, blank=False)
     usat = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['nomTrofeu', 'nivellTrofeu']
