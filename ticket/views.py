@@ -6,6 +6,8 @@ from .serializers import TicketSerializer
 from user.permissions import IsAuthenticated 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from utility.new_discount_utils import verificar_y_otorgar_descuento
+
 class TicketsView(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
@@ -26,8 +28,7 @@ class TicketsView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         ticket = {
             'user': 1,  #request.user.id #1
-            'event': request.data.get('event'),
-            'image': request.data.get('image')
+            'event': request.data.get('event')
         }
         serializer = self.get_serializer(data=ticket)
         serializer.is_valid(raise_exception=True)
@@ -36,10 +37,12 @@ class TicketsView(viewsets.ModelViewSet):
         
         #si se usa un descuento se marca como usado
         if request.data.get('discount') is not None:
-            descuento = Discount.objects.get(codigo=request.data.get('discount')) #si ja dejado hacer el post de entrada es porq ya se ha comprobado q el descuento existe y es válido
+            descuento = Discount.objects.get(codi=request.data.get('discount')) #si ja dejado hacer el post de entrada es porq ya se ha comprobado q el descuento existe y es válido
             # Cambia el valor de bool a True
             descuento.usat = True
             descuento.save()
+            
+        verificar_y_otorgar_descuento(ticket['user'], "Més esdeveniments", Ticket.objects.filter(user= ticket['user']).count())  
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         
         # ticket = request.data.copy()

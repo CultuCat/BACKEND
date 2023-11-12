@@ -93,28 +93,12 @@ class TestComments(TestCase):
 
         comment_in_response = next((comment for comment in comments if comment['event'] == event_id), None)
         self.assertIsNotNone(comment_in_response) 
+    
         
     def test_achiveTrophy_getDiscount(self):
         #como user ha hecho dos coments, debe de tener ya un descuento por conseguir nivel1
         
-        t_comments = Trophy.objects.get(nom="Reviwer")
-        count_check=Comment.objects.filter(user= self.comment1.user).count()
-        if count_check == t_comments.punts_nivell1:
-            nivell = 1
-        elif count_check == t_comments.punts_nivell2:
-            nivell = 2
-        elif count_check == t_comments.punts_nivell3:
-            nivell = 3
-        else:
-            nivell = None
-            
-        if nivell is not None:
-            caracteres_validos_codigo = string.ascii_uppercase + string.digits
-            codigo_descuento= ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-            while Discount.objects.filter(codi=codigo_descuento).exists():
-                codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-                    
-            Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviwer",usat=False)
+        self.check_new_trophy()
         
         self.assertEqual(Discount.objects.count(), 1)
         
@@ -125,24 +109,7 @@ class TestComments(TestCase):
             event = self.esdeveniment1
         )
         
-        t_comments = Trophy.objects.get(nom="Reviwer")
-        count_check=Comment.objects.filter(user= self.comment1.user).count()
-        if count_check == t_comments.punts_nivell1:
-            nivell = 1
-        elif count_check == t_comments.punts_nivell2:
-            nivell = 2
-        elif count_check == t_comments.punts_nivell3:
-            nivell = 3
-        else:
-            nivell = None
-            
-        if nivell is not None:
-            caracteres_validos_codigo = string.ascii_uppercase + string.digits
-            codigo_descuento= ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-            while Discount.objects.filter(codi=codigo_descuento).exists():
-                codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-                    
-            Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviwer",usat=False)
+        self.check_new_trophy()
         
         self.assertEqual(Discount.objects.count(), 2)
         
@@ -153,25 +120,7 @@ class TestComments(TestCase):
             event = self.esdeveniment1
         )
         
-        t_comments = Trophy.objects.get(nom="Reviwer")
-        count_check=Comment.objects.filter(user= self.comment1.user).count()
-        if count_check == t_comments.punts_nivell1:
-            nivell = 1
-        elif count_check == t_comments.punts_nivell2:
-            nivell = 2
-        elif count_check == t_comments.punts_nivell3:
-            nivell = 3
-        else:
-            nivell = None
-            
-        if nivell is not None:
-            caracteres_validos_codigo = string.ascii_uppercase + string.digits
-            codigo_descuento= ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-            while Discount.objects.filter(codi=codigo_descuento).exists():
-                codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-                    
-            Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviwer",usat=False)
-        
+        self.check_new_trophy()
         self.assertEqual(Comment.objects.filter(user= self.comment1.user).count(), 4)
         self.assertEqual(Discount.objects.count(), 2)
         #ahora añado otro para conseguir el 3r descuento
@@ -181,6 +130,11 @@ class TestComments(TestCase):
             event = self.esdeveniment1
         )
         
+        self.check_new_trophy()
+        self.assertEqual(Discount.objects.count(), 3)
+        
+        
+    def check_new_trophy(self):
         t_comments = Trophy.objects.get(nom="Reviwer")
         count_check=Comment.objects.filter(user= self.comment1.user).count()
         if count_check == t_comments.punts_nivell1:
@@ -200,5 +154,8 @@ class TestComments(TestCase):
                     
             Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviwer",usat=False)
         
-        self.assertEqual(Discount.objects.count(), 3)
-        
+    
+    
+    
+    
+    
