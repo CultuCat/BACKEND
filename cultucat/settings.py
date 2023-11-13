@@ -25,12 +25,7 @@ SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
-                 'culcucat.netlify.app',
-                 'ec2-34-227-70-240.compute-1.amazonaws.com', 
-                 '34.227.70.240', 
-                 'localhost:8000', 
-                 'localhost:3000']
+ALLOWED_HOSTS = []
 
 
 
@@ -73,12 +68,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",  # Agrega aquí tus orígenes permitidos
-    "https://cultucat.netlify.app",
-    'https://cultucat.hemanuelpc.es',
-    'http://localhost:3000',
-    'https://34.227.70.240',
-    'https://ec2-34-227-70-240.compute-1.amazonaws.com'
-    
+    "https://cultucat.netlify.app"
 ]
 
 
