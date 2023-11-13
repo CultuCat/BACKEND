@@ -5,3 +5,4 @@
 
 #Ignora el directorio /.vscode
 .vscode/
+myenv/
