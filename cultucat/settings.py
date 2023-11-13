@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,9 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost:3000','34.227.70.240', 'deploy-preview-19--cultucat.netlify.app', 'ec2-34-227-70-240.compute-1.amazonaws.com','cultucat.hemanuelpc.es','cultucat.netlify.app']
+ALLOWED_HOSTS = []
+
+
 
 
 # Application definition
@@ -64,17 +66,9 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#SECURE_SSL_REDIRECT = True
-
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    'http://localhost:3000',
-    'http://34.227.70.240',
-    'http://ec2-34-227-70-240.compute-1.amazonaws.com',
-    'http://cultucat.hemanuelpc.es',
-    "https://cultucat.netlify.app",
-    'https://deploy-preview-19--cultucat.netlify.app',
+    "http://localhost:8000",  # Agrega aquí tus orígenes permitidos
+    "https://cultucat.netlify.app"
 ]
 
 
@@ -102,6 +96,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'cultucat.wsgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -176,15 +171,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-	BASE_DIR / "images",
-]
-
-STATIC_ROOT = BASE_DIR / 'staticfiles_prod'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_IMATGE_PERFIL = 'backend/apps/user/CultuCat.png'
