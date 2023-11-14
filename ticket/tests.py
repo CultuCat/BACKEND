@@ -6,6 +6,7 @@ from events.models import Event
 from .models import Ticket
 from .views import TicketsView
 
+ruta = '/tickets/'
 
 class TestTicketsPost(TestCase):
     def setUp(self) -> None:
@@ -38,7 +39,7 @@ class TestTicketsPost(TestCase):
             'event': 1
         }
         TicketsView.apply_permissions = False
-        response = self.client.post('/tickets/', data, format='json')
+        response = self.client.post(ruta, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Ticket.objects.count(), 3)
         TicketsView.apply_permissions = True
@@ -48,7 +49,7 @@ class TestTicketsPost(TestCase):
             'event': 2
         }
         TicketsView.apply_permissions = False
-        response = self.client.post('/tickets/', data, format='json')
+        response = self.client.post(ruta, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Ticket.objects.count(), 3)
         TicketsView.apply_permissions = True
@@ -90,7 +91,7 @@ class TestTicketsPost(TestCase):
         self.assertEqual(response.data[0]['event'], self.ticket1.event.id)
         
     def test_list_tickets(self):
-        response = self.client.get('/tickets/')
+        response = self.client.get(ruta)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
    
