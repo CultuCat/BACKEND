@@ -32,7 +32,7 @@ class TestComments(TestCase):
             event = self.esdeveniment1
         )
         self.trophy = Trophy.objects.create(
-            nom = "Reviwer",
+            nom = "Reviewer",
             descripcio = "Quants comentaris has escrit",
             punts_nivell1 = 2,
             punts_nivell2 = 3,
@@ -135,7 +135,7 @@ class TestComments(TestCase):
         
         
     def check_new_trophy(self):
-        t_comments = Trophy.objects.get(nom="Reviwer")
+        t_comments = Trophy.objects.get(nom="Reviewer")
         count_check=Comment.objects.filter(user= self.comment1.user).count()
         if count_check == t_comments.punts_nivell1:
             nivell = 1
@@ -152,7 +152,7 @@ class TestComments(TestCase):
             while Discount.objects.filter(codi=codigo_descuento).exists():
                 codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
                     
-            Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviwer",usat=False)
+            Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviewer",usat=False)
         
     
     

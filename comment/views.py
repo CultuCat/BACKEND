@@ -36,12 +36,12 @@ class CommentsView(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         
-        verificar_y_otorgar_descuento(comment['user'], "Reviwer", Comment.objects.filter(user= comment['user']).count())  
+        verificar_y_otorgar_descuento(comment['user'], "Reviewer", Comment.objects.filter(user= comment['user']).count())  
         
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
 # def verificar_y_otorgar_descuento(user_id):
-#     t_comments = Trophy.objects.get(nom="Reviwer")
+#     t_comments = Trophy.objects.get(nom="Reviewer")
 #     num_comments = Comment.objects.filter(user='1').count()
         
 #     if num_comments == t_comments.punts_nivell1:
@@ -56,4 +56,4 @@ class CommentsView(viewsets.ModelViewSet):
 #     while(Discount.objects.get(codi="codigo_descuento") == any):
 #         codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
             
-#     Discount.objects.create(codi=codigo_descuento,userDiscount='1',nivellTrofeu=nivell,nomTrofeu='Reviwer',bool=False)
+#     Discount.objects.create(codi=codigo_descuento,userDiscount='1',nivellTrofeu=nivell,nomTrofeu='Reviewer',bool=False)
