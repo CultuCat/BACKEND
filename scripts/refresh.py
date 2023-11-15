@@ -19,7 +19,7 @@ from tags.models import Tag
 def run():
     getEventsDadesObertes()
 
-def getDates(r, event):
+def get_dates(r, event):
     dataIni = r.get('data_inici', None)
     if dataIni:
         event.dataIni = timezone.make_aware(parse_datetime(dataIni), timezone.get_current_timezone())
@@ -27,7 +27,7 @@ def getDates(r, event):
     if dataFi:
         event.dataFi = timezone.make_aware(parse_datetime(dataFi), timezone.get_current_timezone())
 
-def getEspai(r, event):
+def get_espai(r, event):
     e = r.get('espai', None)
     lat = r['latitud']
     lon = r['longitud']
@@ -35,10 +35,10 @@ def getEspai(r, event):
         espai = Space.get_or_createSpace(nom=e, latitud=lat, longitud=lon)
         event.espai = espai
 
-def getTags(r, event):
+def get_tags(r, event):
     tags_ambits = r.get('tags_mbits', None)
     tags_cat = r.get('tags_categor_es', None)
-    tags_altCat = r.get('tags_altres_categor_es', None)
+    tags_alt_cat = r.get('tags_altres_categor_es', None)
     
     tags = []
 
@@ -52,7 +52,7 @@ def getTags(r, event):
 
     process_tags(tags_ambits)
     process_tags(tags_cat)
-    process_tags(tags_altCat)
+    process_tags(tags_alt_cat)
     
     if tags:
         event.save()
@@ -83,11 +83,11 @@ def getEventsDadesObertes(where=None):
                 longitud = r['longitud'],
             )
             # Es tracten les dates
-            getDates(r, event)
+            get_dates(r, event)
             # Es tracta l'espai
-            getEspai(r, event)
+            get_espai(r, event)
             # Es tracten els tags
-            getTags(r, event)
+            get_tags(r, event)
         except Exception as e:
             print(f"Error al procesar el evento {r.get('codi', 'Desconocido')}: {str(e)}")
             print(f"Event details: {r}")
