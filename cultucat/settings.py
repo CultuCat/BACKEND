@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'comment',
     'spaces',
     'tags',
+    'trophy',
 ]
 
 MIDDLEWARE = [
