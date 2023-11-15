@@ -6,7 +6,7 @@ class Space(models.Model):
     longitud = models.FloatField()
 
     @classmethod
-    def get_or_create(cls, nom, latitud, longitud):
+    def get_or_createSpace(cls, nom, latitud, longitud):
         try:
             space = cls.objects.get(nom=nom)
         except cls.DoesNotExist:

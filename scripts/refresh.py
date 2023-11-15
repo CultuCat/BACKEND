@@ -14,11 +14,12 @@ django.setup()
 
 from events.models import Event
 from spaces.models import Space
+from tags.models import Tag
 
 def run():
     getEventsDadesObertes()
 
-def getDates(r, event):
+def get_dates(r, event):
     dataIni = r.get('data_inici', None)
     if dataIni:
         event.dataIni = timezone.make_aware(parse_datetime(dataIni), timezone.get_current_timezone())
@@ -26,14 +27,36 @@ def getDates(r, event):
     if dataFi:
         event.dataFi = timezone.make_aware(parse_datetime(dataFi), timezone.get_current_timezone())
 
-def getEspai(r, event):
-   e = r.get('espai', None)
-   lat = r['latitud']
-   lon = r['longitud']
-   if e:
-        espai = Space.objects.get_or_create(nom=e, latitud=lat, longitud=lon)
+def get_espai(r, event):
+    e = r.get('espai', None)
+    lat = r['latitud']
+    lon = r['longitud']
+    if e:
+        espai = Space.get_or_createSpace(nom=e, latitud=lat, longitud=lon)
         event.espai = espai
+
+def get_tags(r, event):
+    tags_ambits = r.get('tags_mbits', None)
+    tags_cat = r.get('tags_categor_es', None)
+    tags_alt_cat = r.get('tags_altres_categor_es', None)
+    
+    tags = []
+
+    def process_tags(tag_string):
+        if tag_string:
+            tag_list = tag_string.split(',')
+            for dirty_tag in tag_list:
+                tag_name = dirty_tag.split('/')[1]
+                tag = Tag.get_or_createTag(nom=tag_name)
+                tags.append(tag)
+
+    process_tags(tags_ambits)
+    process_tags(tags_cat)
+    process_tags(tags_alt_cat)
+    
+    if tags:
         event.save()
+        event.tags.set(tags)
     
 def getEventsDadesObertes(where=None):
     if not where:
@@ -60,12 +83,12 @@ def getEventsDadesObertes(where=None):
                 longitud = r['longitud'],
             )
             # Es tracten les dates
-            getDates(r, event)
+            get_dates(r, event)
             # Es tracta l'espai
-            getEspai(r, event)
-        except:
-            try:
-                print("L'esdeveniment " + r['codi'] + " no s'ha pogut carregar")
-            except:
-                print("L'esdeveniment no s'ha pogut carregar")
-    subprocess.run(['python', 'clean.py'])
+            get_espai(r, event)
+            # Es tracten els tags
+            get_tags(r, event)
+        except Exception as e:
+            print(f"Error al procesar el evento {r.get('codi', 'Desconocido')}: {str(e)}")
+            print(f"Event details: {r}")
+    subprocess.run(['python', 'scripts/clean.py'])
