@@ -44,12 +44,5 @@ class TicketsView(viewsets.ModelViewSet):
             
         verificar_y_otorgar_descuento(ticket['user'], "Més esdeveniments", Ticket.objects.filter(user= ticket['user']).count())  
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        
-        # ticket = request.data.copy()
-        # ticket['user'] = 1 #request.user.id #1
-        # serializer = self.get_serializer(data=ticket)
-        # serializer.is_valid(raise_exception=True)
-        # self.perform_create(serializer)
-        # headers = self.get_success_headers(serializer.data)
-        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+   
     
