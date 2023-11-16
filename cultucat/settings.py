@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'social_django',
     'events',
     'user',
     'ticket',
@@ -58,6 +57,8 @@ INSTALLED_APPS = [
     'spaces',
     'tags',
     'trophy',
+    'discount',
+    'utility',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -98,7 +98,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
             ],
         },
     },
@@ -154,7 +153,6 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
 ]
 
 
