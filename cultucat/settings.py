@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
                  'cultucat.netlify.app',
-                 '34.70.237.53',
                  'localhost:8000',
                  'localhost:3000']
 
@@ -77,7 +76,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://cultucat.netlify.app",
     'https://cultucat.hemanuelpc.es',
     'http://localhost:3000',
-    'https://34.70.237.53',
 ]
 
 
