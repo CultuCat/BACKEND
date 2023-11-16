@@ -30,6 +30,6 @@ jobs:
       - name: Run Django Tests with Coverage
         run: |
           echo "Running Django tests with coverage..."
-          coverage run manage.py test
+          coverage run manage.py test --settings=cultucat.test_settings
           coverage report -m --fail-under=80
   
