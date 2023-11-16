@@ -19,7 +19,6 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from scripts.views import scr_refresh
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -33,11 +32,13 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('events/', include('events.urls'), name='Esdeveniments'),
     path('tickets/', include('ticket.urls'), name='Tickets'),
     path('comments/', include('comment.urls'), name='Comments'),
     path('docswagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('spaces/', include('spaces.urls'), name='Espais'),
     path('users/', include('user.urls'), name='Usuaris'),
-    path('refresh/', scr_refresh, name='Refresh'),
+    path('trophies/', include('trophy.urls'), name='Trophies'),
+    path('discounts/', include('discount.urls'), name='Discounts'),
 ]

@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,12 +45,15 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'social_django',
     'events',
-    'ticket',
-    'spaces',
-    'comment',
     'user',
+    'ticket',
+    'comment',
+    'spaces',
+    'tags',
+    'trophy',
+    'discount',
+    'utility',
 ]
 
 MIDDLEWARE = [
@@ -136,11 +141,15 @@ REST_FRAMEWORK = {
     ]
 }
 
-
+#settings google
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
 ]
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '852693017999-ijlpih4e5sqte66p812vihvea3vsbne4.apps.googleusercontent.com' 
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ' 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'
 
 
 
@@ -166,4 +175,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_IMATGE_PERFIL = 'backend/imatges/CultuCat.png'

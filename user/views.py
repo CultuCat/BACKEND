@@ -25,17 +25,14 @@ class PerfilView(viewsets.ModelViewSet):
     def profile(self, request):
 
         if self.request.auth is None:
-            return Response(status=400, data={'error': "El token d'autentificació no ha sigut donat."})
+            return Response(status=status.HTTP_401_UNAUTHORIZED, data={'error': "El token d'autentificació no ha sigut donat."})
 
         user = Token.objects.get(key=self.request.auth.key).user
 
         if request.method == 'PUT':
-            newPassword = request.data.get('password', None)
             newImage = request.data.get('imatge', None)
             newBio = request.data.get('bio', None)
 
-            if newPassword is not None:
-                user.set_password(newPassword)
             if newImage is not None:
                 user.perfil.imatge = newImage
             if newBio is not None:
@@ -44,8 +41,18 @@ class PerfilView(viewsets.ModelViewSet):
             user.perfil.save()
 
         serializer = PerfilSerializer(user.perfil)
-        return Response(status=200, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+        return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
     
+    apply_permissions = False
+
+    def get_permissions(self):
+        if self.action == 'create' and self.apply_permissions:
+            return [IsAuthenticated()]
+        elif self.action == 'update':
+            return [IsAuthenticated()] 
+        else:
+            return []
+        
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         serializer = self.get_serializer(data=data)
@@ -81,7 +88,8 @@ def SignIn_Google(request, backend):
 
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': {'token': "Token invalid"}})
-    
+
+
 
 #get users by ticket
 class TicketUsersView(viewsets.ViewSet):

@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from user.models import Perfil
 from events.models import Event
+from trophy.models import Trophy
 from .models import Ticket
 from .views import TicketsView
 
@@ -27,11 +28,20 @@ class TestTicketsPost(TestCase):
             user = self.user2,
             event = self.esdeveniment2
         )
+        
+        self.trophy = Trophy.objects.create(
+            nom = "Més esdeveniments",
+            descripcio = "Quants esdeveniments has assist",
+            punts_nivell1 = 2,
+            punts_nivell2 = 3,
+            punts_nivell3 = 5
+        )
 
     def test_creations_self(self):
         self.assertEqual(Event.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 2)
         self.assertEqual(Ticket.objects.count(), 2)
+        self.assertEqual(Trophy.objects.count(), 1)
         
     def test_post_ticket(self):
         #creamos un ticket para el user 1 en evento 1, deja crear
@@ -94,4 +104,5 @@ class TestTicketsPost(TestCase):
         response = self.client.get(ruta)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-   
+    
+    

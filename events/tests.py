@@ -3,11 +3,16 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Event
 from spaces.models import Space
+from tags.models import Tag
 from .views import EventView
 
 class EventViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
+
+        self.tag1 = Tag.objects.create(nom='Tag1')
+        self.tag2 = Tag.objects.create(nom='Tag2')
+        self.tag3 = Tag.objects.create(nom='Tag3')
 
         self.event1 = Event.objects.create(
             id = 20231022001,
@@ -25,6 +30,8 @@ class EventViewTestCase(TestCase):
             espai=Space.objects.create(nom='Espacio de Prueba', latitud=40.7128, longitud=-74.0060)
         )
 
+        self.event1.tags.add(self.tag1, self.tag2)
+
         self.event2 = Event.objects.create(
             id = 20231022002,
             dataIni='2023-10-23T11:00:00Z',
@@ -34,6 +41,7 @@ class EventViewTestCase(TestCase):
             longitud=-74.0060,
             espai=self.event1.espai
         )
+        self.event2.tags.add(self.tag2, self.tag3)   
 
         self.event3 = Event.objects.create(
             id = 20231022003,
@@ -44,12 +52,13 @@ class EventViewTestCase(TestCase):
             longitud=139.6917,
             espai=Space.objects.create(nom='Otro Espacio', latitud=35.6895, longitud=139.6917)
         )
+        self.event3.tags.add(self.tag1, self.tag2)
 
     def test_create_event(self):
         EventView.apply_permissions = False
         data = {
-            'dataIni': '2023-10-22T10:00:00Z',
-            'dataFi': '2023-10-22T14:00:00Z',
+            'dataIni': '2023-10-25T10:00:00Z',
+            'dataFi': '2023-10-25T14:00:00Z',
             'nom': 'Evento de Prueba',
             'descripcio': 'Descripción del evento de prueba',
             'preu': 'Gratis',
@@ -59,18 +68,20 @@ class EventViewTestCase(TestCase):
             'imatge': 'https://imagen.com/imagen.jpg',
             'latitud': 41.7128,
             'longitud': -74.1060,
-            'espai': 'Espacio de Prueba 2'
+            'espai': 'Espacio de Prueba 2',
+            'tags': ['tag4', 'tag5']
         }
         response = self.client.post('/events/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
-        self.assertEqual(Space.objects.count(), 3)  
+        self.assertEqual(Space.objects.count(), 3)
+        self.assertEqual(Tag.objects.count(), 5)
 
     def test_create_event_espai_existent(self):
         EventView.apply_permissions = False
         data = {
-            'dataIni': '2023-10-22T10:00:00Z',
-            'dataFi': '2023-10-22T14:00:00Z',
+            'dataIni': '2023-10-26T10:00:00Z',
+            'dataFi': '2023-10-26T14:00:00Z',
             'nom': 'Evento de Prueba',
             'descripcio': 'Descripción del evento de prueba',
             'preu': 'Gratis',
@@ -80,23 +91,25 @@ class EventViewTestCase(TestCase):
             'imatge': 'https://imagen.com/imagen.jpg',
             'latitud': 41.7128,
             'longitud': -74.1060,
-            'espai': 'Espacio de Prueba'
+            'espai': 'Espacio de Prueba',
+            'tags': ['tag4', 'tag5']
         }
         response = self.client.post('/events/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(Space.objects.count(), 2)
+        self.assertEqual(Tag.objects.count(), 5)
 
     def tearDown(self):
         EventView.apply_permissions = True
     
     def test_list_events(self):
-        response = self.client.get('/events/')
+        response = self.client.get('/events/?ordering=-dataIni')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_list_events_by_espai(self):
         espai_name = 'Otro Espacio'
-        response = self.client.get(f'/events/?espai={espai_name}')
+        response = self.client.get(f'/events/?ordering=-dataIni&espai={espai_name}')
 
         self.assertEqual(response.status_code, 200)
         events = response.data['results']

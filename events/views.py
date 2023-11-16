@@ -1,6 +1,7 @@
 from rest_framework import generics, viewsets, status
 from .models import Event
 from spaces.models import Space
+from tags.models import Tag
 from .serializers import EventSerializer, EventListSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -21,7 +22,7 @@ class EventView(viewsets.ModelViewSet):
 
     filterset_fields = ['espai']
 
-    apply_permissions = True
+    apply_permissions = False
 
     def get_permissions(self):
         if self.action == 'create' and self.apply_permissions:
@@ -36,6 +37,7 @@ class EventView(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         event = request.data.copy()
+
         # Per asegurar-se que l'id no es repeteix, agafarem el mes antic i li restarem 1
         last_event = Event.objects.all().order_by('id').first()
         if last_event:
@@ -43,10 +45,19 @@ class EventView(viewsets.ModelViewSet):
         else:
             id = 99999999999
         event['id'] = id
-        Space.get_or_create(nom = event['espai'], latitud = event['latitud'], longitud = event['longitud'])
+        Space.get_or_createSpace(nom = event['espai'], latitud = event['latitud'], longitud = event['longitud'])
+        
+        tags_data = event.get('tags')
+        
+        if tags_data:
+            for tag_name in tags_data:
+                Tag.get_or_createTag(nom=tag_name)
+
         event['isAdminCreated'] = True
+
         serializer = self.get_serializer(data=event)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

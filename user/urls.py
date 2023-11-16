@@ -6,7 +6,7 @@ from django.urls import re_path
 
 router = routers.DefaultRouter()
 
-router.register('perfils', PerfilView, 'Perfils')
+router.register(r'', PerfilView, 'Perfils')
 
 urlpatterns = [
     *router.urls,
