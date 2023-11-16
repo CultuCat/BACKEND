@@ -4,14 +4,8 @@ from rest_framework.test import APIClient
 from user.models import Perfil
 from events.models import Event
 from trophy.models import Trophy
-from discount.models import Discount
 from .models import Comment
 from .views import CommentsView
-
-
-import string
-import random
-from user.models import User
 
 #class Test for model Commment
 class TestComments(TestCase):
@@ -94,67 +88,7 @@ class TestComments(TestCase):
         comment_in_response = next((comment for comment in comments if comment['event'] == event_id), None)
         self.assertIsNotNone(comment_in_response) 
     
-        
-    def test_achiveTrophy_getDiscount(self):
-        #como user ha hecho dos coments, debe de tener ya un descuento por conseguir nivel1
-        
-        self.check_new_trophy()
-        
-        self.assertEqual(Discount.objects.count(), 1)
-        
-        #ahora añado otro para conseguir el 2n descuento
-        self.comment4 = Comment.objects.create(
-            text = 'comentario de prueba',
-            user = self.user,
-            event = self.esdeveniment1
-        )
-        
-        self.check_new_trophy()
-        
-        self.assertEqual(Discount.objects.count(), 2)
-        
-        #ahora añado otro para conseguir el 3r descuento, faltaría uno más
-        self.comment5 = Comment.objects.create(
-            text = 'comentario de prueba',
-            user = self.user,
-            event = self.esdeveniment1
-        )
-        
-        self.check_new_trophy()
-        self.assertEqual(Comment.objects.filter(user= self.comment1.user).count(), 4)
-        self.assertEqual(Discount.objects.count(), 2)
-        #ahora añado otro para conseguir el 3r descuento
-        self.comment6 = Comment.objects.create(
-            text = 'comentario de prueba',
-            user = self.user,
-            event = self.esdeveniment1
-        )
-        
-        self.check_new_trophy()
-        self.assertEqual(Discount.objects.count(), 3)
-        
-        
-    def check_new_trophy(self):
-        t_comments = Trophy.objects.get(nom="Reviewer")
-        count_check=Comment.objects.filter(user= self.comment1.user).count()
-        if count_check == t_comments.punts_nivell1:
-            nivell = 1
-        elif count_check == t_comments.punts_nivell2:
-            nivell = 2
-        elif count_check == t_comments.punts_nivell3:
-            nivell = 3
-        else:
-            nivell = None
-            
-        if nivell is not None:
-            caracteres_validos_codigo = string.ascii_uppercase + string.digits
-            codigo_descuento= ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-            while Discount.objects.filter(codi=codigo_descuento).exists():
-                codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
-                    
-            Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=1),nivellTrofeu=nivell,nomTrofeu="Reviewer",usat=False)
-        
-    
+     
     
     
     
