@@ -5,3 +5,6 @@
 
 #Ignora el directorio /.vscode
 .vscode/
+
+#Ignora todos los archivos con extension .env
+.env

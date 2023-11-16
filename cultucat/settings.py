@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+env = environ.Env()
+
+env_file = Path('.') / '.env'
+if env_file.exists():
+    environ.Env.read_env(str(env_file))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -98,6 +105,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cultucat.wsgi.application'
 
+NOMBRE_USUARIO = env('NOMBRE_USUARIO')
+PASSWORD = env('PASSWORD')
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -106,8 +115,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'cultucatbd',
-        'USER': 'postgres',
-        'PASSWORD': 'pes04',
+        'USER': NOMBRE_USUARIO,
+        'PASSWORD': PASSWORD,
         'HOST': "147.83.148.217",
         'PORT': '40393'
     }
