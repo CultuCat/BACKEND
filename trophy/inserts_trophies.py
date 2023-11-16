@@ -23,11 +23,11 @@ def insertar_trofeos():
             'punts_nivell3':'100'
         },
         {
-            'nom':"Reviwer",
+            'nom':"Reviewer",
             'descripcio':"Quants comentaris has escrit",
-            'punts_nivell1':'10',
-            'punts_nivell2':'50',
-            'punts_nivell3':'100'
+            'punts_nivell1':'3',
+            'punts_nivell2':'5',
+            'punts_nivell3':'7'
         },
         {
             'nom':"Més esdeveniments",

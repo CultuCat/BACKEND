@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from user.models import Perfil
 from events.models import Event
+from trophy.models import Trophy
 from .models import Comment
 from .views import CommentsView
 
@@ -23,6 +24,13 @@ class TestComments(TestCase):
             text = 'comentario de prueba 2',
             user = self.user,
             event = self.esdeveniment1
+        )
+        self.trophy = Trophy.objects.create(
+            nom = "Reviewer",
+            descripcio = "Quants comentaris has escrit",
+            punts_nivell1 = 2,
+            punts_nivell2 = 3,
+            punts_nivell3 = 5
         )
 
     #First TestCase, checking everything OK on setUp
@@ -79,3 +87,9 @@ class TestComments(TestCase):
 
         comment_in_response = next((comment for comment in comments if comment['event'] == event_id), None)
         self.assertIsNotNone(comment_in_response) 
+    
+     
+    
+    
+    
+    
