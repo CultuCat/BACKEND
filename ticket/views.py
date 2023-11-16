@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Ticket
+from .serializers import TicketSerializer, TicketSerializer_byEvent, TicketSerializer_byUser
 from discount.models import Discount
-from .serializers import TicketSerializer
 from user.permissions import IsAuthenticated 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -10,7 +10,6 @@ from utility.new_discount_utils import verificar_y_otorgar_descuento
 
 class TicketsView(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
     models = Ticket
     #permission_classes = [IsAuthenticated]
 
@@ -24,6 +23,18 @@ class TicketsView(viewsets.ModelViewSet):
             return [IsAuthenticated]
         else:
             return []
+        
+    def get_serializer_class(self):
+        user_param = self.request.query_params.get('user', None)
+        event_param = self.request.query_params.get('event', None)
+
+        # Determinar el serializador basado en los parámetros de la solicitud
+        if user_param is not None and event_param is None:
+            return TicketSerializer_byUser
+        elif event_param is not None and user_param is None:
+            return TicketSerializer_byEvent
+        else:
+            return TicketSerializer
 
     def create(self, request, *args, **kwargs):
         ticket = {
