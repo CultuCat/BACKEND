@@ -80,15 +80,15 @@ class TestTicketsPost(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['event'], self.ticket3.event.id) #primero aparece el que tiene dataIni más peq, es decir el evento1, osea ticket3
-        self.assertEqual(response.data[1]['event'], self.ticket2.event.id) #1
+        self.assertEqual(response.data[0]['nomEvent'], self.ticket3.event.nom) #primero aparece el que tiene dataIni más peq, es decir el evento1, osea ticket3
+        self.assertEqual(response.data[1]['nomEvent'], self.ticket2.event.nom) #1
         
         #hacemos get de ticket2
         response = self.client.get(f'/tickets/?user={self.ticket1.user.id}')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['event'], self.ticket1.event.id)
+        self.assertEqual(response.data[0]['nomEvent'], self.ticket1.event.nom)
         
     def test_list_tickets(self):
         response = self.client.get(ruta)
