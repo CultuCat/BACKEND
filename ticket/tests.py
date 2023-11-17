@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from user.models import Perfil
 from events.models import Event
 from trophy.models import Trophy
+from spaces.models import Space
 from .models import Ticket
 from .views import TicketsView
 
@@ -15,8 +16,9 @@ class TestTicketsPost(TestCase):
         
         self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
         self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True)
-        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni="2023-11-01 01:00:00+01")
-        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni="2024-11-01 01:00:00+01") #esdeveniment2 es posterior a esdeveniment1
+        self.space = Space.objects.create(nom="Bcn", latitud=3.3, longitud=3.3)
+        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni="2023-11-01 01:00:00+01", espai=self.space, imatge="a")
+        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni="2024-11-01 01:00:00+01", espai=self.space, imatge="a") #esdeveniment2 es posterior a esdeveniment1
         #creamos ticket para user 1 en evento 2
         self.ticket1 = Ticket.objects.create(
             user = self.user,
