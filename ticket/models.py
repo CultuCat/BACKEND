@@ -10,6 +10,7 @@ class Ticket(models.Model):
 
     class Meta:
         unique_together = ('user', 'event')
+        ordering = ['event__dataIni']
         
     def __str__(self):
         return f"Ticket by {self.user} on {self.event}"

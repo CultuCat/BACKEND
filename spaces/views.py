@@ -55,3 +55,6 @@ class SpaceView(viewsets.ModelViewSet):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
     filter_backends = [DjangoFilterBackend, SpaceFilter]
+
+    def get_permissions(self):
+            return []
