@@ -1,9 +1,9 @@
 from django.db import models
 from events.models import Event
-from user.models import User
+from user.models import Perfil
 
 class Ticket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False, related_name='tickets')
+    user = models.ForeignKey(Perfil, on_delete=models.CASCADE, null=False, blank=False, related_name='tickets')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False, blank=False)
     image = models.ImageField(default='/images/qr.jpg')
 

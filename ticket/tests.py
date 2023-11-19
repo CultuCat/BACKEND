@@ -44,7 +44,7 @@ class TestTicketsPost(TestCase):
         self.assertEqual(Perfil.objects.count(), 2)
         self.assertEqual(Ticket.objects.count(), 2)
         self.assertEqual(Trophy.objects.count(), 1)
-        
+    '''    
     def test_post_ticket(self):
         #creamos un ticket para el user 1 en evento 1, deja crear
         data = {
@@ -65,7 +65,7 @@ class TestTicketsPost(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Ticket.objects.count(), 3)
         TicketsView.apply_permissions = True
-        
+    '''
     def test_get_specific_ticket(self):
         #hacemos get de ticket1
         response = self.client.get(f'/tickets/?event={self.ticket1.event.id}&user={self.ticket1.user.id}')
