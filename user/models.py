@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from tags.models import Tag
 
 
 class Perfil(User):
@@ -13,4 +14,4 @@ class Perfil(User):
     wantsToTalk = models.BooleanField(default=True, verbose_name=_('La resta dels usuaris poden parlar amb ell'))
     isVisible = models.BooleanField(default=True,verbose_name=_('La resta dels usuaris el poden trobar'))
 
-
+    tags_preferits = models.ManyToManyField(Tag, blank=True, related_name='perfils', verbose_name=("Tags preferits"))
