@@ -2,7 +2,7 @@ from rest_framework import generics, viewsets, status
 from .models import Event
 from spaces.models import Space
 from tags.models import Tag
-from .serializers import EventSerializer, EventListSerializer
+from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -33,6 +33,8 @@ class EventView(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return EventListSerializer
+        elif self.action == 'create':    
+            return EventCreateSerializer
         return EventSerializer
 
     def create(self, request, *args, **kwargs):
