@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Event
-from comment.serializers import CommentSerializer
 
 class EventSerializer(serializers.ModelSerializer):
     enllacos_list = serializers.ListField(read_only=True, required=False, source='get_enllac')
