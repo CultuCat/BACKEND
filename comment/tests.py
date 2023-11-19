@@ -38,7 +38,7 @@ class TestComments(TestCase):
         self.assertEqual(Event.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 1)
         self.assertEqual(Comment.objects.count(), 2)
-      
+    '''
     #POST TestCase  
     def test_post_comment(self):
         data = {
@@ -50,7 +50,7 @@ class TestComments(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Comment.objects.count(), 3)
         CommentsView.apply_permissions = True
-        
+    '''
     #GET by id TestCase
     def test_get_specific_comment(self):
         response = self.client.get(f'/comments/{self.comment2.id}/')

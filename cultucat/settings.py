@@ -68,7 +68,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Agrega aquí tus orígenes permitidos
+    "http://localhost:8000",
+    "http://localhost:3000",  
     "https://cultucat.netlify.app"
 ]
 
@@ -104,7 +105,7 @@ WSGI_APPLICATION = 'cultucat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cultucatbd',
+        'NAME': 'cutucatbd2',
         'USER': 'postgres',
         'PASSWORD': 'pes04',
         'HOST': "147.83.148.217",
@@ -132,9 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -144,7 +142,6 @@ REST_FRAMEWORK = {
 #settings google
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'social_core.backends.google.GoogleOAuth2',
 ]
 
 

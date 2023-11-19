@@ -2,12 +2,12 @@ from django.db import models
 
 
 from events.models import Event
-from user.models import User
+from user.models import Perfil
 
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False, related_name='comments')
+    user = models.ForeignKey(Perfil, on_delete=models.CASCADE, null=False, blank=False, related_name='comments')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False, blank=False, related_name='comments')  
     text = models.TextField(null=False, blank=False, max_length=560)
     created_at = models.DateTimeField(auto_now_add=True)

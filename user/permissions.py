@@ -9,6 +9,6 @@ class IsAuthenticated(permissions.IsAuthenticated):
 class IsAdmin(IsAuthenticated):
     def has_permission(self, request, view=None):
         try:
-            return super().has_permission(request, view) and request.user.isAdmin
+            return super().has_permission(request, view) and request.user.is_staff
         except (ObjectDoesNotExist, AttributeError):
             return False

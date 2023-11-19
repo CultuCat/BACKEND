@@ -1,9 +1,9 @@
 from django.db import models
-from user.models import User
+from user.models import Perfil
 
 class Discount(models.Model):
     codi = models.CharField(primary_key=True)
-    userDiscount = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    userDiscount = models.ForeignKey(Perfil, on_delete=models.CASCADE, null=False, blank=False)
     NIVELL_CHOICES = (
         (1, '1'),
         (2, '2'),
