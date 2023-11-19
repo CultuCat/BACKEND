@@ -10,7 +10,6 @@ router.register(r'', PerfilView, 'Perfils')
 
 urlpatterns = [
     *router.urls,
-    re_path('loginPerfil', views.loginPerfil),
-    re_path('signupPerfil', views.signupPerfil),
-    re_path('test_tokenPerfil', views.test_tokenPerfil),
+    re_path('login', views.loginPerfil),
+    re_path('signup', views.signupPerfil),
 ]
