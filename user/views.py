@@ -40,7 +40,7 @@ class PerfilView(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
     
 @api_view(['POST'])
-def signupPerfil(request):
+def signup_perfil(request):
     serializer = PerfilSerializer(data=request.data)
     email = request.data.get('email')
     if Perfil.objects.filter(email=email).exists():
@@ -56,16 +56,11 @@ def signupPerfil(request):
 
 
 @api_view(['POST'])
-def loginPerfil(request):
+def login_perfil(request):
     user = get_object_or_404(Perfil, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response({"detail":"L'usuari o el password no són correctes"}, status=status.HTTP_404_NOT_FOUND)
-    token, created = Token.objects.get_or_create(user=user)
+    token, _ = Token.objects.get_or_create(user=user)
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})
 
-@api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def test_tokenPerfil(request):
-    return Response("passed for {}".format(request.user.username))
