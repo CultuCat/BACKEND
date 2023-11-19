@@ -1,4 +1,4 @@
-from user.models import User
+from user.models import Perfil
 from discount.models import Discount
 from trophy.models import Trophy
 
@@ -23,4 +23,4 @@ def verificar_y_otorgar_descuento(user_id, trofeo_nombre, count_check):
         while Discount.objects.filter(codi=codigo_descuento).exists():
             codigo_descuento = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
                 
-        Discount.objects.create(codi=codigo_descuento,userDiscount=User.objects.get(id=user_id),nivellTrofeu=nivell,nomTrofeu=trofeo_nombre,usat=False)
+        Discount.objects.create(codi=codigo_descuento,userDiscount=Perfil.objects.get(id=user_id),nivellTrofeu=nivell,nomTrofeu=trofeo_nombre,usat=False)
