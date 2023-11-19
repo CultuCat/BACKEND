@@ -1,3 +1,4 @@
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,7 @@ from rest_framework.authtoken.models import Token
 
 from user.serializers import PerfilSerializer
 from user.models import Perfil
+from tags.models import Tag
 
 
 class PerfilView(viewsets.ModelViewSet):
@@ -64,3 +66,16 @@ def login_perfil(request):
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})
 
+class TagsPreferits(APIView):
+    def delete(self, request, user_id, tag_name):
+        try:
+            user = Perfil.objects.get(id=user_id)
+            tag = Tag.objects.get(nom=tag_name)
+
+            user.tags_preferits.remove(tag)
+            
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Perfil.DoesNotExist:
+            return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
+        except Tag.DoesNotExist:
+            return Response({"error": f"El tag con ID {tag_name} no existe"}, status=status.HTTP_404_NOT_FOUND)

@@ -12,4 +12,5 @@ urlpatterns = [
     *router.urls,
     re_path('login', views.login_perfil),
     re_path('signup', views.signup_perfil),
+    re_path(r'^(?P<user_id>\d+)/tags_preferits/(?P<tag_name>\w+)/$', views.TagsPreferits.as_view(), name='tags_preferits'),
 ]
