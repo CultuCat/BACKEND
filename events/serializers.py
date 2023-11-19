@@ -15,3 +15,10 @@ class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id', 'nom', 'descripcio', 'dataIni', 'imatges_list', 'espai', 'preu']
+
+class EventCreateSerializer(serializers.ModelSerializer):
+    imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
+    
+    class Meta:
+        model = Event
+        fields = '__all__'
