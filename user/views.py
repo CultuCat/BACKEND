@@ -1,20 +1,16 @@
-from rest_framework import status, viewsets
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from django.http import HttpResponse
 
+from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
 
-from user.models import Perfil
-from ticket.models import Ticket
 from user.serializers import PerfilSerializer
-from ticket.serializers import TicketSerializer
-from user.permissions import IsAuthenticated
-
-from social_django.utils import psa
-
-from requests.exceptions import HTTPError
-
+from user.models import Perfil
 
 
 class PerfilView(viewsets.ModelViewSet):
@@ -43,66 +39,33 @@ class PerfilView(viewsets.ModelViewSet):
         serializer = PerfilSerializer(user.perfil)
         return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
     
-    apply_permissions = False
-
-    def get_permissions(self):
-        if self.action == 'create' and self.apply_permissions:
-            return [IsAuthenticated()]
-        elif self.action == 'update':
-            return [IsAuthenticated()] 
-        else:
-            return []
-        
-    def create(self, request, *args, **kwargs):
-        data = request.data.copy()
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+@api_view(['POST'])
+def signupPerfil(request):
+    serializer = PerfilSerializer(data=request.data)
+    email = request.data.get('email')
+    if Perfil.objects.filter(email=email).exists():
+        return Response({'email: This email is already used'}, status=status.HTTP_400_BAD_REQUEST)
+    if serializer.is_valid():
+        serializer.save()
+        user = Perfil.objects.get(username=request.data['username'])
+        user.set_password(request.data['password'])
+        user.save()
+        token = Token.objects.create(user=user)
+        return Response({'token': token.key, 'user': serializer.data})
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
-@psa()
-def SignIn_Google(request, backend):
-    token = request.POST.get('access_token', None)
-    if token is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': "El token d'accés no ha sigut donat."})
-    try:
-        user = request.backend.do_auth(token)
-        print(request)
-    except HTTPError as e:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': {'token': "Token invalid", 'detail': str(e)}})
+def loginPerfil(request):
+    user = get_object_or_404(Perfil, username=request.data['username'])
+    if not user.check_password(request.data['password']):
+        return Response({"detail":"L'usuari o el password no són correctes"}, status=status.HTTP_404_NOT_FOUND)
+    token, created = Token.objects.get_or_create(user=user)
+    serializer = PerfilSerializer(instance=user)
+    return Response({'token': token.key, 'user': serializer.data})
 
-
-    if user:
-        if user.is_active:
-            token, created = Token.objects.get_or_create(user=user)
-            if user.perfil is None:
-                Perfil.objects.create(user=user)
-            serializer = PerfilSerializer(user.perfil)
-            return Response(status=status.HTTP_200_OK, data={**serializer.data, 'token': token.key, 'created': created})
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': "L'usuari ha esborrat el seu compte o ha sigut banejat per l'administrador"})
-
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': {'token': "Token invalid"}})
-
-
-
-#get users by ticket
-class TicketUsersView(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-
-    def list(self, request, event_id=None):
-        tickets_for_event = Ticket.objects.filter(event=event_id)
-
-        users_for_event = Perfil.objects.filter(ticket__in=tickets_for_event)
-
-        if not users_for_event:
-            return Response(status=status.HTTP_404_NOT_FOUND, data={'error': 'No hi ha usuaris per a aquest event'})
-
-        serializer = PerfilSerializer(users_for_event, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def test_tokenPerfil(request):
+    return Response("passed for {}".format(request.user.username))
