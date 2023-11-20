@@ -133,10 +133,10 @@ def delete_perfil(request):
 
 
 class TagsPreferits(APIView):
-    def delete(self, request, user_id, tag_name):
+    def delete(self, request, user_id, tag_id):
         try:
             user = Perfil.objects.get(id=user_id)
-            tag = Tag.objects.get(nom=tag_name)
+            tag = Tag.objects.get(id=tag_id)
 
             user.tags_preferits.remove(tag)
             
@@ -144,5 +144,5 @@ class TagsPreferits(APIView):
         except Perfil.DoesNotExist:
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
-            return Response({"error": f"El tag con ID {tag_name} no existe"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": f"El tag con ID {tag.nom} no existe"}, status=status.HTTP_404_NOT_FOUND)
         
