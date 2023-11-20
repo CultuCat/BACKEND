@@ -13,10 +13,18 @@ from rest_framework.authtoken.models import Token
 from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
 from user.models import Perfil, FriendshipRequest
 from tags.models import Tag
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
+    serializer_class = PerfilSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+
+    ordering_fields = ['id']
+
+    filterset_fields = ['username']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -29,6 +37,7 @@ class PerfilView(viewsets.ModelViewSet):
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
+        
 
         if self.request.auth is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED, data={'error': "El token d'autentificació no ha sigut donat."})
@@ -62,8 +71,8 @@ class PerfilView(viewsets.ModelViewSet):
             user.save()
             user.perfil.save()
 
-            serializer = PerfilSerializer(user.perfil)
-            return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+        serializer = PerfilSerializer(user.perfil)
+        return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
     
     @action(detail=True, methods=['POST'])
     def send_friend_request(self, request, pk=None):
@@ -122,6 +131,7 @@ def delete_perfil(request):
     user.delete()
     return Response({'detail': 'Usuari eliminat correctament'}, status=status.HTTP_200_OK)
 
+
 class TagsPreferits(APIView):
     def delete(self, request, user_id, tag_name):
         try:
@@ -135,4 +145,4 @@ class TagsPreferits(APIView):
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
             return Response({"error": f"El tag con ID {tag_name} no existe"}, status=status.HTTP_404_NOT_FOUND)
-
+        
