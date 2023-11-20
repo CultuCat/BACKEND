@@ -12,4 +12,5 @@ urlpatterns = [
     *router.urls,
     re_path('login', views.login_perfil),
     re_path('signup', views.signup_perfil),
+    re_path('delete', views.delete_perfil)
 ]
