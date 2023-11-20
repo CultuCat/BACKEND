@@ -13,6 +13,7 @@ from rest_framework.authtoken.models import Token
 from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
 from user.models import Perfil, FriendshipRequest
 from tags.models import Tag
+from spaces.models import Space
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
@@ -144,5 +145,18 @@ class TagsPreferits(APIView):
         except Perfil.DoesNotExist:
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
-            return Response({"error": f"El tag con ID {tag.nom} no existe"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": f"El tag con ID {tag_id} no existe"}, status=status.HTTP_404_NOT_FOUND)
+        
+class SpacesPreferits(APIView):
+    def delete(self, request, user_id, space_id):
+        try:
+            user = Perfil.objects.get(id=user_id)
+            space = Space.objects.get(id=space_id)
+            user.espais_preferits.remove(space)
+            
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Perfil.DoesNotExist:
+            return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
+        except Tag.DoesNotExist:
+            return Response({"error": f"El tag con ID {space_id} no existe"}, status=status.HTTP_404_NOT_FOUND)
         
