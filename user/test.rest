@@ -34,6 +34,6 @@ GET http://127.0.0.1:8000/users/
 Content-Type: application/json
 
 ###
-GET http://127.0.0.1:8000/users/nuria1234
+GET http://127.0.0.1:8000/users/?username=eric
 Content-Type: application/json
 

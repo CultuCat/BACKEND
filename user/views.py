@@ -13,14 +13,22 @@ from rest_framework.authtoken.models import Token
 from user.serializers import PerfilSerializer
 from user.models import Perfil
 from tags.models import Tag
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
     serializer_class = PerfilSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+
+    ordering_fields = ['id']
+
+    filterset_fields = ['username']
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
+        
 
         if self.request.auth is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED, data={'error': "El token d'autentificació no ha sigut donat."})
@@ -57,14 +65,8 @@ class PerfilView(viewsets.ModelViewSet):
         serializer = PerfilSerializer(user.perfil)
         return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
     
-    @action(methods=['GET'], detail=False)
-    def get_user_by_username(self,request, username):
-        try:
-            user = Perfil.objects.get(username=username)
-            serializer = PerfilSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Perfil.DoesNotExist:
-            return Response({"error": f"User with username '{username}' does not exist"}, status=status.HTTP_404_NOT_FOUND)
+    
+
 
 
 @api_view(['POST'])
