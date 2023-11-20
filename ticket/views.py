@@ -5,6 +5,8 @@ from .serializers import TicketSerializer, TicketSerializer_byEvent, TicketSeria
 from discount.models import Discount
 from user.permissions import IsAuthenticated 
 from django_filters.rest_framework import DjangoFilterBackend
+from events.models import Event
+from user.models import Perfil
 
 from utility.new_discount_utils import verificar_y_otorgar_descuento
 
@@ -46,6 +48,14 @@ class TicketsView(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         
+        event = Event.objects.get(id=ticket['event'])
+
+        event_tags = event.tags.all()
+
+        user = Perfil.objects.get(id=ticket['user'])  
+        user.tags_preferits.add(*event_tags)
+
+
         #si se usa un descuento se marca como usado
         if request.data.get('discount') is not None:
             descuento = Discount.objects.get(codi=request.data.get('discount')) #si ja dejado hacer el post de entrada es porq ya se ha comprobado q el descuento existe y es válido
