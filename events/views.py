@@ -38,7 +38,7 @@ class EventView(viewsets.ModelViewSet):
         return EventSerializer
 
     def create(self, request, *args, **kwargs):
-        event = request.data.copy()
+        event_data = request.data.copy()
 
         # Per asegurar-se que l'id no es repeteix, agafarem el mes antic i li restarem 1
         last_event = Event.objects.all().order_by('id').first()
@@ -46,20 +46,11 @@ class EventView(viewsets.ModelViewSet):
             id = last_event.id - 1
         else:
             id = 99999999999
-        event['id'] = id
-        Space.get_or_createSpace(nom = event['espai'], latitud = event['latitud'], longitud = event['longitud'])
-        
-        tags_data = event.get('tags')
-        
-        if tags_data:
-            for tag_name in tags_data:
-                Tag.get_or_createTag(nom=tag_name)
+        event_data['id'] = id
 
-        event['isAdminCreated'] = True
+        event = Event.create_event(event_data)
 
-        serializer = self.get_serializer(data=event)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        serializer = self.get_serializer(event)
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

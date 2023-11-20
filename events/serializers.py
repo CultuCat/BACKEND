@@ -28,8 +28,16 @@ class EventListSerializer(serializers.ModelSerializer):
         return obj.espai_info
 
 class EventCreateSerializer(serializers.ModelSerializer):
+    espai = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
     imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
     
     class Meta:
         model = Event
         fields = '__all__'
+
+    def get_espai(self, obj):
+        return obj.espai_info
+
+    def get_tags(self, obj):
+        return obj.tags_info

@@ -108,15 +108,15 @@ class EventViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_list_events_by_espai(self):
-        espai_name = 'Otro Espacio'
-        response = self.client.get(f'/events/?ordering=-dataIni&espai={espai_name}')
+        espai_id = self.event1.espai.id
+        response = self.client.get(f'/events/?espai={espai_id}')
 
         self.assertEqual(response.status_code, 200)
         events = response.data['results']
         self.assertTrue(events)
 
         event_in_response = next((event for event in events if event['id'] == self.event3.id), None)
-        self.assertIsNotNone(event_in_response) 
+        self.assertIsNone(event_in_response) 
     
     def test_get_specific_event(self):
         response = self.client.get(f'/events/{self.event1.id}/')
@@ -132,4 +132,4 @@ class EventViewTestCase(TestCase):
         self.assertEqual(response.data['adreca'], self.event1.adreca)
         self.assertEqual(response.data['latitud'], self.event1.latitud)
         self.assertEqual(response.data['longitud'], self.event1.longitud)
-        self.assertEqual(response.data['espai'], self.event1.espai.nom)
+        self.assertEqual(response.data['espai']['nom'], self.event1.espai.nom)
