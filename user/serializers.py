@@ -21,6 +21,8 @@ class PerfilShortSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio')
 
 class PerfilSerializer(serializers.ModelSerializer):
+    espais_preferits = serializers.SerializerMethodField()
+    tags_preferits = serializers.SerializerMethodField()
     pending_friend_requests = serializers.SerializerMethodField()
     friends = serializers.SerializerMethodField()
 
@@ -47,3 +49,10 @@ class PerfilSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Perfil
         fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'friends')
+
+    
+    def get_espais_preferits(self, obj):
+        return obj.espais_info
+
+    def get_tags_preferits(self, obj):
+        return obj.tags_info

@@ -1,6 +1,7 @@
 from django.db import models
 from spaces.models import Space
 from tags.models import Tag
+from tags.serializers import TagSerializer
 from django.utils.translation import gettext_lazy as _
 
 def split_colon(obj):
@@ -41,3 +42,21 @@ class Event(models.Model):
                     enllac_imatges.append(imatge)
             return enllac_imatges
         return imatges
+
+    @property
+    def espai_info(self):
+        if self.espai:
+            return {
+                'id': self.espai.id,
+                'nom': self.espai.nom
+            }
+        return None
+
+    @property
+    def tags_info(self):
+        tags = self.tags.all()
+        if tags:
+            return [
+                {'id': tag.id, 'nom': tag.nom} for tag in tags
+            ]
+        return None
