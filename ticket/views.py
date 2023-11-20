@@ -51,9 +51,11 @@ class TicketsView(viewsets.ModelViewSet):
         event = Event.objects.get(id=ticket['event'])
 
         event_tags = event.tags.all()
+        event_espai = event.espai
 
         user = Perfil.objects.get(id=ticket['user'])  
         user.tags_preferits.add(*event_tags)
+        user.espais_preferits.add(event_espai)
 
 
         #si se usa un descuento se marca como usado
