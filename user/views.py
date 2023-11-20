@@ -54,9 +54,19 @@ class PerfilView(viewsets.ModelViewSet):
             user.save()
             user.perfil.save()
 
-            serializer = PerfilSerializer(user.perfil)
-            return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+        serializer = PerfilSerializer(user.perfil)
+        return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
     
+    @action(methods=['GET'], detail=False)
+    def get_user_by_username(self,request, username):
+        try:
+            user = Perfil.objects.get(username=username)
+            serializer = PerfilSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Perfil.DoesNotExist:
+            return Response({"error": f"User with username '{username}' does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 def signup_perfil(request):
     serializer = PerfilSerializer(data=request.data)
@@ -91,6 +101,7 @@ def delete_perfil(request):
     user.delete()
     return Response({'detail': 'Usuari eliminat correctament'}, status=status.HTTP_200_OK)
 
+
 class TagsPreferits(APIView):
     def delete(self, request, user_id, tag_name):
         try:
@@ -104,4 +115,4 @@ class TagsPreferits(APIView):
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
             return Response({"error": f"El tag con ID {tag_name} no existe"}, status=status.HTTP_404_NOT_FOUND)
-
+        
