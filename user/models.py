@@ -6,6 +6,22 @@ from django.utils.translation import gettext_lazy as _
 from tags.models import Tag
 from spaces.models import Space
 
+class FriendshipRequest(models.Model):
+    id = models.AutoField(primary_key=True)
+    from_user = models.ForeignKey('Perfil', related_name='friendship_requests_sent', on_delete=models.CASCADE)
+    to_user = models.ForeignKey('Perfil', related_name='friendship_requests_received', on_delete=models.CASCADE)
+    is_answered = models.BooleanField(default=False)
+    is_accepted = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def accept(self):
+        self.is_answered = True
+        self.is_accepted = True
+        self.save()
+
+    def decline(self):
+        self.is_answered = True
+        self.save()
 
 class Perfil(User):
     imatge = models.CharField(default='https://www.calfruitos.com/es/fotos/pr_223_20190304145434.png')    
@@ -17,3 +33,28 @@ class Perfil(User):
 
     tags_preferits = models.ManyToManyField(Tag, blank=True, related_name='perfils', verbose_name=("Tags preferits"))
     espais_preferits = models.ManyToManyField(Space, blank=True, related_name='perfils', verbose_name=("Espais preferits"))
+
+    def send_friend_request(self, to_user):
+        if not FriendshipRequest.objects.filter(from_user=self, to_user=to_user, is_accepted=True).exists() and \
+            not FriendshipRequest.objects.filter(from_user=self, to_user=to_user, is_answered=False).exists() and \
+            not FriendshipRequest.objects.filter(from_user=to_user, to_user=self, is_accepted=True).exists() and \
+            not FriendshipRequest.objects.filter(from_user=to_user, to_user=self, is_answered=False).exists():
+            FriendshipRequest.objects.create(from_user=self, to_user=to_user)
+            return True
+        return False
+            
+    def get_pending_friend_requests(self):
+            return FriendshipRequest.objects.filter(to_user=self, is_answered=False)
+
+    def get_friends(self):
+            friends = []
+            sent_requests = FriendshipRequest.objects.filter(from_user=self, is_answered=True, is_accepted=True)
+            received_requests = FriendshipRequest.objects.filter(to_user=self, is_answered=True, is_accepted=True)
+
+            for request in sent_requests:
+                friends.append(request.to_user)
+
+            for request in received_requests:
+                friends.append(request.from_user)
+
+            return friends

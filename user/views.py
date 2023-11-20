@@ -10,14 +10,22 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
-from user.serializers import PerfilSerializer
-from user.models import Perfil
+from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
+from user.models import Perfil, FriendshipRequest
 from tags.models import Tag
 
 
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
-    serializer_class = PerfilSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return PerfilShortSerializer
+        elif self.action == 'send_friend_request':    
+            return FriendshipCreateSerializer
+        elif self.action == 'accept_friend_request': 
+            return FriendshipAcceptSerializer
+        return PerfilSerializer
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
@@ -56,6 +64,29 @@ class PerfilView(viewsets.ModelViewSet):
 
             serializer = PerfilSerializer(user.perfil)
             return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+    
+    @action(detail=True, methods=['POST'])
+    def send_friend_request(self, request, pk=None):
+        sender_profile = self.get_object()
+        receiver_id = request.data.get('to_user')
+        receiver_profile = get_object_or_404(Perfil, id=receiver_id)
+
+        created = sender_profile.send_friend_request(receiver_profile)
+        if created:
+            return Response({'detail': 'Solicitud de amistad enviada'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Ya tienes una solicitud de amistad de ese usuario'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'])
+    def accept_friend_request(self, request, pk=None):
+        request_id = request.data.get('id')
+        friendship_request = get_object_or_404(FriendshipRequest, id=request_id)
+
+        if (request.data.get('is_accepted') == True):
+            friendship_request.accept()
+            return Response({'detail': 'Solicitud de amistad aceptada'}, status=status.HTTP_200_OK)
+        else:
+            friendship_request.decline()
+            return Response({'detail': 'Solicitud de amistad rechazada'}, status=status.HTTP_200_OK)
     
 @api_view(['POST'])
 def signup_perfil(request):
