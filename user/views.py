@@ -10,14 +10,22 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
-from user.serializers import PerfilSerializer
-from user.models import Perfil
+from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
+from user.models import Perfil, FriendshipRequest
 from tags.models import Tag
 
 
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
-    serializer_class = PerfilSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return PerfilShortSerializer
+        elif self.action == 'send_friend_request':    
+            return FriendshipCreateSerializer
+        elif self.action == 'accept_friend_request': 
+            return FriendshipAcceptSerializer
+        return PerfilSerializer
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
@@ -25,9 +33,25 @@ class PerfilView(viewsets.ModelViewSet):
         if self.request.auth is None:
             return Response(status=status.HTTP_401_UNAUTHORIZED, data={'error': "El token d'autentificació no ha sigut donat."})
 
-        user = Token.objects.get(key=self.request.auth.key).user
 
-        if request.method == 'PUT':
+        if request.method == 'GET':
+            profiles = Perfil.objects.all()
+            response_data = []
+
+            for profile in profiles:
+                token, _ = Token.objects.get_or_create(user=profile.user)
+                serializer = PerfilSerializer(instance=profile.user)
+                
+                user_data = {
+                    'token': token.key,
+                    'user': serializer.data
+                }
+                response_data.append(user_data)
+
+            return Response(response_data)
+
+        elif request.method == 'PUT':
+            user = Token.objects.get(key=self.request.auth.key).user
             newImage = request.data.get('imatge', None)
             newBio = request.data.get('bio', None)
 
@@ -38,8 +62,31 @@ class PerfilView(viewsets.ModelViewSet):
             user.save()
             user.perfil.save()
 
-        serializer = PerfilSerializer(user.perfil)
-        return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+            serializer = PerfilSerializer(user.perfil)
+            return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
+    
+    @action(detail=True, methods=['POST'])
+    def send_friend_request(self, request, pk=None):
+        sender_profile = self.get_object()
+        receiver_id = request.data.get('to_user')
+        receiver_profile = get_object_or_404(Perfil, id=receiver_id)
+
+        created = sender_profile.send_friend_request(receiver_profile)
+        if created:
+            return Response({'detail': 'Solicitud de amistad enviada'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Ya tienes una solicitud de amistad de ese usuario'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'])
+    def accept_friend_request(self, request, pk=None):
+        request_id = request.data.get('id')
+        friendship_request = get_object_or_404(FriendshipRequest, id=request_id)
+
+        if (request.data.get('is_accepted') == True):
+            friendship_request.accept()
+            return Response({'detail': 'Solicitud de amistad aceptada'}, status=status.HTTP_200_OK)
+        else:
+            friendship_request.decline()
+            return Response({'detail': 'Solicitud de amistad rechazada'}, status=status.HTTP_200_OK)
     
 @api_view(['POST'])
 def signup_perfil(request):
@@ -66,6 +113,15 @@ def login_perfil(request):
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})
 
+@api_view(['DELETE'])
+def delete_perfil(request):
+    try:
+        user = get_object_or_404(Perfil, username=request.data['username'])
+    except Perfil.DoesNotExist:
+        return Response({'detail': 'Usuari no trobat'}, status=status.HTTP_404_NOT_FOUND)
+    user.delete()
+    return Response({'detail': 'Usuari eliminat correctament'}, status=status.HTTP_200_OK)
+
 class TagsPreferits(APIView):
     def delete(self, request, user_id, tag_name):
         try:
@@ -79,3 +135,4 @@ class TagsPreferits(APIView):
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
         except Tag.DoesNotExist:
             return Response({"error": f"El tag con ID {tag_name} no existe"}, status=status.HTTP_404_NOT_FOUND)
+
