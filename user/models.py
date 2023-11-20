@@ -58,3 +58,21 @@ class Perfil(User):
                 friends.append(request.from_user)
 
             return friends
+    
+    @property
+    def espais_info(self):
+        espais = self.espais_preferits.all()
+        if espais:
+            return [
+                {'id': espai.id, 'nom': espai.nom} for espai in espais
+            ]
+        return None
+
+    @property
+    def tags_info(self):
+        tags = self.tags_preferits.all()
+        if tags:
+            return [
+                {'id': tag.id, 'nom': tag.nom} for tag in tags
+            ]
+        return None
