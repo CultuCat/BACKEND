@@ -10,10 +10,14 @@ from user.permissions import IsAdmin
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from user.permissions import IsAdmin
+from rest_framework.authentication import TokenAuthentication
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     models = Event
+    permission_classes = [IsAdmin]
+    authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination
     pagination_class.page_size = 50
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
@@ -22,10 +26,8 @@ class EventView(viewsets.ModelViewSet):
 
     filterset_fields = ['espai']
 
-    apply_permissions = False
-
-    def get_permissions(self):
-        if self.action == 'create' and self.apply_permissions:
+    def get_permission_classes(self):
+        if self.action == 'create':
             return [IsAdmin()]
         else:
             return []
