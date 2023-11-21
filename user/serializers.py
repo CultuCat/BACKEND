@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Perfil, FriendshipRequest
+from discount.models import Discount
 
 class FriendshipRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,15 +17,42 @@ class FriendshipAcceptSerializer(serializers.ModelSerializer):
         fields = ('id', 'is_accepted')
 
 class PerfilShortSerializer(serializers.ModelSerializer):
+    puntuacio_actual = serializers.SerializerMethodField()
+    
+    def get_puntuacio_actual(self, obj):
+        punt = 0
+        descuentos = Discount.objects.filter(userDiscount=obj.id)
+        for d in descuentos:
+            if d.nivellTrofeu == 1:
+                punt += 10
+            elif d.nivellTrofeu == 2:
+                punt += 50
+            elif d.nivellTrofeu == 3:
+                punt += 100
+        return punt
+    
     class Meta:
         model = Perfil
-        fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio')
+        fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio', 'puntuacio_actual')
 
 class PerfilSerializer(serializers.ModelSerializer):
     espais_preferits = serializers.SerializerMethodField()
     tags_preferits = serializers.SerializerMethodField()
     pending_friend_requests = serializers.SerializerMethodField()
     friends = serializers.SerializerMethodField()
+    puntuacio_actual = serializers.SerializerMethodField()
+    
+    def get_puntuacio_actual(self, obj):
+        punt = 0
+        descuentos = Discount.objects.filter(userDiscount=obj.id)
+        for d in descuentos:
+            if d.nivellTrofeu == 1:
+                punt += 10
+            elif d.nivellTrofeu == 2:
+                punt += 50
+            elif d.nivellTrofeu == 3:
+                punt += 100
+        return punt
 
     def get_pending_friend_requests(self, obj):
         pending_requests = obj.get_pending_friend_requests()
@@ -48,7 +76,7 @@ class PerfilSerializer(serializers.ModelSerializer):
     
     class Meta(object):
         model = Perfil
-        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'friends')
+        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'friends', 'puntuacio_actual')
 
     
     def get_espais_preferits(self, obj):
