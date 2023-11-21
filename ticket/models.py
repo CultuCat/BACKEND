@@ -14,7 +14,7 @@ def get_random_image():
 class Ticket(models.Model):
     user = models.ForeignKey(Perfil, on_delete=models.CASCADE, null=False, blank=False, related_name='tickets')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False, blank=False)
-    image = models.CharField(default=get_random_image)
+    image = models.CharField(default=get_random_image, max_length=200)
 
 
     class Meta:
