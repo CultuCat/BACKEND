@@ -5,6 +5,7 @@ from user.models import Perfil
 from events.models import Event
 from trophy.models import Trophy
 from spaces.models import Space
+from tags.models import Tag
 from .models import Ticket
 from .views import TicketsView
 
@@ -16,8 +17,12 @@ class TestTicketsPost(TestCase):
         
         self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
         self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True)
-        self.space = Space.objects.create(nom="Bcn", latitud=3.3, longitud=3.3)
+        self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
+        self.tag1 = Tag.objects.create(id=1, nom="tag1")
+        self.tag2 = Tag.objects.create(id=2, nom="tag2")
+
         self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni="2023-11-01 01:00:00+01", espai=self.space, imatge="a")
+        self.esdeveniment1.tags.set([self.tag1, self.tag2])
         self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni="2024-11-01 01:00:00+01", espai=self.space, imatge="a") #esdeveniment2 es posterior a esdeveniment1
         #creamos ticket para user 1 en evento 2
         self.ticket1 = Ticket.objects.create(
@@ -54,9 +59,12 @@ class TestTicketsPost(TestCase):
         response = self.client.post(ruta, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Ticket.objects.count(), 3)
+        self.assertTrue(self.user.espais_preferits.filter(id=self.space.id).exists())
+        self.assertTrue(self.user.tags_preferits.filter(id=self.tag1.id).exists())
+        self.assertTrue(self.user.tags_preferits.filter(id=self.tag2.id).exists())
         TicketsView.apply_permissions = True
         
-        #creamos un ticket para el user 1 en evento 1, no deja crear, ya existe
+        #creamos un ticket para el user 1 en evento 2, no deja crear, ya existe
         data = {
             'event': 2
         }
