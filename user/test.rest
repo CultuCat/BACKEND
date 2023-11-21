@@ -9,8 +9,8 @@ POST http://127.0.0.1:8000/users/login
 Content-Type: application/json
 
 { 
-    "username": "adam123", 
-    "password": "Pass1234!" 
+    "username": "nuriacn", 
+    "password": "nuria123" 
 }
 
 ###
@@ -59,10 +59,10 @@ Content-Type: application/json
 #token no admin: 4083f2871e5caeb3c791c3d73c777614fbad6cf7 - id:6
 #token admin: 21262f8874fe335ccf98c423cc3f5ad57dafaf69
 
-PUT http://127.0.0.1:8000/users/2/block_profile/
+PUT http://127.0.0.1:8000/users/6/block_profile/
 Content-Type: application/json
-Authorization: Token 4083f2871e5caeb3c791c3d73c777614fbad6cf7
+Authorization: Token 21262f8874fe335ccf98c423cc3f5ad57dafaf69
 
 { 
-    "isBlocked": true
+    "isBlocked": false
 }

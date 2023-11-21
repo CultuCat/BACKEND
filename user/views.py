@@ -164,6 +164,8 @@ def login_perfil(request):
     user = get_object_or_404(Perfil, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response({"detail":"L'usuari o el password no són correctes"}, status=status.HTTP_404_NOT_FOUND)
+    if user.isBlocked:
+        return Response({"detail": "L'usuari està bloquejat per l'administració"}, status=status.HTTP_403_FORBIDDEN)
     token, _ = Token.objects.get_or_create(user=user)
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})
