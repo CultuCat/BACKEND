@@ -37,3 +37,20 @@ Content-Type: application/json
 GET http://127.0.0.1:8000/users/?username=eric
 Content-Type: application/json
 
+###
+
+PUT http://127.0.0.1:8000/users/2/wants_to_talk_perfil/
+Content-Type: application/json
+
+{ 
+    "wantsToTalk": true 
+}
+
+###
+
+PUT http://127.0.0.1:8000/users/2/is_visible_perfil/
+Content-Type: application/json
+
+{ 
+    "isVisible": true 
+}
