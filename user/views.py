@@ -97,6 +97,33 @@ class PerfilView(viewsets.ModelViewSet):
         else:
             friendship_request.decline()
             return Response({'detail': 'Solicitud de amistad rechazada'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
+    def wants_to_talk_perfil(self,request,pk=None):
+        perfil = self.get_object()
+        wants_to_talk = request.data.get('wantsToTalk')
+
+        perfil.wantsToTalk = wants_to_talk
+        perfil.save()
+
+        if (perfil.wantsToTalk == True):
+            return Response({'detail': 'La resta dels usuaris poden parlar amb tu'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'La resta dels usuaris no poden parlar amb tu'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
+    def is_visible_perfil(self,request,pk=None):
+        perfil = self.get_object()
+        is_visible = request.data.get('isVisible')
+
+        perfil.isVisible = is_visible
+        perfil.save()
+
+        if (perfil.isVisible == True):
+            return Response({'detail': 'La resta dels usuaris et poden trobar'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'La resta dels usuaris no et poden trobar'}, status=status.HTTP_200_OK)
+
     
 @api_view(['POST'])
 def signup_perfil(request):
