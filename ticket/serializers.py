@@ -3,9 +3,24 @@ from .models import Ticket
 from events.models import Event
 
 class TicketSerializer(serializers.ModelSerializer):
+    imatgeEvent = serializers.SerializerMethodField()
+    
     class Meta:
         model = Ticket
-        fields = '__all__'
+        fields = ['user', 'event', 'imatgeEvent', 'image']
+        
+    def get_imatgeEvent(self, obj):
+        imatges = split_colon(obj.event.imatge if obj.event else None)
+        if imatges:
+            enllac_imatges = []
+            for imatge in imatges:
+                img_split = imatge.split('://')[0]
+                if img_split != 'http' and img_split != 'https':
+                    return 'http://agenda.cultura.gencat.cat' + imatge
+                else:
+                    return imatge
+            return enllac_imatges
+        return imatges
 
 class TicketSerializer_byEvent(serializers.ModelSerializer):
     id = serializers.CharField(default="1")
