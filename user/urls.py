@@ -18,4 +18,8 @@ urlpatterns = [
     re_path('<str:username>', views.PerfilView.as_view({'get': 'get_user_by_username'}), name='get_user_by_username'),
     re_path(r'^(?P<user_id>\d+)/send_friend_request/$', PerfilView.as_view({'post': 'send_friend_request'}), name='send_friend_request'),
     re_path(r'^(?P<user_id>\d+)/accept_friend_request/$', PerfilView.as_view({'post': 'accept_friend_request'}), name='accept_friend_request'),
+    re_path(r'^(?P<user_id>\d+)/wants_to_talk_perfil/$', PerfilView.as_view({'put': 'wants_to_talk_perfil'}), name='wants_to_talk_perfil'),
+    re_path(r'^(?P<user_id>\d+)/is_visible_perfil/$', PerfilView.as_view({'put': 'is_visible_perfil'}), name='is_visible_perfil'),
+    re_path(r'^(?P<user_id>\d+)/block_profile/$', PerfilView.as_view({'put': 'block_profile'}), name='block_profile'),
+
 ]

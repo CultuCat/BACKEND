@@ -16,6 +16,7 @@ from tags.models import Tag
 from spaces.models import Space
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from user.permissions import IsAdmin
 
 
 class PerfilView(viewsets.ModelViewSet):
@@ -97,6 +98,50 @@ class PerfilView(viewsets.ModelViewSet):
         else:
             friendship_request.decline()
             return Response({'detail': 'Solicitud de amistad rechazada'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
+    def wants_to_talk_perfil(self,request,pk=None):
+        perfil = self.get_object()
+        wants_to_talk = request.data.get('wantsToTalk')
+
+        perfil.wantsToTalk = wants_to_talk
+        perfil.save()
+
+        if (perfil.wantsToTalk == True):
+            return Response({'detail': 'La resta dels usuaris poden parlar amb tu'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'La resta dels usuaris no poden parlar amb tu'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
+    def is_visible_perfil(self,request,pk=None):
+        perfil = self.get_object()
+        is_visible = request.data.get('isVisible')
+
+        perfil.isVisible = is_visible
+        perfil.save()
+
+        if (perfil.isVisible == True):
+            return Response({'detail': 'La resta dels usuaris et poden trobar'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'La resta dels usuaris no et poden trobar'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
+    def block_profile(self, request, pk=None):
+        perfil = self.get_object()
+        is_blocked = request.data.get('isBlocked')
+
+        if request.user.is_staff:
+            
+            perfil.isBlocked = is_blocked
+            perfil.save()
+
+            if perfil.isBlocked == True:
+                return Response({'detail': "L'usuari està bloquejat"}, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': "L'usuari no està bloquejat"}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'No tens permisos per fer aquesta acció'}, status=status.HTTP_403_FORBIDDEN)
+
     
 @api_view(['POST'])
 def signup_perfil(request):
@@ -119,6 +164,8 @@ def login_perfil(request):
     user = get_object_or_404(Perfil, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response({"detail":"L'usuari o el password no són correctes"}, status=status.HTTP_404_NOT_FOUND)
+    if user.isBlocked:
+        return Response({"detail": "L'usuari està bloquejat per l'administració"}, status=status.HTTP_403_FORBIDDEN)
     token, _ = Token.objects.get_or_create(user=user)
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})

@@ -59,6 +59,16 @@ class Perfil(User):
 
             return friends
     
+    def wants_to_talk_status(self, wants_to_talk):
+        if wants_to_talk != self.wantsToTalk:
+            self.wantsToTalk = wants_to_talk
+            self.save()
+
+    def is_visible_status(self, is_visible):
+        if is_visible != self.isVisible:
+            self.isVisible = is_visible
+            self.save()
+    
     @property
     def espais_info(self):
         espais = self.espais_preferits.all()
