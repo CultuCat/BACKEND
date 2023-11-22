@@ -1,7 +1,6 @@
 from user.models import Perfil
 from discount.models import Discount
 from trophy.models import Trophy
-from user.models import User
 
 import string
 import random
@@ -24,7 +23,7 @@ def verificar_y_otorgar_descuento(user_id, trofeo_nombre, count_check):
         
     if nivell is not None:
         #se suman los puntos
-        u = User.objects.get(id=user_id) 
+        u = Perfil.objects.get(id=user_id) 
         u.puntuacio += new_points
         u.save()
         

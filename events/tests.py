@@ -4,11 +4,17 @@ from rest_framework import status
 from .models import Event
 from spaces.models import Space
 from tags.models import Tag
+from user.models import Perfil
 from .views import EventView
+from rest_framework.authtoken.models import Token
 
 class EventViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
+
+        self.user = Perfil.objects.create(id=1, username='test_user', is_active=True)
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
 
         self.tag1 = Tag.objects.create(nom='Tag1')
         self.tag2 = Tag.objects.create(nom='Tag2')
@@ -71,7 +77,8 @@ class EventViewTestCase(TestCase):
             'espai': 'Espacio de Prueba 2',
             'tags': ['tag4', 'tag5']
         }
-        response = self.client.post('/events/', data, format='json')
+        headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
+        response = self.client.post('/events/', data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(Space.objects.count(), 3)
@@ -94,7 +101,8 @@ class EventViewTestCase(TestCase):
             'espai': 'Espacio de Prueba',
             'tags': ['tag4', 'tag5']
         }
-        response = self.client.post('/events/', data, format='json')
+        headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
+        response = self.client.post('/events/', data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(Space.objects.count(), 2)
