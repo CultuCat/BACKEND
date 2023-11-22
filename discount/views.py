@@ -5,7 +5,7 @@ from .models import Discount
 from .serializers import DiscountSerializer
 
 class DiscountsView(viewsets.ModelViewSet):
-    queryset = Discount.objects.filter(usat=False)
+    queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
 
     filter_backends = [DjangoFilterBackend]
