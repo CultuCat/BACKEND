@@ -12,18 +12,18 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from user.permissions import IsAdmin
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     models = Event
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticatedOrReadOnly] 
     authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination
     pagination_class.page_size = 50
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
     ordering_fields = ['dataIni']
-
     filterset_fields = ['espai']
 
     def get_queryset(self):
@@ -36,7 +36,7 @@ class EventView(viewsets.ModelViewSet):
         if self.action == 'create':
             return [IsAdmin()]
         else:
-            return []
+            return [IsAuthenticatedOrReadOnly()]
 
     def get_serializer_class(self):
         if self.action == 'list':
