@@ -22,16 +22,16 @@ class TicketSerializer(serializers.ModelSerializer):
         return imatges
 
 class TicketSerializer_byEvent(serializers.ModelSerializer):
-    id = serializers.SerializerMethodField()
+    idUser = serializers.SerializerMethodField()
     nickname = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
     
     class Meta:
         model = Ticket
-        fields = ['id', 'nickname', 'name', 'avatar']
+        fields = ['idUser', 'nickname', 'name', 'avatar']
         
-    def get_id(self, obj):
+    def get_idUser(self, obj):
         return obj.user.id if obj.user else None
     
     def get_nickname(self, obj):
@@ -57,7 +57,7 @@ class TicketSerializer_byUser(serializers.ModelSerializer):
     
     class Meta:
         model = Ticket
-        fields = ['nomEvent', 'data', 'espai', 'imatge']
+        fields = ['id', 'nomEvent', 'data', 'espai', 'imatge']
         
     def get_nomEvent(self, obj):
         return obj.event.nom if obj.event else None
