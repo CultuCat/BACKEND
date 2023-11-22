@@ -36,6 +36,18 @@ class PerfilView(viewsets.ModelViewSet):
         elif self.action == 'accept_friend_request': 
             return FriendshipAcceptSerializer
         return PerfilSerializer
+    
+    def get_queryset(self):
+        queryset = Perfil.objects.all()
+        username_param = self.request.data.get('username')
+        
+        if username_param:
+            try:
+                user = Perfil.objects.get(username=username_param)
+            except Perfil.DoesNotExist:
+                return Response({'detail': 'No existeix cap usuari amb aquest username'}, status=status.HTTP_404_NOT_FOUND)
+
+        return queryset
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
