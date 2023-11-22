@@ -11,9 +11,9 @@ class TestUsers(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         
-        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, puntuacio=1, password='test')
-        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, puntuacio=2, password='test2')
-        self.user3 = Perfil.objects.create(id=3,username='test_user3', is_active=True, puntuacio=3, password='test3')
+        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, puntuacio=1)
+        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, puntuacio=2)
+        self.user3 = Perfil.objects.create(id=3,username='test_user3', is_active=True, puntuacio=3)
         self.admin = Perfil.objects.create(id=4, username='test_admin', is_active=True, is_staff=True)
         self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
         self.space2 = Space.objects.create(id=2, nom="Bdn", latitud=3.2, longitud=3.2)
