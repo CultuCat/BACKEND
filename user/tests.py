@@ -180,15 +180,7 @@ class TestUsers(TestCase):
         self.user2.refresh_from_db() 
         self.assertFalse(self.user2.isBlocked)
 
-    ##Tests login i signup
-    def test_login_ok(self):
-        data = {
-            'username': 'test_user', 
-            'password': 'test'
-        }
-        response = self.client.post("/users/login", data, format='json')
-        print(response.data)
-        #self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 
     #tests edit perfil i get
