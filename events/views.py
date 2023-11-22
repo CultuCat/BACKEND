@@ -26,6 +26,12 @@ class EventView(viewsets.ModelViewSet):
 
     filterset_fields = ['espai']
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if not self.request.query_params.get('ordering'):
+            queryset = queryset.order_by('dataIni')
+        return queryset
+
     def get_permission_classes(self):
         if self.action == 'create':
             return [IsAdmin()]
