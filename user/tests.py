@@ -4,6 +4,8 @@ from rest_framework.test import APIClient
 from .models import Perfil, FriendshipRequest
 from spaces.models import Space
 from tags.models import Tag
+from rest_framework.authtoken.models import Token
+
 
 class TestUsers(TestCase):
     def setUp(self) -> None:
@@ -133,6 +135,54 @@ class TestUsers(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
  
     
+    #test get user by username false
+
+    ##Tests bloquejar user
+    def test_block_as_admin_true(self):
+        admin_token = Token.objects.create(user=self.admin)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {admin_token.key}')
+        data = {
+            'isBlocked': True
+        }
+        response = self.client.put("/users/1/block_profile/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db() 
+        self.assertTrue(self.user.isBlocked)
+
+    def test_block_as_admin_false(self):
+        admin_token = Token.objects.create(user=self.admin)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {admin_token.key}')
+        data = {
+            'isBlocked': False
+        }
+        response = self.client.put("/users/1/block_profile/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db() 
+        self.assertFalse(self.user.isBlocked)
+
+    def test_block_as_perfil_true(self):
+        user_token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {user_token.key}')
+        data = {
+            'isBlocked': True
+        }
+        response = self.client.put("/users/2/block_profile/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.user2.refresh_from_db() 
+        self.assertFalse(self.user2.isBlocked)
+
+    def test_block_as_perfil_false(self):
+        user_token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {user_token.key}')
+        data = {
+            'isBlocked': False
+        }
+        response = self.client.put("/users/2/block_profile/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.user2.refresh_from_db() 
+        self.assertFalse(self.user2.isBlocked)
+
+
 
     
 

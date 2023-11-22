@@ -16,7 +16,7 @@ from tags.models import Tag
 from spaces.models import Space
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from user.permissions import IsAdmin
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class PerfilView(viewsets.ModelViewSet):
@@ -37,17 +37,18 @@ class PerfilView(viewsets.ModelViewSet):
             return FriendshipAcceptSerializer
         return PerfilSerializer
     
-    def get_queryset(self):
-        queryset = Perfil.objects.all()
-        username_param = self.request.data.get('username')
+    @action(detail=False, methods=['GET'])
+    def get_user_by_username(self, request):
+        username_param = request.data.get('username')
         
         if username_param:
             try:
-                user = Perfil.objects.get(username=username_param)
-            except Perfil.DoesNotExist:
+                user = get_object_or_404(Perfil, username=username_param)
+                serializer = PerfilSerializer(user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
                 return Response({'detail': 'No existeix cap usuari amb aquest username'}, status=status.HTTP_404_NOT_FOUND)
 
-        return queryset
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
