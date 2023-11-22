@@ -24,7 +24,7 @@ class PerfilView(viewsets.ModelViewSet):
     serializer_class = PerfilSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
-    ordering_fields = ['id']
+    ordering_fields = ['id', 'puntuacio']
 
     filterset_fields = ['username']
 
@@ -170,14 +170,6 @@ def login_perfil(request):
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})
 
-@api_view(['DELETE'])
-def delete_perfil(request):
-    try:
-        user = get_object_or_404(Perfil, username=request.data['username'])
-    except Perfil.DoesNotExist:
-        return Response({'detail': 'Usuari no trobat'}, status=status.HTTP_404_NOT_FOUND)
-    user.delete()
-    return Response({'detail': 'Usuari eliminat correctament'}, status=status.HTTP_200_OK)
 
 
 class TagsPreferits(APIView):
