@@ -24,10 +24,16 @@ class PerfilSerializer(serializers.ModelSerializer):
     espais_preferits = serializers.SerializerMethodField()
     tags_preferits = serializers.SerializerMethodField()
     pending_friend_requests = serializers.SerializerMethodField()
+    pending_friend_requests_sent = serializers.SerializerMethodField()
     friends = serializers.SerializerMethodField()
 
     def get_pending_friend_requests(self, obj):
         pending_requests = obj.get_pending_friend_requests()
+        serializer = FriendshipRequestSerializer(pending_requests, many=True)
+        return serializer.data
+    
+    def get_pending_friend_requests_sent(self, obj):
+        pending_requests = obj.get_pending_friend_requests_sent()
         serializer = FriendshipRequestSerializer(pending_requests, many=True)
         return serializer.data
 
@@ -48,7 +54,7 @@ class PerfilSerializer(serializers.ModelSerializer):
     
     class Meta(object):
         model = Perfil
-        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'friends')
+        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
 
     
     def get_espais_preferits(self, obj):
