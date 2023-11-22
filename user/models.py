@@ -45,6 +45,9 @@ class Perfil(User):
             
     def get_pending_friend_requests(self):
             return FriendshipRequest.objects.filter(to_user=self, is_answered=False)
+    
+    def get_pending_friend_requests_sent(self):
+            return FriendshipRequest.objects.filter(from_user=self, is_answered=False)
 
     def get_friends(self):
             friends = []
