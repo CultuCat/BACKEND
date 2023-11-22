@@ -16,7 +16,7 @@ from tags.models import Tag
 from spaces.models import Space
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from user.permissions import IsAdmin
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class PerfilView(viewsets.ModelViewSet):
@@ -24,7 +24,7 @@ class PerfilView(viewsets.ModelViewSet):
     serializer_class = PerfilSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
-    ordering_fields = ['id']
+    ordering_fields = ['id', 'puntuacio']
 
     filterset_fields = ['username']
 
@@ -36,6 +36,19 @@ class PerfilView(viewsets.ModelViewSet):
         elif self.action == 'accept_friend_request': 
             return FriendshipAcceptSerializer
         return PerfilSerializer
+    
+    @action(detail=False, methods=['GET'])
+    def get_user_by_username(self, request):
+        username_param = request.data.get('username')
+        
+        if username_param:
+            try:
+                user = get_object_or_404(Perfil, username=username_param)
+                serializer = PerfilSerializer(user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'No existeix cap usuari amb aquest username'}, status=status.HTTP_404_NOT_FOUND)
+
 
     @action(methods=['GET', 'PUT'], detail=False)
     def profile(self, request):
@@ -170,14 +183,6 @@ def login_perfil(request):
     serializer = PerfilSerializer(instance=user)
     return Response({'token': token.key, 'user': serializer.data})
 
-@api_view(['DELETE'])
-def delete_perfil(request):
-    try:
-        user = get_object_or_404(Perfil, username=request.data['username'])
-    except Perfil.DoesNotExist:
-        return Response({'detail': 'Usuari no trobat'}, status=status.HTTP_404_NOT_FOUND)
-    user.delete()
-    return Response({'detail': 'Usuari eliminat correctament'}, status=status.HTTP_200_OK)
 
 
 class TagsPreferits(APIView):

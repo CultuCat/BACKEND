@@ -1,7 +1,7 @@
 POST http://127.0.0.1:8000/users/signup
 Content-Type: application/json
 
-{ "username": "nuriacn", "password": "nuria123", "email": "nuria@mail.com", "first_name": "Nuria" }
+{ "username": "nuriacn2", "password": "nuria1232", "email": "nuria2@mail.com", "first_name": "Nuria", "puntuacio": 4}
 
 ### 
 
@@ -66,3 +66,9 @@ Authorization: Token 21262f8874fe335ccf98c423cc3f5ad57dafaf69
 { 
     "isBlocked": false
 }
+
+
+###
+
+GET http://127.0.0.1:8000/users/?ordering=-puntuacio
+Content-Type: application/json
