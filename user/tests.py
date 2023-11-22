@@ -11,9 +11,9 @@ class TestUsers(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         
-        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, puntuacio=1)
-        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, puntuacio=2)
-        self.user3 = Perfil.objects.create(id=3,username='test_user3', is_active=True, puntuacio=3)
+        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, puntuacio=1, password='test')
+        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, puntuacio=2, password='test2')
+        self.user3 = Perfil.objects.create(id=3,username='test_user3', is_active=True, puntuacio=3, password='test3')
         self.admin = Perfil.objects.create(id=4, username='test_admin', is_active=True, is_staff=True)
         self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
         self.space2 = Space.objects.create(id=2, nom="Bdn", latitud=3.2, longitud=3.2)
@@ -25,7 +25,7 @@ class TestUsers(TestCase):
     def test_creations_self(self):
         self.assertEqual(Space.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 4)
-        self.assertEqual(Tag.objects.count(), 2)
+        self.assertEqual(Tag.objects.count(), 2) 
 
     def test_delete_espai_preferit(self):
         response = self.client.delete("/users/1/espais_preferits/1/")
@@ -130,13 +130,11 @@ class TestUsers(TestCase):
         self.assertEqual(users[2]['id'], self.user.id)  #user1 la més baixa
 
     ##Tests get user by username
-    def test_get_user_by_username_true(self):
+    def test_get_user_by_username(self):
         response = self.client.get("/users/?username=test_user", format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
  
     
-    #test get user by username false
-
     ##Tests bloquejar user
     def test_block_as_admin_true(self):
         admin_token = Token.objects.create(user=self.admin)
@@ -182,12 +180,16 @@ class TestUsers(TestCase):
         self.user2.refresh_from_db() 
         self.assertFalse(self.user2.isBlocked)
 
+    ##Tests login i signup
+    def test_login_ok(self):
+        data = {
+            'username': 'test_user', 
+            'password': 'test'
+        }
+        response = self.client.post("/users/login", data, format='json')
+        print(response.data)
+        #self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-    
-
-
-
-
-
+    #tests edit perfil i get
 
