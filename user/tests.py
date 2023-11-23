@@ -25,7 +25,7 @@ class TestUsers(TestCase):
     def test_creations_self(self):
         self.assertEqual(Space.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 4)
-        self.assertEqual(Tag.objects.count(), 2)
+        self.assertEqual(Tag.objects.count(), 2) 
 
     def test_delete_espai_preferit(self):
         response = self.client.delete("/users/1/espais_preferits/1/")
@@ -130,13 +130,11 @@ class TestUsers(TestCase):
         self.assertEqual(users[2]['id'], self.user.id)  #user1 la més baixa
 
     ##Tests get user by username
-    def test_get_user_by_username_true(self):
+    def test_get_user_by_username(self):
         response = self.client.get("/users/?username=test_user", format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
  
     
-    #test get user by username false
-
     ##Tests bloquejar user
     def test_block_as_admin_true(self):
         admin_token = Token.objects.create(user=self.admin)
@@ -184,10 +182,6 @@ class TestUsers(TestCase):
 
 
 
-    
 
-
-
-
-
+    #tests edit perfil i get
 

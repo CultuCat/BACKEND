@@ -8,6 +8,7 @@ from spaces.models import Space
 from tags.models import Tag
 from .models import Ticket
 from .views import TicketsView
+from rest_framework.authtoken.models import Token
 
 ruta = '/tickets/'
 
@@ -16,7 +17,10 @@ class TestTicketsPost(TestCase):
         self.client = APIClient()
         
         self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
         self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True)
+        self.token2 = Token.objects.create(user=self.user2)
         self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
         self.tag1 = Tag.objects.create(id=1, nom="tag1")
         self.tag2 = Tag.objects.create(id=2, nom="tag2")
@@ -55,24 +59,21 @@ class TestTicketsPost(TestCase):
         data = {
             'event': 1
         }
-        TicketsView.apply_permissions = False
-        response = self.client.post(ruta, data, format='json')
+        headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
+        response = self.client.post(ruta, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Ticket.objects.count(), 3)
         self.assertTrue(self.user.espais_preferits.filter(id=self.space.id).exists())
         self.assertTrue(self.user.tags_preferits.filter(id=self.tag1.id).exists())
         self.assertTrue(self.user.tags_preferits.filter(id=self.tag2.id).exists())
-        TicketsView.apply_permissions = True
         
         #creamos un ticket para el user 1 en evento 2, no deja crear, ya existe
         data = {
             'event': 2
         }
-        TicketsView.apply_permissions = False
-        response = self.client.post(ruta, data, format='json')
+        response = self.client.post(ruta, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Ticket.objects.count(), 3)
-        TicketsView.apply_permissions = True
     
     def test_get_specific_ticket(self):
         #hacemos get de ticket1

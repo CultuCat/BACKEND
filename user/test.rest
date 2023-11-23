@@ -34,6 +34,10 @@ GET http://127.0.0.1:8000/users/
 Content-Type: application/json
 
 ###
+GET http://127.0.0.1:8000/users/23/
+Content-Type: application/json
+
+###
 GET http://127.0.0.1:8000/users/?username=eric
 Content-Type: application/json
 
@@ -72,3 +76,13 @@ Authorization: Token 21262f8874fe335ccf98c423cc3f5ad57dafaf69
 
 GET http://127.0.0.1:8000/users/?ordering=-puntuacio
 Content-Type: application/json
+
+###
+
+PUT http://127.0.0.1:8000/users/23/edit/
+Content-Type: application/json
+Authorization: Token 6f51246fe924c05485b6fa5cbb5d639e88ffea3b
+
+{
+    "bio": "holii" 
+}

@@ -21,7 +21,6 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
-    serializer_class = PerfilSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
     ordering_fields = ['id', 'puntuacio']
@@ -36,59 +35,29 @@ class PerfilView(viewsets.ModelViewSet):
         elif self.action == 'accept_friend_request': 
             return FriendshipAcceptSerializer
         return PerfilSerializer
-    
-    @action(detail=False, methods=['GET'])
-    def get_user_by_username(self, request):
-        username_param = request.data.get('username')
+
+
+    @action(methods=['PUT'], detail=True)
+    def update_profile(self, request, pk=None):
+        perfil = self.get_object()
         
-        if username_param:
-            try:
-                user = get_object_or_404(Perfil, username=username_param)
-                serializer = PerfilSerializer(user)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            except ObjectDoesNotExist:
-                return Response({'detail': 'No existeix cap usuari amb aquest username'}, status=status.HTTP_404_NOT_FOUND)
+        newImage = request.data.get('imatge', None)
+        newBio = request.data.get('bio', None)
 
+        if request.user.id != int(pk):
+            return Response({'detail': 'No tens permisos per fer aquesta acció'}, status=status.HTTP_403_FORBIDDEN)
 
-    @action(methods=['GET', 'PUT'], detail=False)
-    def profile(self, request):
+        if newImage is not None:
+            perfil.imatge = newImage
+
+        if newBio is not None:
+            perfil.bio = newBio
         
+        perfil.save()
 
-        if self.request.auth is None:
-            return Response(status=status.HTTP_401_UNAUTHORIZED, data={'error': "El token d'autentificació no ha sigut donat."})
-
-
-        if request.method == 'GET':
-            profiles = Perfil.objects.all()
-            response_data = []
-
-            for profile in profiles:
-                token, _ = Token.objects.get_or_create(user=profile.user)
-                serializer = PerfilSerializer(instance=profile.user)
-                
-                user_data = {
-                    'token': token.key,
-                    'user': serializer.data
-                }
-                response_data.append(user_data)
-
-            return Response(response_data)
-
-        elif request.method == 'PUT':
-            user = Token.objects.get(key=self.request.auth.key).user
-            newImage = request.data.get('imatge', None)
-            newBio = request.data.get('bio', None)
-
-            if newImage is not None:
-                user.perfil.imatge = newImage
-            if newBio is not None:
-                user.perfil.bio = newBio
-            user.save()
-            user.perfil.save()
-
-        serializer = PerfilSerializer(user.perfil)
-        return Response(status=status.HTTP_200_OK, data={*serializer.data, *{'message': "S'ha actualitzat el perfil"}})
-    
+        serializer = PerfilSerializer(perfil)
+        return Response({'data': serializer.data, 'message': "S'ha actualitzat el perfil"}, status=status.HTTP_200_OK)
+        
     @action(detail=True, methods=['POST'])
     def send_friend_request(self, request, pk=None):
         sender_profile = self.get_object()
