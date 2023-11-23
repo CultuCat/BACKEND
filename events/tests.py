@@ -12,7 +12,7 @@ class EventViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.user = Perfil.objects.create(id=1, username='test_user', is_active=True)
+        self.user = Perfil.objects.create(id=1, username='test_user', is_active=True, is_staff=True, is_superuser=True)
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
 
