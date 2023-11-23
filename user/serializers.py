@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Perfil, FriendshipRequest
+from discount.models import Discount
 
 class FriendshipRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +17,7 @@ class FriendshipAcceptSerializer(serializers.ModelSerializer):
         fields = ('id', 'is_accepted')
 
 class PerfilShortSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Perfil
         fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio')

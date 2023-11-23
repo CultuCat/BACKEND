@@ -7,22 +7,22 @@ from user.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from events.models import Event
 from user.models import Perfil
+from rest_framework.authentication import TokenAuthentication
+
 
 from utility.new_discount_utils import verificar_y_otorgar_descuento
 
 class TicketsView(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
-    models = Ticket
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['event', 'user']
     
-    apply_permissions = False
-
     def get_permissions(self):
-        if self.action == 'create' and self.apply_permissions:
-            return [IsAuthenticated]
+        if self.action == 'create':
+            return [IsAuthenticated()]
         else:
             return []
         
@@ -30,7 +30,7 @@ class TicketsView(viewsets.ModelViewSet):
         user_param = self.request.query_params.get('user', None)
         event_param = self.request.query_params.get('event', None)
 
-        # Determinar el serializador basado en los parámetros de la solicitud
+        # Determinar el serializer basado en la solicitud
         if user_param is not None and event_param is None:
             return TicketSerializer_byUser
         elif event_param is not None and user_param is None:
@@ -39,8 +39,11 @@ class TicketsView(viewsets.ModelViewSet):
             return TicketSerializer
 
     def create(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({"error": "Usuario no autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+    
         ticket = {
-            'user': 1,  #request.user.id #1
+            'user': request.user.id,
             'event': request.data.get('event')
         }
         serializer = self.get_serializer(data=ticket)
