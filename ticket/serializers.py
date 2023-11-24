@@ -10,8 +10,8 @@ class TicketSerializer(serializers.ModelSerializer):
         
     def get_imatgeEvent(self, obj):
         imatges = split_colon(obj.event.imatge if obj.event else None)
+        enllac_imatges = []
         if imatges:
-            enllac_imatges = []
             for imatge in imatges:
                 img_split = imatge.split('://')[0]
                 if img_split != 'http' and img_split != 'https':
@@ -71,8 +71,8 @@ class TicketSerializer_byUser(serializers.ModelSerializer):
     
     def get_imatge(self, obj):
         imatges = split_colon(obj.event.imatge if obj.event else None)
+        enllac_imatges = []
         if imatges:
-            enllac_imatges = []
             for imatge in imatges:
                 img_split = imatge.split('://')[0]
                 if img_split != 'http' and img_split != 'https':
