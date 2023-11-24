@@ -19,7 +19,8 @@ class TicketSerializer(serializers.ModelSerializer):
                 else:
                     return imatge
             return enllac_imatges
-        return imatges
+        enllac_imatges.append('https://th.bing.com/th/id/R.78f9298564b10c30b16684861515c670?rik=zpQaqTcSRIc4jA&pid=ImgRaw&r=0')
+        return enllac_imatges
 
 class TicketSerializer_byEvent(serializers.ModelSerializer):
     idUser = serializers.SerializerMethodField()
@@ -79,5 +80,6 @@ class TicketSerializer_byUser(serializers.ModelSerializer):
                 else:
                     return imatge
             return enllac_imatges
-        return imatges
+        enllac_imatges.append('https://th.bing.com/th/id/R.78f9298564b10c30b16684861515c670?rik=zpQaqTcSRIc4jA&pid=ImgRaw&r=0')
+        return enllac_imatges
     
