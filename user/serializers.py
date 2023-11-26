@@ -20,7 +20,7 @@ class PerfilShortSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Perfil
-        fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio')
+        fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio', 'isBlocked')
 
 class PerfilSerializer(serializers.ModelSerializer):
     espais_preferits = serializers.SerializerMethodField()
