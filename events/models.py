@@ -32,16 +32,16 @@ class Event(models.Model):
 
     def get_imatge(self):
         imatges = split_colon(self.imatge)
+        enllac_imatges = []
         if imatges:
-            enllac_imatges = []
             for imatge in imatges:
                 img_split = imatge.split('://')[0]
                 if img_split != 'http' and img_split != 'https':
                     enllac_imatges.append('http://agenda.cultura.gencat.cat' + imatge)
                 else:
-                    enllac_imatges.append(imatge)
-            return enllac_imatges
-        return imatges
+                    enllac_imatges.append(imatge) 
+        enllac_imatges.append('https://th.bing.com/th/id/R.78f9298564b10c30b16684861515c670?rik=zpQaqTcSRIc4jA&pid=ImgRaw&r=0')
+        return enllac_imatges
 
     @property
     def espai_info(self):

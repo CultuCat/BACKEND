@@ -46,6 +46,8 @@ class EventView(viewsets.ModelViewSet):
         return EventSerializer
 
     def create(self, request, *args, **kwargs):
+        if not request.user.is_staff or not request.user.is_superuser:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         event_data = request.data.copy()
 
         # Per asegurar-se que l'id no es repeteix, agafarem el mes antic i li restarem 1
