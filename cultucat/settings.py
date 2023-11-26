@@ -30,7 +30,9 @@ ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
                  'cultucat.netlify.app',
                  '34.70.237.53',
                  'localhost:8000',
-                 'localhost:3000']
+                 'localhost:3000',
+		'deploy-preview-40--cultucat.netlify.app'
+]
 
 
 
@@ -64,19 +66,20 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     'https://cultucat.hemanuelpc.es',
     "http://localhost:3000",
-    "https://cultucat.netlify.app"
+    "https://cultucat.netlify.app",
+    "https://deploy-preview-40--cultucat.netlify.app"
 ]
 
 
