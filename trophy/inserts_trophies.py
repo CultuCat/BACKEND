@@ -25,23 +25,23 @@ def insertar_trofeos():
         {
             'nom':"Reviewer",
             'descripcio':"Quants comentaris has escrit",
-            'punts_nivell1':'3',
-            'punts_nivell2':'5',
-            'punts_nivell3':'7'
+            'punts_nivell1':'1',
+            'punts_nivell2':'2',
+            'punts_nivell3':'3'
         },
         {
             'nom':"Més esdeveniments",
             'descripcio':"Quants esdeveniments has assist",
-            'punts_nivell1':'10',
-            'punts_nivell2':'50',
-            'punts_nivell3':'100'
+            'punts_nivell1':'1',
+            'punts_nivell2':'2',
+            'punts_nivell3':'3'
         },
         {
             'nom':"El més amigable",
             'descripcio':"Quants amics tens",
-            'punts_nivell1':'10',
-            'punts_nivell2':'50',
-            'punts_nivell3':'100'
+            'punts_nivell1':'1',
+            'punts_nivell2':'2',
+            'punts_nivell3':'3'
         },
         {
             'nom':"Coleccionista",
