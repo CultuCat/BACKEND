@@ -80,9 +80,9 @@ class PerfilView(viewsets.ModelViewSet):
             friendship_request.accept()
             
             #se mira si el q envía cumple el trofeo
-            verificar_y_otorgar_descuento(request_id, "El més amigable", FriendshipRequest.objects.filter(from_user=request_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=request_id, is_accepted=True).count())  
-            #se mira si el user al q le envían (yo) cumple el trofeo
-            verificar_y_otorgar_descuento(self.id, "El més amigable", FriendshipRequest.objects.filter(from_user=self.id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=self.id, is_accepted=True).count())   
+            verificar_y_otorgar_descuento(friendship_request.from_user_id, "El més amigable", FriendshipRequest.objects.filter(from_user=friendship_request.from_user_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=friendship_request.from_user_id, is_accepted=True).count())  
+            #se mira si el user al q le envían cumple el trofeo
+            verificar_y_otorgar_descuento(friendship_request.to_user_id, "El més amigable", FriendshipRequest.objects.filter(from_user=friendship_request.to_user_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=friendship_request.to_user_id, is_accepted=True).count())   
             
             return Response({'detail': 'Solicitud de amistad aceptada'}, status=status.HTTP_200_OK)
         else:
