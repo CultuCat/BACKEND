@@ -18,6 +18,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.core.exceptions import ObjectDoesNotExist
 
+from utility.new_discount_utils import verificar_y_otorgar_descuento
+
 
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
@@ -76,6 +78,12 @@ class PerfilView(viewsets.ModelViewSet):
 
         if (request.data.get('is_accepted') == True):
             friendship_request.accept()
+            
+            #se mira si el q envía cumple el trofeo
+            verificar_y_otorgar_descuento(friendship_request.from_user_id, "El més amigable", FriendshipRequest.objects.filter(from_user=friendship_request.from_user_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=friendship_request.from_user_id, is_accepted=True).count())  
+            #se mira si el user al q le envían cumple el trofeo
+            verificar_y_otorgar_descuento(friendship_request.to_user_id, "El més amigable", FriendshipRequest.objects.filter(from_user=friendship_request.to_user_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=friendship_request.to_user_id, is_accepted=True).count())   
+            
             return Response({'detail': 'Solicitud de amistad aceptada'}, status=status.HTTP_200_OK)
         else:
             friendship_request.decline()

@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from .models import Perfil, FriendshipRequest
 from spaces.models import Space
 from tags.models import Tag
+from trophy.models import Trophy
 from rest_framework.authtoken.models import Token
 
 
@@ -21,6 +22,14 @@ class TestUsers(TestCase):
         self.tag2 = Tag.objects.create(id=2, nom="tag2")
         self.user.tags_preferits.set([self.tag1, self.tag2])
         self.user.espais_preferits.set([self.space, self.space2])
+        
+        self.trophy = Trophy.objects.create(
+            nom = "El més amigable",
+            descripcio = "Quants amics tens",
+            punts_nivell1 = 1,
+            punts_nivell2 = 2,
+            punts_nivell3 = 3
+        )
 
     def test_creations_self(self):
         self.assertEqual(Space.objects.count(), 2)
