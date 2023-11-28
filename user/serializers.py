@@ -2,10 +2,19 @@ from rest_framework import serializers
 from .models import Perfil, FriendshipRequest
 from discount.models import Discount
 
+class PerfilShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perfil
+        fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible')
+
 class FriendshipRequestSerializer(serializers.ModelSerializer):
+    from_user = PerfilShortSerializer(source='from_user.perfil', read_only=True)
+    to_user = PerfilShortSerializer(source='to_user.perfil', read_only=True)
+
     class Meta:
         model = FriendshipRequest
         fields = ('id', 'from_user', 'to_user', 'is_answered', 'is_accepted', 'timestamp')
+
 class FriendshipCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendshipRequest
@@ -15,12 +24,6 @@ class FriendshipAcceptSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendshipRequest
         fields = ('id', 'is_accepted')
-
-class PerfilShortSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Perfil
-        fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible')
 
 class PerfilSerializer(serializers.ModelSerializer):
     espais_preferits = serializers.SerializerMethodField()
