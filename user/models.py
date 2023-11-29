@@ -30,6 +30,7 @@ class Perfil(User):
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
     wantsToTalk = models.BooleanField(default=True, verbose_name=_('La resta dels usuaris poden parlar amb ell'))
     isVisible = models.BooleanField(default=True,verbose_name=_('La resta dels usuaris el poden trobar'))
+    wantsNotifications = models.BooleanField(default=True, verbose_name=_('Permet notificacions'))
 
     tags_preferits = models.ManyToManyField(Tag, blank=True, related_name='perfils', verbose_name=("Tags preferits"))
     espais_preferits = models.ManyToManyField(Space, blank=True, related_name='perfils', verbose_name=("Espais preferits"))

@@ -56,7 +56,7 @@ class PerfilSerializer(serializers.ModelSerializer):
     
     class Meta(object):
         model = Perfil
-        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
+        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'wantsNotifications', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
 
     
     def get_espais_preferits(self, obj):
