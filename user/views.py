@@ -108,6 +108,19 @@ class PerfilView(viewsets.ModelViewSet):
             return Response({'detail': 'La resta dels usuaris no et poden trobar'}, status=status.HTTP_200_OK)
         
     @action(detail=True, methods=['PUT'])
+    def wants_notifications_perfil(self,request,pk=None):
+        perfil = self.get_object()
+        wants_notifications = request.data.get('wantsNotifications')
+
+        perfil.wantsNotifications = wants_notifications
+        perfil.save()
+
+        if (perfil.wantsNotifications == True):
+            return Response({'detail': 'Rebràs notificacions de l\'aplicació'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'No rebràs notificacions de l\'aplicació'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
     def block_profile(self, request, pk=None):
         perfil = self.get_object()
         is_blocked = request.data.get('isBlocked')
