@@ -13,7 +13,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
     
     def _str_(self):
         return f"Comment by {self.user} on {self.event} at {self.created_at}"
