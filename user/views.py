@@ -145,7 +145,7 @@ class PerfilView(viewsets.ModelViewSet):
 
         
     @action(detail=True, methods=['PUT'])
-    def block_profile(self, request, user_id=None):
+    def block_profile(self, request, pk=None):
         perfil = self.get_object()
         is_blocked = request.data.get('isBlocked')
 
