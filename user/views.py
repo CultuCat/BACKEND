@@ -122,9 +122,9 @@ class PerfilView(viewsets.ModelViewSet):
         
     @action(detail=True, methods=['PUT'])
     def put_language(self, request, user_id=None):
-        id = self.kwargs.get('user_id')
+        id_user = self.kwargs.get('user_id')
         try:
-            perfil = Perfil.objects.get(id=id)
+            perfil = Perfil.objects.get(id=id_user)
         except Perfil.DoesNotExist:
             return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
