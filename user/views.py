@@ -121,7 +121,31 @@ class PerfilView(viewsets.ModelViewSet):
             return Response({'detail': 'No rebràs notificacions de l\'aplicació'}, status=status.HTTP_200_OK)
         
     @action(detail=True, methods=['PUT'])
-    def block_profile(self, request, pk=None):
+    def put_language(self, request, user_id=None):
+        user_id = self.kwargs.get('user_id')
+        try:
+            perfil = Perfil.objects.get(id=user_id)
+        except Perfil.DoesNotExist:
+            return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        language = request.data.get('language')
+
+        try:
+            perfil.language = Perfil.LanguageChoices(language).value
+            perfil.save()
+        except ValueError:
+            return Response({'detail': 'Idioma no vàlid'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if perfil.language == 'en':
+            return Response({'detail': 'Now CultuCat is in english'}, status=status.HTTP_200_OK)
+        elif perfil.language == 'es':
+            return Response({'detail': 'Ahora CultuCat está en castellano'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Ara CultuCat està en català'}, status=status.HTTP_200_OK)
+
+        
+    @action(detail=True, methods=['PUT'])
+    def block_profile(self, request, user_id=None):
         perfil = self.get_object()
         is_blocked = request.data.get('isBlocked')
 

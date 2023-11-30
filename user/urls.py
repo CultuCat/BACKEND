@@ -20,6 +20,7 @@ urlpatterns = [
     re_path(r'^(?P<user_id>\d+)/wants_to_talk_perfil/$', PerfilView.as_view({'put': 'wants_to_talk_perfil'}), name='wants_to_talk_perfil'),
     re_path(r'^(?P<user_id>\d+)/is_visible_perfil/$', PerfilView.as_view({'put': 'is_visible_perfil'}), name='is_visible_perfil'),
     re_path(r'^(?P<user_id>\d+)/wants_notifications_perfil/$', PerfilView.as_view({'put': 'wants_notifications_perfil'}), name='wants_notifications_perfil'),
+    re_path(r'^(?P<user_id>\d+)/language/$', PerfilView.as_view({'put': 'put_language'}), name='language'),
     re_path(r'^(?P<user_id>\d+)/block_profile/$', PerfilView.as_view({'put': 'block_profile'}), name='block_profile'),
 
 ]
