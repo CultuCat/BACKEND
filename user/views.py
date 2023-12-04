@@ -172,6 +172,8 @@ class PerfilView(viewsets.ModelViewSet):
     
 @api_view(['POST'])
 def signup_perfil(request):
+    request.data['wantsNotifications'] = True
+    request.data['Language'] = Perfil.LanguageChoices("cat").value
     serializer = PerfilSerializer(data=request.data)
     email = request.data.get('email')
     if Perfil.objects.filter(email=email).exists():
