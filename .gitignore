@@ -5,6 +5,3 @@
 
 #Ignora el directorio /.vscode
 .vscode/
-myenv/
-.venv/
-staticfiles_prod/
