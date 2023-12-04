@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
                  'cultucat.netlify.app',
                  'localhost:8000',
                  'localhost:3000',
+		 'deploy-preview-46--cultucat.netlify.app'
 ]
 
 
@@ -77,7 +78,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://cultucat.hemanuelpc.es',
     "http://localhost:3000",
     "https://cultucat.netlify.app",
-
+    "https://deploy-preview-46--cultucat.netlify.app",
+]
 
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
