@@ -223,7 +223,7 @@ class SpacesPreferits(APIView):
             user = Perfil.objects.get(id=user_id)
             space = Space.objects.get(id=space_id)
             
-            espai_preferit = TagPreferit.objects.get(user=user, space=space)
+            espai_preferit = SpacePreferit.objects.get(user=user, space=space)
             espai_preferit.show = False
             espai_preferit.save()
             
