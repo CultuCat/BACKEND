@@ -24,6 +24,30 @@ class FriendshipRequest(models.Model):
         self.is_answered = True
         self.save()
 
+class TagPreferit(models.Model):
+    tag = models.ForeignKey(Tag, verbose_name=("Tag preferit"), on_delete=models.CASCADE)
+    user = models.ForeignKey('Perfil', verbose_name=("User amb tag preferit"), on_delete=models.CASCADE)
+    count = models.IntegerField(null=False, default=0, verbose_name=_('Comptador de vegades'))
+    show = models.BooleanField(default=True)
+
+    @property
+    def tags_info(self):
+        return [
+            {'id': self.tag.id, 'nom': self.tag.nom, 'count': self.count}
+        ]
+
+class SpacePreferit(models.Model):
+    space = models.ForeignKey(Space, verbose_name=("Espai preferit"), on_delete=models.CASCADE)
+    user = models.ForeignKey('Perfil', verbose_name=("User amb tag preferit"), on_delete=models.CASCADE)
+    count = models.IntegerField(null=False, default=0, verbose_name=_('Comptador de vegades'))
+    show = models.BooleanField(default=True)
+    
+    @property
+    def espais_info(self):
+        return [
+            {'id': self.space.id, 'nom': self.space.nom, 'count': self.count}
+        ]
+
 class Perfil(User):
     imatge = models.CharField(default='https://www.calfruitos.com/es/fotos/pr_223_20190304145434.png')    
     bio = models.CharField(max_length=200, default="Hey there, I'm using CultuCat", null=True, blank=True, verbose_name=_('Bio'))
@@ -38,10 +62,6 @@ class Perfil(User):
         CATALAN = 'cat'
 
     language = models.CharField(max_length=3, choices=[(language.value, language.name) for language in LanguageChoices], default=LanguageChoices.CATALAN.value)
-
-
-    tags_preferits = models.ManyToManyField(Tag, blank=True, related_name='perfils', verbose_name=("Tags preferits"))
-    espais_preferits = models.ManyToManyField(Space, blank=True, related_name='perfils', verbose_name=("Espais preferits"))
 
     def send_friend_request(self, to_user):
         if not FriendshipRequest.objects.filter(from_user=self, to_user=to_user, is_accepted=True).exists() and \
@@ -71,6 +91,24 @@ class Perfil(User):
 
             return friends
     
+    def get_espais_preferits(self):
+        espais_preferits = SpacePreferit.objects.filter(user=self, show=True)
+        espais_info_list = []
+
+        for espai_preferit in espais_preferits:
+            espais_info_list.extend(espai_preferit.espais_info)
+
+        return espais_info_list
+
+    def get_tags_preferits(self):  
+        tag_preferits = TagPreferit.objects.filter(user=self, show=True)
+        tags_info_list = []
+
+        for tag_preferit in tag_preferits:
+            tags_info_list.extend(tag_preferit.tags_info)
+
+        return tags_info_list
+    
     def wants_to_talk_status(self, wants_to_talk):
         if wants_to_talk != self.wantsToTalk:
             self.wantsToTalk = wants_to_talk
@@ -80,21 +118,3 @@ class Perfil(User):
         if is_visible != self.isVisible:
             self.isVisible = is_visible
             self.save()
-    
-    @property
-    def espais_info(self):
-        espais = self.espais_preferits.all()
-        if espais:
-            return [
-                {'id': espai.id, 'nom': espai.nom} for espai in espais
-            ]
-        return None
-
-    @property
-    def tags_info(self):
-        tags = self.tags_preferits.all()
-        if tags:
-            return [
-                {'id': tag.id, 'nom': tag.nom} for tag in tags
-            ]
-        return None

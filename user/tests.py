@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
-from .models import Perfil, FriendshipRequest
+from .models import Perfil, FriendshipRequest, TagPreferit, SpacePreferit
 from spaces.models import Space
 from tags.models import Tag
 from trophy.models import Trophy
@@ -12,16 +12,18 @@ class TestUsers(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         
-        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, puntuacio=1)
-        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, puntuacio=2)
-        self.user3 = Perfil.objects.create(id=3,username='test_user3', is_active=True, puntuacio=3)
-        self.admin = Perfil.objects.create(id=4, username='test_admin', is_active=True, is_staff=True)
+        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, puntuacio=1, wantsNotifications=True)
+        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, puntuacio=2, wantsNotifications=True)
+        self.user3 = Perfil.objects.create(id=3,username='test_user3', is_active=True, puntuacio=3, wantsNotifications=True)
+        self.admin = Perfil.objects.create(id=4, username='test_admin', is_active=True, is_staff=True, wantsNotifications=True)
         self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
         self.space2 = Space.objects.create(id=2, nom="Bdn", latitud=3.2, longitud=3.2)
         self.tag1 = Tag.objects.create(id=1, nom="tag1")
         self.tag2 = Tag.objects.create(id=2, nom="tag2")
-        self.user.tags_preferits.set([self.tag1, self.tag2])
-        self.user.espais_preferits.set([self.space, self.space2])
+        self.tag_preferit1 = TagPreferit.objects.create(user=self.user, tag=self.tag1, count=1)
+        self.tag_preferit2 = TagPreferit.objects.create(user=self.user, tag=self.tag2, count=1)
+        self.espai_preferit1 = SpacePreferit.objects.create(user=self.user, space=self.space, count=1)
+        self.espai_preferit2 = SpacePreferit.objects.create(user=self.user, space=self.space2, count=1)
         
         self.trophy = Trophy.objects.create(
             nom = "El més amigable",
@@ -35,16 +37,18 @@ class TestUsers(TestCase):
         self.assertEqual(Space.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 4)
         self.assertEqual(Tag.objects.count(), 2) 
+        self.assertEqual(SpacePreferit.objects.count(), 2) 
+        self.assertEqual(TagPreferit.objects.count(), 2) 
 
     def test_delete_espai_preferit(self):
         response = self.client.delete("/users/1/espais_preferits/1/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(self.user.espais_preferits.count(), 1)
+        self.assertEqual(SpacePreferit.objects.filter(show=True).count(), 1)
 
     def test_delete_tag_preferit(self):
         response = self.client.delete("/users/1/tags_preferits/1/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(self.user.tags_preferits.count(), 1)
+        self.assertEqual(TagPreferit.objects.filter(show=True).count(), 1)
     
     def test_send_and_accept_request(self):
         data = {
@@ -116,6 +120,24 @@ class TestUsers(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db() 
         self.assertFalse(self.user.isVisible)
+
+    def test_wants_notifications_true(self):
+        data = {
+            'wantsNotifications': True
+        }
+        response = self.client.put("/users/1/wants_notifications_perfil/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db() 
+        self.assertTrue(self.user.wantsNotifications)
+
+    def test_wants_notifications_false(self):
+        data = {
+            'wantsNotifications': False
+        }
+        response = self.client.put("/users/1/wants_notifications_perfil/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db() 
+        self.assertFalse(self.user.wantsNotifications)
 
     ##Tests permisos
     def test_is_perfil(self):

@@ -2,7 +2,7 @@ import psycopg2
 
 # Conexión a la base de datos PostgreSQL
 conn = psycopg2.connect(
-    database='cultucatbd',
+    database='cutucatbd2',
     user='postgres',
     password='pes04',
     host="147.83.148.217",

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
-from user.models import Perfil
+from user.models import Perfil, SpacePreferit, TagPreferit
 from events.models import Event
 from trophy.models import Trophy
 from spaces.models import Space
@@ -63,9 +63,9 @@ class TestTicketsPost(TestCase):
         response = self.client.post(ruta, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Ticket.objects.count(), 3)
-        self.assertTrue(self.user.espais_preferits.filter(id=self.space.id).exists())
-        self.assertTrue(self.user.tags_preferits.filter(id=self.tag1.id).exists())
-        self.assertTrue(self.user.tags_preferits.filter(id=self.tag2.id).exists())
+        self.assertTrue(SpacePreferit.objects.filter(space=self.space.id).exists())
+        self.assertTrue(TagPreferit.objects.filter(tag=self.tag1.id).exists())
+        self.assertTrue(TagPreferit.objects.filter(tag=self.tag2.id).exists())
         
         #creamos un ticket para el user 1 en evento 2, no deja crear, ya existe
         data = {
