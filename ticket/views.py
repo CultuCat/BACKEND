@@ -61,10 +61,12 @@ class TicketsView(viewsets.ModelViewSet):
         for tag in event_tags:
             tag_preferit, _ = TagPreferit.objects.get_or_create(tag=tag, user=user)
             tag_preferit.count += 1
+            if not tag_preferit.show: tag_preferit.show = True
             tag_preferit.save()
 
         espai_preferit, _ = SpacePreferit.objects.get_or_create(space=event_espai, user=user)
         espai_preferit.count += 1
+        if not espai_preferit.show: espai_preferit.show = True
         espai_preferit.save()
 
         #si se usa un descuento se marca como usado

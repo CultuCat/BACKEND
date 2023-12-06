@@ -28,10 +28,7 @@ class TagPreferit(models.Model):
     tag = models.ForeignKey(Tag, verbose_name=("Tag preferit"), on_delete=models.CASCADE)
     user = models.ForeignKey('Perfil', verbose_name=("User amb tag preferit"), on_delete=models.CASCADE)
     count = models.IntegerField(null=False, default=0, verbose_name=_('Comptador de vegades'))
-
-    def save_count(self, count):
-        self.count = count
-        self.save()
+    show = models.BooleanField(default=True)
 
     @property
     def tags_info(self):
@@ -43,11 +40,7 @@ class SpacePreferit(models.Model):
     space = models.ForeignKey(Space, verbose_name=("Espai preferit"), on_delete=models.CASCADE)
     user = models.ForeignKey('Perfil', verbose_name=("User amb tag preferit"), on_delete=models.CASCADE)
     count = models.IntegerField(null=False, default=0, verbose_name=_('Comptador de vegades'))
-
-    def save_count(self, count):
-        self.count = count
-        self.save()
-
+    show = models.BooleanField(default=True)
     
     @property
     def espais_info(self):
@@ -99,7 +92,7 @@ class Perfil(User):
             return friends
     
     def get_espais_preferits(self):
-        espais_preferits = SpacePreferit.objects.filter(user=self)
+        espais_preferits = SpacePreferit.objects.filter(user=self, show=True)
         espais_info_list = []
 
         for espai_preferit in espais_preferits:
@@ -108,7 +101,7 @@ class Perfil(User):
         return espais_info_list
 
     def get_tags_preferits(self):  
-        tag_preferits = TagPreferit.objects.filter(user=self)
+        tag_preferits = TagPreferit.objects.filter(user=self, show=True)
         tags_info_list = []
 
         for tag_preferit in tag_preferits:

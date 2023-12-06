@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
 from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
-from user.models import Perfil, FriendshipRequest
+from user.models import Perfil, FriendshipRequest, TagPreferit, SpacePreferit
 from tags.models import Tag
 from spaces.models import Space
 from django_filters.rest_framework import DjangoFilterBackend
@@ -207,8 +207,10 @@ class TagsPreferits(APIView):
             user = Perfil.objects.get(id=user_id)
             tag = Tag.objects.get(id=tag_id)
 
-            user.tags_preferits.remove(tag)
-            
+            tag_preferit = TagPreferit.objects.get(user=user, tag=tag)
+            tag_preferit.show = False
+            tag_preferit.save()
+
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Perfil.DoesNotExist:
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
@@ -220,7 +222,10 @@ class SpacesPreferits(APIView):
         try:
             user = Perfil.objects.get(id=user_id)
             space = Space.objects.get(id=space_id)
-            user.espais_preferits.remove(space)
+            
+            espai_preferit = TagPreferit.objects.get(user=user, space=space)
+            espai_preferit.show = False
+            espai_preferit.save()
             
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Perfil.DoesNotExist:
