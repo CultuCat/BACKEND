@@ -51,6 +51,10 @@ class EventView(viewsets.ModelViewSet):
         if espai_ids:
             queryset = queryset.filter(espai__id__in=espai_ids)
 
+        tag_ids = self.request.query_params.getlist('tag', [])
+        if tag_ids:
+            queryset = queryset.filter(tags__id__in=tag_ids)
+
         if not self.request.query_params.get('ordering'):
             queryset = queryset.order_by('dataIni')
 
