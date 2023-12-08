@@ -1,11 +1,8 @@
-from rest_framework import generics, viewsets, status
+from rest_framework import viewsets, status
 from .models import Event
-from spaces.models import Space
-from tags.models import Tag
 from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from user.permissions import IsAdmin
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,6 +10,8 @@ from rest_framework import filters
 from user.permissions import IsAdmin
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.db.models import Q
+from rest_framework.decorators import action
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -40,6 +39,13 @@ class EventView(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+
+        query = self.request.query_params.get('query', None)
+        
+        if query:
+            queryset = queryset.filter(
+                Q(nom__icontains=query) | Q(espai__nom__icontains=query)
+            )
 
         espai_ids = self.request.query_params.getlist('espai', [])
         if espai_ids:
