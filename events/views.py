@@ -24,13 +24,6 @@ class EventView(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
     ordering_fields = ['dataIni']
-    filterset_fields = ['espai']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if not self.request.query_params.get('ordering'):
-            queryset = queryset.order_by('dataIni')
-        return queryset
 
     def get_permission_classes(self):
         if self.action == 'create':
@@ -44,6 +37,24 @@ class EventView(viewsets.ModelViewSet):
         elif self.action == 'create':    
             return EventCreateSerializer
         return EventSerializer
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        espai_ids = self.request.query_params.getlist('espai', [])
+        if espai_ids:
+            queryset = queryset.filter(espai__id__in=espai_ids)
+
+        if not self.request.query_params.get('ordering'):
+            queryset = queryset.order_by('dataIni')
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         if not request.user.is_staff or not request.user.is_superuser:
