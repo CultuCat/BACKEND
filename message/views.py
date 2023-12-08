@@ -1,9 +1,8 @@
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Message
 from .serializers import MessageSerializer
-from django_filters.rest_framework import DjangoFilterBackend
 from .pusher import pusher_client
 
 from utility.new_discount_utils import verificar_y_otorgar_descuento

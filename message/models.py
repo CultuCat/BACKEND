@@ -8,7 +8,7 @@ class Message(models.Model):
     text = models.TextField(null=False, blank=False, max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    class Meta: #AÑADIR CONSTRAINT O LO Q SEA DE Q USER1 != USER2
+    class Meta:
         ordering = ['created_at']
     
     def __str__(self):
