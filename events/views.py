@@ -1,11 +1,8 @@
-from rest_framework import generics, viewsets, status
+from rest_framework import viewsets, status
 from .models import Event
-from spaces.models import Space
-from tags.models import Tag
 from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from user.permissions import IsAdmin
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,6 +10,8 @@ from rest_framework import filters
 from user.permissions import IsAdmin
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.db.models import Q
+from rest_framework.decorators import action
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -24,13 +23,6 @@ class EventView(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
     ordering_fields = ['dataIni']
-    filterset_fields = ['espai']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if not self.request.query_params.get('ordering'):
-            queryset = queryset.order_by('dataIni')
-        return queryset
 
     def get_permission_classes(self):
         if self.action == 'create':
@@ -44,6 +36,31 @@ class EventView(viewsets.ModelViewSet):
         elif self.action == 'create':    
             return EventCreateSerializer
         return EventSerializer
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        query = self.request.query_params.get('query', None)
+        
+        if query:
+            queryset = queryset.filter(
+                Q(nom__icontains=query) | Q(espai__nom__icontains=query)
+            )
+
+        espai_ids = self.request.query_params.getlist('espai', [])
+        if espai_ids:
+            queryset = queryset.filter(espai__id__in=espai_ids)
+
+        if not self.request.query_params.get('ordering'):
+            queryset = queryset.order_by('dataIni')
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         if not request.user.is_staff or not request.user.is_superuser:
