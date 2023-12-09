@@ -41,5 +41,5 @@ urlpatterns = [
     path('users/', include('user.urls'), name='Usuaris'),
     path('trophies/', include('trophy.urls'), name='Trophies'),
     path('discounts/', include('discount.urls'), name='Discounts'),
-    path('', include('message.urls'), name='Messages'),
+    path('messages/', include('message.urls'), name='Messages'),
 ]
