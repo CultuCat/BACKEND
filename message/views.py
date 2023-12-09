@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Message
@@ -7,7 +7,7 @@ from .pusher import pusher_client
 
 from utility.new_discount_utils import verificar_y_otorgar_descuento
 
-class MessageAPIView(APIView):
+class MessageViewSet(viewsets.ModelViewSet):
     
     def get(self, request):
         user_to = request.query_params.get('user1')
@@ -35,7 +35,7 @@ class MessageAPIView(APIView):
                 'text': message.text,
             })
             
-            verificar_y_otorgar_descuento(message.user_from.id, "Parlaner", Message.objects.filter(user_from= message.user_from.id).count()) 
+            verificar_y_otorgar_descuento(message.user_from.id, "Xerraire", Message.objects.filter(user_from= message.user_from.id).count()) 
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
