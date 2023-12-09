@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
 from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
-from user.models import Perfil, FriendshipRequest
+from user.models import Perfil, FriendshipRequest, TagPreferit, SpacePreferit
 from tags.models import Tag
 from spaces.models import Space
 from django_filters.rest_framework import DjangoFilterBackend
@@ -116,6 +116,43 @@ class PerfilView(viewsets.ModelViewSet):
             return Response({'detail': 'La resta dels usuaris no et poden trobar'}, status=status.HTTP_200_OK)
         
     @action(detail=True, methods=['PUT'])
+    def wants_notifications_perfil(self,request,pk=None):
+        perfil = self.get_object()
+        wants_notifications = request.data.get('wantsNotifications')
+
+        perfil.wantsNotifications = wants_notifications
+        perfil.save()
+
+        if (perfil.wantsNotifications == True):
+            return Response({'detail': 'Rebràs notificacions de l\'aplicació'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'No rebràs notificacions de l\'aplicació'}, status=status.HTTP_200_OK)
+        
+    @action(detail=True, methods=['PUT'])
+    def put_language(self, request, user_id=None):
+        id_user = self.kwargs.get('user_id')
+        try:
+            perfil = Perfil.objects.get(id=id_user)
+        except Perfil.DoesNotExist:
+            return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        language = request.data.get('language')
+
+        try:
+            perfil.language = Perfil.LanguageChoices(language).value
+            perfil.save()
+        except ValueError:
+            return Response({'detail': 'Idioma no vàlid'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if perfil.language == 'en':
+            return Response({'detail': 'Now CultuCat is in english'}, status=status.HTTP_200_OK)
+        elif perfil.language == 'es':
+            return Response({'detail': 'Ahora CultuCat está en castellano'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Ara CultuCat està en català'}, status=status.HTTP_200_OK)
+
+        
+    @action(detail=True, methods=['PUT'])
     def block_profile(self, request, pk=None):
         perfil = self.get_object()
         is_blocked = request.data.get('isBlocked')
@@ -135,6 +172,8 @@ class PerfilView(viewsets.ModelViewSet):
     
 @api_view(['POST'])
 def signup_perfil(request):
+    request.data['wantsNotifications'] = True
+    request.data['Language'] = Perfil.LanguageChoices("cat").value
     serializer = PerfilSerializer(data=request.data)
     email = request.data.get('email')
     if Perfil.objects.filter(email=email).exists():
@@ -168,8 +207,10 @@ class TagsPreferits(APIView):
             user = Perfil.objects.get(id=user_id)
             tag = Tag.objects.get(id=tag_id)
 
-            user.tags_preferits.remove(tag)
-            
+            tag_preferit = TagPreferit.objects.get(user=user, tag=tag)
+            tag_preferit.show = False
+            tag_preferit.save()
+
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Perfil.DoesNotExist:
             return Response({"error": f"El usuario {user.username} no existe"}, status=status.HTTP_404_NOT_FOUND)
@@ -181,7 +222,10 @@ class SpacesPreferits(APIView):
         try:
             user = Perfil.objects.get(id=user_id)
             space = Space.objects.get(id=space_id)
-            user.espais_preferits.remove(space)
+            
+            espai_preferit = SpacePreferit.objects.get(user=user, space=space)
+            espai_preferit.show = False
+            espai_preferit.save()
             
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Perfil.DoesNotExist:

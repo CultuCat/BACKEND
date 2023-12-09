@@ -19,6 +19,11 @@ from tags.models import Tag
 def run():
     getEventsDadesObertes()
 
+def get_municipi(r, event):
+    comarca_i_municipi = r.get('comarca_i_municipi', None)
+    if comarca_i_municipi:
+        event.municipi = comarca_i_municipi.split('/')[-1]
+
 def get_dates(r, event):
     dataIni = r.get('data_inici', None)
     if dataIni:
@@ -82,6 +87,8 @@ def getEventsDadesObertes(where=None):
                 latitud = r['latitud'],
                 longitud = r['longitud'],
             )
+            # Es tracten els municipis
+            get_municipi(r, event)
             # Es tracten les dates
             get_dates(r, event)
             # Es tracta l'espai

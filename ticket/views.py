@@ -6,7 +6,7 @@ from discount.models import Discount
 from user.permissions import IsAuthenticated 
 from django_filters.rest_framework import DjangoFilterBackend
 from events.models import Event
-from user.models import Perfil
+from user.models import Perfil, SpacePreferit, TagPreferit
 from rest_framework.authentication import TokenAuthentication
 
 
@@ -56,10 +56,18 @@ class TicketsView(viewsets.ModelViewSet):
         event_tags = event.tags.all()
         event_espai = event.espai
 
-        user = Perfil.objects.get(id=ticket['user'])  
-        user.tags_preferits.add(*event_tags)
-        user.espais_preferits.add(event_espai)
+        user = Perfil.objects.get(id=ticket['user'])
 
+        for tag in event_tags:
+            tag_preferit, _ = TagPreferit.objects.get_or_create(tag=tag, user=user)
+            tag_preferit.count += 1
+            if not tag_preferit.show: tag_preferit.show = True
+            tag_preferit.save()
+
+        espai_preferit, _ = SpacePreferit.objects.get_or_create(space=event_espai, user=user)
+        espai_preferit.count += 1
+        if not espai_preferit.show: espai_preferit.show = True
+        espai_preferit.save()
 
         #si se usa un descuento se marca como usado
         if request.data.get('discount') is not None:

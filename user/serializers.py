@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Perfil, FriendshipRequest
+from .models import Perfil, FriendshipRequest,  TagPreferit, SpacePreferit
 from discount.models import Discount
 
 class PerfilShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Perfil
         fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible')
-
+        
 class FriendshipRequestSerializer(serializers.ModelSerializer):
     from_user = PerfilShortSerializer(source='from_user.perfil', read_only=True)
     to_user = PerfilShortSerializer(source='to_user.perfil', read_only=True)
@@ -57,13 +57,12 @@ class PerfilSerializer(serializers.ModelSerializer):
         serializer = PerfilShortSerializer(friends, many=True)
         return serializer.data
     
-    class Meta(object):
-        model = Perfil
-        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
-
-    
     def get_espais_preferits(self, obj):
-        return obj.espais_info
+        return obj.get_espais_preferits()
 
     def get_tags_preferits(self, obj):
-        return obj.tags_info
+        return obj.get_tags_preferits()
+    
+    class Meta(object):
+        model = Perfil
+        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'wantsNotifications', 'isVisible', 'language', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
