@@ -1,7 +1,12 @@
 from rest_framework import routers
-from .views import MessageViewSet
+from .views import MessageAPIView
+from django.urls import path
 
-router = routers.DefaultRouter()
-router.register(r'', MessageViewSet, basename='messages')
+urlpatterns = [
+    path(r'', MessageAPIView.as_view())
+]
 
-urlpatterns = router.urls
+# router = routers.DefaultRouter()
+# router.register(r'', MessageAPIView, basename='messages')
+
+# urlpatterns = router.urls

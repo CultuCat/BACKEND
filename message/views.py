@@ -7,7 +7,7 @@ from .pusher import pusher_client
 
 from utility.new_discount_utils import verificar_y_otorgar_descuento
 
-class MessageViewSet(viewsets.ModelViewSet):
+class MessageAPIView(APIView):
     
     def get(self, request):
         user_to = request.query_params.get('user1')
