@@ -16,11 +16,11 @@ from trophy.models import Trophy
 def insertar_trofeos():
     trofeos = [
         {
-            'nom':"Parlaner",
+            'nom':"Xerraire",
             'descripcio':"Quants missatges has enviat, no siguis pesat...",
-            'punts_nivell1':'10',
-            'punts_nivell2':'50',
-            'punts_nivell3':'100'
+            'punts_nivell1':'1',
+            'punts_nivell2':'2',
+            'punts_nivell3':'3'
         },
         {
             'nom':"Reviewer",

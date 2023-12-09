@@ -41,5 +41,6 @@ urlpatterns = [
     path('users/', include('user.urls'), name='Usuaris'),
     path('trophies/', include('trophy.urls'), name='Trophies'),
     path('discounts/', include('discount.urls'), name='Discounts'),
+    path('messages/', include('message.urls'), name='Messages'),
     path('tags/', include('tags.urls'), name='Tags'),
 ]

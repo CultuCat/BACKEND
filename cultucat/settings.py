@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'trophy',
     'discount',
     'utility',
+    'message',
 ]
 
 MIDDLEWARE = [
