@@ -19,11 +19,14 @@ from tags.models import Tag
 def run():
     getEventsDadesObertes()
 
+<<<<<<< Updated upstream
 def get_municipi(r, event):
     comarca_i_municipi = r.get('comarca_i_municipi', None)
     if comarca_i_municipi:
         event.municipi = comarca_i_municipi.split('/')[-1]
 
+=======
+>>>>>>> Stashed changes
 def get_dates(r, event):
     dataIni = r.get('data_inici', None)
     if dataIni:

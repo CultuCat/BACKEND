@@ -1,4 +1,5 @@
 from django.test import TestCase
+<<<<<<< Updated upstream
 from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Tag
@@ -12,3 +13,5 @@ class SpaceViewTestCase(TestCase):
     def test_list_tags(self):
         response = self.client.get('/tags/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+=======
+>>>>>>> Stashed changes

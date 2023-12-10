@@ -1,6 +1,12 @@
 from rest_framework import viewsets, status
 from .models import Event
+<<<<<<< Updated upstream
 from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer
+=======
+from spaces.models import Space
+from tags.models import Tag
+from .serializers import EventSerializer, EventListSerializer
+>>>>>>> Stashed changes
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from user.permissions import IsAdmin
@@ -67,9 +73,13 @@ class EventView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+<<<<<<< Updated upstream
         if not request.user.is_staff or not request.user.is_superuser:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         event_data = request.data.copy()
+=======
+        event = request.data.copy()
+>>>>>>> Stashed changes
 
         # Per asegurar-se que l'id no es repeteix, agafarem el mes antic i li restarem 1
         last_event = Event.objects.all().order_by('id').first()
@@ -77,11 +87,28 @@ class EventView(viewsets.ModelViewSet):
             id = last_event.id - 1
         else:
             id = 99999999999
+<<<<<<< Updated upstream
         event_data['id'] = id
 
         event = Event.create_event(event_data)
 
         serializer = self.get_serializer(event)
+=======
+        event['id'] = id
+        Space.get_or_createSpace(nom = event['espai'], latitud = event['latitud'], longitud = event['longitud'])
+        
+        tags_data = event.get('tags')
+        
+        if tags_data:
+            for tag_name in tags_data:
+                Tag.get_or_createTag(nom=tag_name)
+
+        event['isAdminCreated'] = True
+
+        serializer = self.get_serializer(data=event)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+>>>>>>> Stashed changes
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

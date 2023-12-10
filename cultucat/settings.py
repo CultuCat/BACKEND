@@ -52,12 +52,22 @@ INSTALLED_APPS = [
     'user',
     'ticket',
     'comment',
+<<<<<<< Updated upstream
     'spaces',
     'tags',
     'trophy',
     'discount',
     'utility',
     'message',
+=======
+<<<<<<< Updated upstream
+    'user',
+=======
+    'spaces',
+    'tags',
+    'trophy',
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 ]
 
 MIDDLEWARE = [

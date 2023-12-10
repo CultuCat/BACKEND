@@ -4,7 +4,10 @@ from rest_framework import status
 from .models import Event
 from spaces.models import Space
 from tags.models import Tag
+<<<<<<< Updated upstream
 from user.models import Perfil
+=======
+>>>>>>> Stashed changes
 from .views import EventView
 from rest_framework.authtoken.models import Token
 
@@ -12,10 +15,13 @@ class EventViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
 
+<<<<<<< Updated upstream
         self.user = Perfil.objects.create(id=1, username='test_user', is_active=True, is_staff=True, is_superuser=True)
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
 
+=======
+>>>>>>> Stashed changes
         self.tag1 = Tag.objects.create(nom='Tag1')
         self.tag2 = Tag.objects.create(nom='Tag2')
         self.tag3 = Tag.objects.create(nom='Tag3')
