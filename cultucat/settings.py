@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
+                 'cultucat.netlify.app',
+                 'localhost:8000',
+                 'localhost:3000']
 
 
 
@@ -70,8 +73,9 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    "http://localhost:3000",  
-    "https://cultucat.netlify.app"
+    "http://localhost:3000",
+    "https://cultucat.netlify.app",
+    'https://cultucat.hemanuelpc.es',
 ]
 
 
@@ -167,6 +171,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+        BASE_DIR / "images",
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles_prod'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
