@@ -1,10 +1,7 @@
 from django.db import models
 from spaces.models import Space
 from tags.models import Tag
-<<<<<<< Updated upstream
 from tags.serializers import TagSerializer
-=======
->>>>>>> Stashed changes
 from django.utils.translation import gettext_lazy as _
 
 def split_colon(obj):
@@ -27,10 +24,7 @@ class Event(models.Model):
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     espai = models.ForeignKey(Space, on_delete=models.CASCADE, null=True, blank=True)
-<<<<<<< Updated upstream
     municipi = models.CharField(null=True, blank=True)
-=======
->>>>>>> Stashed changes
     tags = models.ManyToManyField(Tag)
     isAdminCreated = models.BooleanField(null=False, default=False, blank=True)
 

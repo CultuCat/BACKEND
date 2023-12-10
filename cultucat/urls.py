@@ -39,16 +39,8 @@ urlpatterns = [
     path('docswagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('spaces/', include('spaces.urls'), name='Espais'),
     path('users/', include('user.urls'), name='Usuaris'),
-<<<<<<< Updated upstream
     path('trophies/', include('trophy.urls'), name='Trophies'),
     path('discounts/', include('discount.urls'), name='Discounts'),
     path('messages/', include('message.urls'), name='Messages'),
     path('tags/', include('tags.urls'), name='Tags'),
-=======
-<<<<<<< Updated upstream
-    path('refresh/', scr_refresh, name='Refresh'),
-=======
-    path('trophies/', include('trophy.urls'), name='Trophies'),
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 ]
