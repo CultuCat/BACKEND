@@ -12,6 +12,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Q
 from rest_framework.decorators import action
+from geopy.distance import geodesic
+from django.utils import timezone
+from datetime import datetime
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -32,13 +35,49 @@ class EventView(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return EventListSerializer
+            latitud = self.request.query_params.get('latitud')
+            longitud = self.request.query_params.get('longitud')
+            distancia = self.request.query_params.get('distancia')
+
+            if latitud and longitud and distancia:
+                return EventSerializer
+            else:
+                return EventListSerializer
         elif self.action == 'create':    
             return EventCreateSerializer
         return EventSerializer
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+
+        latitud = request.query_params.get('latitud')
+        longitud = request.query_params.get('longitud')
+        distancia = request.query_params.get('distancia')
+        data_min = request.query_params.get('data_min')
+        data_max = request.query_params.get('data_max')
+
+        if latitud and longitud and distancia:
+            latitud = float(latitud)
+            longitud = float(longitud)
+            distancia = float(distancia)
+
+            queryset = [
+                event for event in queryset
+                if geodesic((latitud, longitud), (event.latitud, event.longitud)).km <= distancia
+            ]
+
+            if data_min:
+                data_min = datetime.strptime(data_min, '%d-%m-%Y')
+                data_min = timezone.make_aware(data_min, timezone.get_current_timezone())
+                queryset = [event for event in queryset if event.dataIni >= data_min]
+
+            if data_max:
+                data_max = datetime.strptime(data_max, '%d-%m-%Y')
+                data_max = timezone.make_aware(data_max, timezone.get_current_timezone())
+                queryset = [event for event in queryset if event.dataIni <= data_max]
+
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
 
         query = self.request.query_params.get('query', None)
         
