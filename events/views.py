@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from .models import Event
+from user.models import TagPreferit, SpacePreferit
 from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from user.permissions import IsAdmin
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Q
+from django.utils import timezone
 from rest_framework.decorators import action
 from geopy.distance import geodesic
 from django.utils import timezone
@@ -34,6 +36,8 @@ class EventView(viewsets.ModelViewSet):
             return [IsAuthenticatedOrReadOnly()]
 
     def get_serializer_class(self):
+        if self.action == 'home':
+            return EventListSerializer
         if self.action == 'list':
             latitud = self.request.query_params.get('latitud')
             longitud = self.request.query_params.get('longitud')
@@ -124,3 +128,34 @@ class EventView(viewsets.ModelViewSet):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    @action(detail=True, methods=['GET'])
+    def home(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        user = request.user
+
+        if not user.is_authenticated:
+            today = timezone.now().date()
+            queryset = queryset.filter(dataIni__gte=today)
+            queryset = queryset.order_by('-dataIni')
+            events = queryset[:20]
+            serializer = self.get_serializer(events, many=True)
+            return Response(serializer.data)
+
+        favorite_tags = TagPreferit.objects.filter(user=user).values_list('tag_id', flat=True)
+        favorite_espais = SpacePreferit.objects.filter(user=user).values_list('space_id', flat=True)
+
+        if not favorite_tags and not favorite_espais:
+            today = timezone.now().date()
+            queryset = queryset.filter(dataIni__gte=today)
+            queryset = queryset.order_by('-dataIni')
+            events = queryset[:20]
+            serializer = self.get_serializer(events, many=True)
+            return Response(serializer.data)
+
+        today = timezone.now().date()
+        queryset = queryset.filter(tags__id__in=favorite_tags, espai__id__in=favorite_espais, dataIni__gte=today)
+        queryset = queryset.order_by('dataIni')
+        events = queryset[:20]
+        serializer = self.get_serializer(events, many=True)
+        return Response(serializer.data)
