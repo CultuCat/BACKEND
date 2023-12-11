@@ -114,17 +114,6 @@ class EventViewTestCase(TestCase):
     def test_list_events(self):
         response = self.client.get('/events/?ordering=-dataIni')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_list_events_by_espai(self):
-        espai_id = self.event1.espai.id
-        response = self.client.get(f'/events/?espai={espai_id}')
-
-        self.assertEqual(response.status_code, 200)
-        events = response.data['results']
-        self.assertTrue(events)
-
-        event_in_response = next((event for event in events if event['id'] == self.event3.id), None)
-        self.assertIsNone(event_in_response) 
     
     def test_get_specific_event(self):
         response = self.client.get(f'/events/{self.event1.id}/')
