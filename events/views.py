@@ -62,6 +62,16 @@ class EventView(viewsets.ModelViewSet):
         data_min = request.query_params.get('data_min')
         data_max = request.query_params.get('data_max')
 
+        if data_min:
+                data_min = datetime.strptime(data_min, '%d-%m-%Y')
+                data_min = timezone.make_aware(data_min, timezone.get_current_timezone())
+                queryset = queryset.filter(dataIni__gte=data_min)
+
+        if data_max:
+            data_max = datetime.strptime(data_max, '%d-%m-%Y')
+            data_max = timezone.make_aware(data_max, timezone.get_current_timezone())
+            queryset = queryset.filter(dataIni__lte=data_max)
+        
         if latitud and longitud and distancia:
             latitud = float(latitud)
             longitud = float(longitud)
@@ -71,16 +81,6 @@ class EventView(viewsets.ModelViewSet):
                 event for event in queryset
                 if geodesic((latitud, longitud), (event.latitud, event.longitud)).km <= distancia
             ]
-
-            if data_min:
-                data_min = datetime.strptime(data_min, '%d-%m-%Y')
-                data_min = timezone.make_aware(data_min, timezone.get_current_timezone())
-                queryset = [event for event in queryset if event.dataIni >= data_min]
-
-            if data_max:
-                data_max = datetime.strptime(data_max, '%d-%m-%Y')
-                data_max = timezone.make_aware(data_max, timezone.get_current_timezone())
-                queryset = [event for event in queryset if event.dataIni <= data_max]
 
             serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data)
