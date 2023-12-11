@@ -53,6 +53,8 @@ class EventView(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        today = timezone.now().date()
+        queryset = queryset.filter(dataIni__gte=today)
 
         latitud = request.query_params.get('latitud')
         longitud = request.query_params.get('longitud')
