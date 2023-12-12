@@ -36,7 +36,7 @@ class EventView(viewsets.ModelViewSet):
             return [IsAuthenticatedOrReadOnly()]
 
     def get_serializer_class(self):
-        if self.action == 'home':
+        if self.action == 'home' or self.action == 'today':
             return EventListSerializer
         if self.action == 'list':
             latitud = self.request.query_params.get('latitud')
@@ -54,7 +54,7 @@ class EventView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         today = timezone.now().date()
-        queryset = queryset.filter(dataIni__gte=today)
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
 
         latitud = request.query_params.get('latitud')
         longitud = request.query_params.get('longitud')
@@ -160,4 +160,14 @@ class EventView(viewsets.ModelViewSet):
         queryset = queryset.order_by('dataIni')
         events = queryset[:20]
         serializer = self.get_serializer(events, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['GET'])
+    def today(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        today = timezone.now().date()
+        queryset = queryset.filter(dataIni=today)
+        queryset = queryset.order_by('-dataIni')
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
