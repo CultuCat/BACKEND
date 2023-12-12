@@ -16,7 +16,7 @@ from django.utils import timezone
 from rest_framework.decorators import action
 from geopy.distance import geodesic
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -36,7 +36,7 @@ class EventView(viewsets.ModelViewSet):
             return [IsAuthenticatedOrReadOnly()]
 
     def get_serializer_class(self):
-        if self.action == 'home' or self.action == 'today':
+        if self.action == 'home' or self.action == 'today' or self.action == 'this_week':
             return EventListSerializer
         if self.action == 'list':
             latitud = self.request.query_params.get('latitud')
@@ -169,5 +169,28 @@ class EventView(viewsets.ModelViewSet):
         today = timezone.now().date()
         queryset = queryset.filter(dataIni=today)
         queryset = queryset.order_by('-dataIni')
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['GET'])
+    def this_week(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        today = timezone.now().date()
+        six_days_later = today + timezone.timedelta(days=6)
+
+        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('-dataIni')
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
