@@ -27,7 +27,7 @@ class EventView(viewsets.ModelViewSet):
     pagination_class.page_size = 50
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
-    ordering_fields = ['dataIni']
+    ordering_fields = ['dataIni', 'nom']
 
     def get_permission_classes(self):
         if self.action == 'create':
@@ -100,9 +100,12 @@ class EventView(viewsets.ModelViewSet):
         if tag_ids:
             queryset = queryset.filter(tags__id__in=tag_ids)
 
-        if not self.request.query_params.get('ordering'):
+        ordering = self.request.query_params.get('ordering', None)
+        if ordering:
+            queryset = queryset.order_by(ordering)
+        else:
             queryset = queryset.order_by('dataIni')
-
+        
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
