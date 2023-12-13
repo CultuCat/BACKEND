@@ -27,7 +27,7 @@ class EventView(viewsets.ModelViewSet):
     pagination_class.page_size = 50
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
-    ordering_fields = ['dataIni', 'nom', 'espai']
+    ordering_fields = ['dataIni', 'nom']
 
     def get_permission_classes(self):
         if self.action == 'create':
@@ -101,8 +101,6 @@ class EventView(viewsets.ModelViewSet):
             queryset = queryset.filter(tags__id__in=tag_ids)
 
         ordering = self.request.query_params.get('ordering', None)
-        if ordering == 'espai':
-            ordering = 'espai__nom'
         if ordering:
             queryset = queryset.order_by(ordering)
         else:
