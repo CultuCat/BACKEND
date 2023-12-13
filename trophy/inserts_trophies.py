@@ -44,8 +44,8 @@ def insertar_trofeos():
             'punts_nivell3':'3'
         },
         {
-            'nom':"Coleccionista",
-            'descripcio':"Quant trofeus tens",
+            'nom':"Coleccionista d'or",
+            'descripcio':"Quant trofeus de nivell d'or tens",
             'punts_nivell1':'1',
             'punts_nivell2':'3',
             'punts_nivell3':'4'

@@ -37,6 +37,9 @@ class TrophySerializer(serializers.ModelSerializer):
         
         elif obj.nom == "El més amigable":
             prog = FriendshipRequest.objects.filter(from_user=user_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=user_id, is_accepted=True).count()
-            
+        
+        elif obj.nom == "Coleccionista d'or":
+            prog = Discount.objects.filter(nivellTrofeu=3, userDiscount=user_id).count()
+          
         return prog
         
