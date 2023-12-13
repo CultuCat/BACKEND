@@ -27,7 +27,7 @@ class EventView(viewsets.ModelViewSet):
     pagination_class.page_size = 50
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
 
-    ordering_fields = ['dataIni']
+    ordering_fields = ['dataIni', 'nom']
 
     def get_permission_classes(self):
         if self.action == 'create':
@@ -100,9 +100,12 @@ class EventView(viewsets.ModelViewSet):
         if tag_ids:
             queryset = queryset.filter(tags__id__in=tag_ids)
 
-        if not self.request.query_params.get('ordering'):
+        ordering = self.request.query_params.get('ordering', None)
+        if ordering:
+            queryset = queryset.order_by(ordering)
+        else:
             queryset = queryset.order_by('dataIni')
-
+        
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -134,11 +137,11 @@ class EventView(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'])
     def home(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        today = timezone.now().date()
+        queryset = queryset.filter(dataIni__gte=today)
         user = request.user
 
         if not user.is_authenticated:
-            today = timezone.now().date()
-            queryset = queryset.filter(dataIni__gte=today)
             queryset = queryset.order_by('-dataIni')
             events = queryset[:20]
             serializer = self.get_serializer(events, many=True)
@@ -148,15 +151,12 @@ class EventView(viewsets.ModelViewSet):
         favorite_espais = SpacePreferit.objects.filter(user=user).values_list('space_id', flat=True)
 
         if not favorite_tags and not favorite_espais:
-            today = timezone.now().date()
-            queryset = queryset.filter(dataIni__gte=today)
             queryset = queryset.order_by('-dataIni')
             events = queryset[:20]
             serializer = self.get_serializer(events, many=True)
             return Response(serializer.data)
 
-        today = timezone.now().date()
-        queryset = queryset.filter(tags__id__in=favorite_tags, espai__id__in=favorite_espais, dataIni__gte=today)
+        queryset = queryset.filter(tags__id__in=favorite_tags, espai__id__in=favorite_espais)
         queryset = queryset.order_by('dataIni')
         events = queryset[:20]
         serializer = self.get_serializer(events, many=True)
@@ -168,7 +168,7 @@ class EventView(viewsets.ModelViewSet):
 
         today = timezone.now().date()
         queryset = queryset.filter(dataIni=today)
-        queryset = queryset.order_by('-dataIni')
+        queryset = queryset.order_by('dataIni')
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -185,7 +185,23 @@ class EventView(viewsets.ModelViewSet):
         today = timezone.now().date()
         six_days_later = today + timezone.timedelta(days=6)
 
-        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('-dataIni')
+        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('dataIni')
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['GET'])
+    def free(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        today = timezone.now().date()
+        queryset = queryset.filter(dataIni__gte=today)
+
+        queryset = queryset.filter(preu="Gratuït").order_by('dataIni')
 
         page = self.paginate_queryset(queryset)
         if page is not None:
