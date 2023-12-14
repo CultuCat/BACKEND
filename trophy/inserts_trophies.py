@@ -31,7 +31,7 @@ def insertar_trofeos():
         },
         {
             'nom':"Més esdeveniments",
-            'descripcio':"Quants esdeveniments has assist",
+            'descripcio':"Quants esdeveniments has assistit",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
@@ -45,7 +45,7 @@ def insertar_trofeos():
         },
         {
             'nom':"Coleccionista d'or",
-            'descripcio':"Quant trofeus de nivell d'or tens",
+            'descripcio':"Quants trofeus de nivell d'or tens",
             'punts_nivell1':'1',
             'punts_nivell2':'3',
             'punts_nivell3':'4'
