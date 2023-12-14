@@ -31,7 +31,7 @@ def insertar_trofeos():
         },
         {
             'nom':"Més esdeveniments",
-            'descripcio':"Quants esdeveniments has assistit",
+            'descripcio':"A quants esdeveniments has comprat entrada",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
