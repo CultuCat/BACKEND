@@ -11,4 +11,5 @@ urlpatterns = [
     re_path('today', EventView.as_view({'get': 'today'}), name='today events'),
     re_path('this_week', EventView.as_view({'get': 'this_week'}), name='this week events'),
     re_path('free', EventView.as_view({'get': 'free'}), name='free events'),
+    re_path('popular', EventView.as_view({'get': 'popular'}), name='popular events'),
 ]
