@@ -6,4 +6,5 @@
 #Ignora el directorio /.vscode
 .vscode/
 .venv/
+myenv/
 cultucat-serviceAcc.json
