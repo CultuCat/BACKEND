@@ -18,6 +18,7 @@ from geopy.distance import geodesic
 from django.utils import timezone
 from datetime import datetime, timedelta
 from ticket.models import Ticket
+from django.db.models import Count
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -139,7 +140,7 @@ class EventView(viewsets.ModelViewSet):
     def home(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         today = timezone.now().date()
-        queryset = queryset.filter(dataIni__gte=today)
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
         user = request.user
 
         if not user.is_authenticated:
@@ -206,7 +207,7 @@ class EventView(viewsets.ModelViewSet):
     def free(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         today = timezone.now().date()
-        queryset = queryset.filter(dataIni__gte=today)
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
 
         queryset = queryset.filter(preu="Gratuït").order_by('dataIni').distinct()
 
@@ -216,4 +217,16 @@ class EventView(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['GET'])
+    def popular(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        today = timezone.now().date()
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
+
+        queryset = queryset.annotate(num_tickets=Count('ticket__id')).order_by('-num_tickets', 'dataIni')
+
+        events = queryset[:20]
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
