@@ -153,7 +153,7 @@ AUTHENTICATION_BACKENDS = [
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '852693017999-ijlpih4e5sqte66p812vihvea3vsbne4.apps.googleusercontent.com' 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ' 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'
 
-GOOGLE_APPLICATION_CREDENTIALS = BASE_DIR / "cultucat-405114-26e7e7d6ee7f.json"
+GOOGLE_APPLICATION_CREDENTIALS = BASE_DIR / "cultucat-serviceAcc.json"
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'cultucat_bucket'
 
