@@ -6,6 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from tags.models import Tag
 from spaces.models import Space
 from enum import Enum
+from storages.backends.gcloud import GoogleCloudStorage
+storage = GoogleCloudStorage()
+
 
 class FriendshipRequest(models.Model):
     id = models.AutoField(primary_key=True)
@@ -118,3 +121,12 @@ class Perfil(User):
         if is_visible != self.isVisible:
             self.isVisible = is_visible
             self.save()
+
+    @staticmethod
+    def upload_image(file, filename):
+        try:
+            target_path = '/images/' + filename
+            path = storage.save(target_path, file)
+            return storage.url(path)
+        except Exception as e:
+            print("Failed to upload!")

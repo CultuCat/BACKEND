@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from django.http import HttpResponse
-
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
@@ -24,7 +24,7 @@ from utility.new_discount_utils import verificar_y_otorgar_descuento
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-
+    parser_classes = [MultiPartParser]
     ordering_fields = ['id', 'puntuacio']
 
     filterset_fields = ['username']
@@ -43,7 +43,7 @@ class PerfilView(viewsets.ModelViewSet):
     def update_profile(self, request, pk=None):
         perfil = self.get_object()
         
-        newImage = request.data.get('imatge', None)
+        newImage = request.FILES['imatge']
         newBio = request.data.get('bio', None)
 
         if request.user.id != int(pk):
@@ -51,6 +51,7 @@ class PerfilView(viewsets.ModelViewSet):
 
         if newImage is not None:
             perfil.imatge = newImage
+            Perfil.upload_image(newImage, newImage.name)
 
         if newBio is not None:
             perfil.bio = newBio
