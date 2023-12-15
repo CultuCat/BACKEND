@@ -17,6 +17,8 @@ from rest_framework.decorators import action
 from geopy.distance import geodesic
 from django.utils import timezone
 from datetime import datetime, timedelta
+from ticket.models import Ticket
+from django.db.models import Count
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -102,9 +104,9 @@ class EventView(viewsets.ModelViewSet):
 
         ordering = self.request.query_params.get('ordering', None)
         if ordering:
-            queryset = queryset.order_by(ordering)
+            queryset = queryset.order_by(ordering).distinct()
         else:
-            queryset = queryset.order_by('dataIni')
+            queryset = queryset.order_by('dataIni').distinct()
         
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -138,7 +140,7 @@ class EventView(viewsets.ModelViewSet):
     def home(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         today = timezone.now().date()
-        queryset = queryset.filter(dataIni__gte=today)
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
         user = request.user
 
         if not user.is_authenticated:
@@ -156,8 +158,14 @@ class EventView(viewsets.ModelViewSet):
             serializer = self.get_serializer(events, many=True)
             return Response(serializer.data)
 
-        queryset = queryset.filter(tags__id__in=favorite_tags, espai__id__in=favorite_espais)
-        queryset = queryset.order_by('dataIni')
+        queryset = queryset.filter(Q(tags__id__in=favorite_tags) | Q(espai__id__in=favorite_espais))
+
+        user_ticket_events = Ticket.objects.filter(user=user).values_list('event__id', flat=True)
+    
+        if user_ticket_events:
+            queryset = queryset.exclude(id__in=user_ticket_events)
+
+        queryset = queryset.order_by('dataIni').distinct()
         events = queryset[:20]
         serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
@@ -168,7 +176,7 @@ class EventView(viewsets.ModelViewSet):
 
         today = timezone.now().date()
         queryset = queryset.filter(dataIni=today)
-        queryset = queryset.order_by('dataIni')
+        queryset = queryset.order_by('dataIni').distinct()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -185,7 +193,7 @@ class EventView(viewsets.ModelViewSet):
         today = timezone.now().date()
         six_days_later = today + timezone.timedelta(days=6)
 
-        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('dataIni')
+        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('dataIni').distinct()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -199,9 +207,9 @@ class EventView(viewsets.ModelViewSet):
     def free(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         today = timezone.now().date()
-        queryset = queryset.filter(dataIni__gte=today)
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
 
-        queryset = queryset.filter(preu="Gratuït").order_by('dataIni')
+        queryset = queryset.filter(preu="Gratuït").order_by('dataIni').distinct()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -209,4 +217,16 @@ class EventView(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['GET'])
+    def popular(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        today = timezone.now().date()
+        queryset = queryset.filter(Q(dataIni__gte=today) | Q(dataFi__gte=today))
+
+        queryset = queryset.annotate(num_tickets=Count('ticket__id')).order_by('-num_tickets', 'dataIni')
+
+        events = queryset[:20]
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
