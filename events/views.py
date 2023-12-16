@@ -187,9 +187,10 @@ class EventView(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
 
         today = timezone.now().date()
+        one_day_later = today + timezone.timedelta(days=1)
         six_days_later = today + timezone.timedelta(days=6)
 
-        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('dataIni').distinct()
+        queryset = queryset.filter(dataIni__range=[one_day_later, six_days_later]).order_by('dataIni').distinct()
 
         events = queryset[:20]
         serializer = self.get_serializer(events, many=True)
