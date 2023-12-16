@@ -178,12 +178,8 @@ class EventView(viewsets.ModelViewSet):
         queryset = queryset.filter(dataIni=today)
         queryset = queryset.order_by('dataIni').distinct()
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        
-        serializer = self.get_serializer(queryset, many=True)
+        events = queryset[:20]
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
     
     @action(detail=True, methods=['GET'])
@@ -191,16 +187,13 @@ class EventView(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
 
         today = timezone.now().date()
+        one_day_later = today + timezone.timedelta(days=1)
         six_days_later = today + timezone.timedelta(days=6)
 
-        queryset = queryset.filter(dataIni__range=[today, six_days_later]).order_by('dataIni').distinct()
+        queryset = queryset.filter(dataIni__range=[one_day_later, six_days_later]).order_by('dataIni').distinct()
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        
-        serializer = self.get_serializer(queryset, many=True)
+        events = queryset[:20]
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
     
     @action(detail=True, methods=['GET'])
@@ -211,12 +204,8 @@ class EventView(viewsets.ModelViewSet):
 
         queryset = queryset.filter(preu="Gratuït").order_by('dataIni').distinct()
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        
-        serializer = self.get_serializer(queryset, many=True)
+        events = queryset[:20]
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
     
     @action(detail=True, methods=['GET'])
