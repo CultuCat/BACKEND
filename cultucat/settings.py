@@ -27,10 +27,7 @@ SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
-                 'cultucat.netlify.app',
-                 'localhost:8000',
-                 'localhost:3000']
+ALLOWED_HOSTS = []
 
 
 
@@ -112,11 +109,11 @@ WSGI_APPLICATION = 'cultucat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cutucatbd2',
+        'NAME': 'cultucatbd',
         'USER': 'postgres',
         'PASSWORD': 'pes04',
-        'HOST': "147.83.148.217",
-        'PORT': '40393'
+        'HOST': "34.31.77.244",
+        'PORT': '5432'
     }
 }
 
