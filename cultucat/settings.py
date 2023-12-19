@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
 
 
 
+
 # Application definition
 
 INSTALLED_APPS = [

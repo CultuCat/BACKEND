@@ -2,11 +2,11 @@ import psycopg2
 
 # Conexión a la base de datos PostgreSQL
 conn = psycopg2.connect(
-    database='cutucatbd2',
+    database='cultucatbd',
     user='postgres',
     password='pes04',
-    host="147.83.148.217",
-    port='40393'
+    host="34.31.77.244",
+    port='5432'
 )
 cursor = conn.cursor()
 
