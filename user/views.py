@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from django.http import HttpResponse
-
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
@@ -24,26 +24,28 @@ from utility.new_discount_utils import verificar_y_otorgar_descuento
 class PerfilView(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-
     ordering_fields = ['id', 'puntuacio']
-
     filterset_fields = ['username']
 
     def get_serializer_class(self):
         if self.action == 'list':
             return PerfilShortSerializer
-        elif self.action == 'send_friend_request':    
+        elif self.action == 'send_friend_request':
             return FriendshipCreateSerializer
-        elif self.action == 'accept_friend_request': 
+        elif self.action == 'accept_friend_request':
             return FriendshipAcceptSerializer
         return PerfilSerializer
 
+    def get_parser_classes(self):
+        if self.action == 'update_profile':
+            return [MultiPartParser]
+        else:
+            return super().get_parser_classes()
 
     @action(methods=['PUT'], detail=True)
     def update_profile(self, request, pk=None):
         perfil = self.get_object()
-        
-        newImage = request.data.get('imatge', None)
+        newImage = request.FILES['imatge', None]
         newBio = request.data.get('bio', None)
 
         if request.user.id != int(pk):
@@ -51,15 +53,16 @@ class PerfilView(viewsets.ModelViewSet):
 
         if newImage is not None:
             perfil.imatge = newImage
+            Perfil.upload_image(newImage, newImage.name)
 
         if newBio is not None:
             perfil.bio = newBio
-        
+
         perfil.save()
 
         serializer = PerfilSerializer(perfil)
         return Response({'data': serializer.data, 'message': "S'ha actualitzat el perfil"}, status=status.HTTP_200_OK)
-        
+
     @action(detail=True, methods=['POST'])
     def send_friend_request(self, request, pk=None):
         sender_profile = self.get_object()

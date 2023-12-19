@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from google.oauth2 import service_account
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +28,7 @@ SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 
@@ -70,8 +73,10 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    "http://localhost:3000",  
-    "https://cultucat.netlify.app"
+    "http://localhost:3000",
+    "https://cultucat.netlify.app",
+    'https://cultucat.hemanuelpc.es',
+    'https://deploy-preview-59--cultucat.netlify.app',
 ]
 
 
@@ -106,11 +111,11 @@ WSGI_APPLICATION = 'cultucat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cutucatbd2',
+        'NAME': 'cultucatbd',
         'USER': 'postgres',
         'PASSWORD': 'pes04',
-        'HOST': "147.83.148.217",
-        'PORT': '40393'
+        'HOST': "34.31.77.244",
+        'PORT': '5432'
     }
 }
 
@@ -149,7 +154,11 @@ AUTHENTICATION_BACKENDS = [
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '852693017999-ijlpih4e5sqte66p812vihvea3vsbne4.apps.googleusercontent.com' 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ' 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'
 
-
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'cultucat-serviceAcc.json')
+)
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'cultucat_bucket'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -167,6 +176,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+        BASE_DIR / "images",
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles_prod'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
