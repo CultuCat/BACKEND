@@ -52,7 +52,7 @@ class SpacePreferit(models.Model):
         ]
 
 class Perfil(User):
-    imatge = models.ImageField(upload_to='images/',default='images/AvatarDefault.png')    
+    imatge = models.ImageField(upload_to='images/',default='images/avatarDefault.png')    
     bio = models.CharField(max_length=200, default="Hey there, I'm using CultuCat", null=True, blank=True, verbose_name=_('Bio'))
     puntuacio = models.IntegerField(null=False, default=0, verbose_name=_('Puntuacio'))
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
