@@ -30,7 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
                  'cultucat.netlify.app',
                  'localhost:8000',
-                 'localhost:3000']
+                 'localhost:3000',
+                 'deploy-preview-59--cultucat.netlify.app']
 
 
 
@@ -78,6 +79,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://cultucat.netlify.app",
     'https://cultucat.hemanuelpc.es',
+    'https://deploy-preview-59--cultucat.netlify.app',
 ]
 
 
@@ -112,11 +114,11 @@ WSGI_APPLICATION = 'cultucat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cutucatbd2',
+        'NAME': 'cultucatbd',
         'USER': 'postgres',
         'PASSWORD': 'pes04',
-        'HOST': "147.83.148.217",
-        'PORT': '40393'
+        'HOST': "34.31.77.244",
+        'PORT': '5432'
     }
 }
 
