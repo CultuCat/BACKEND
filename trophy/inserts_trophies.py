@@ -38,7 +38,7 @@ def insertar_trofeos():
         },
         {
             'nom':"El més amigable",
-            'descripcio':"Nombre de amics que tens",
+            'descripcio':"Nombre de amics que tens afegits a l'aplicació",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
