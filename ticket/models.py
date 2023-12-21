@@ -3,13 +3,14 @@ from events.models import Event
 from user.models import Perfil
 import random
 
-def get_random_image():
-    IMAGE_CHOICES = [
+IMAGE_CHOICES = [
         'images/EncontradoQR.png',
-        'images/PatacasQR.png',
-        'images/GolasoQR.png',
         'images/NanoQR.png',
+        'images/GolasoQR.png',
+        'images/PatacasQR.png',
     ]
+
+def get_random_image():
     return random.choice(IMAGE_CHOICES)
 
 class Ticket(models.Model):
