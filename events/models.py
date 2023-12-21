@@ -2,6 +2,7 @@ from django.db import models
 from spaces.models import Space
 from tags.models import Tag
 from django.utils.translation import gettext_lazy as _
+import requests
 from storages.backends.gcloud import GoogleCloudStorage
 from django.core.files.storage import default_storage
 storage = GoogleCloudStorage()
@@ -71,6 +72,19 @@ class Event(models.Model):
                 {'id': tag.id, 'nom': tag.nom} for tag in tags
             ]
         return None
+    
+    @property
+    def pregunta_externa_info(self):
+        url = f'http://nattech.fib.upc.edu:40520/api/questions/municipi/{self.municipi}?type=random'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except ValueError as e:
+                print("Error decoding JSON:", e)
+        else:
+            print("Unexpected response from the server:", response.status_code)
 
     @classmethod
     def create_event(cls, event_data):
