@@ -63,7 +63,7 @@ class TestMessages(TestCase):
         self.assertEqual(Message.objects.count(), 4)
         
     #GET all given 2 users
-    def test_list_comments(self):
+    def test_list_messages(self):
         #obtenemos los 2 mensajes del inicio
         response = self.client.get('/messages/?user1=1&user2=2')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
