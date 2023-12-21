@@ -27,7 +27,7 @@ class TestMessages(TestCase):
             punts_nivell3 = 3
         )
         self.trophy2 = Trophy.objects.create(
-            nom = "Coleccionista d'or",
+            nom = "Col·leccionista d'or",
             descripcio = "Quants trofeus d'or",
             punts_nivell1 = 1,
             punts_nivell2 = 2,
