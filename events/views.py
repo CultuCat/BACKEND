@@ -19,6 +19,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from ticket.models import Ticket
 from django.db.models import Count
+from rest_framework.parsers import MultiPartParser
 
 class EventView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -52,6 +53,12 @@ class EventView(viewsets.ModelViewSet):
         elif self.action == 'create':    
             return EventCreateSerializer
         return EventSerializer
+    
+    def get_parser_classes(self):
+        if self.action == 'create':
+            return [MultiPartParser]
+        else:
+            return super().get_parser_classes()
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -128,6 +135,12 @@ class EventView(viewsets.ModelViewSet):
         else:
             id = 99999999999
         event_data['id'] = id
+
+        newImage = request.FILES.get('imatge', None)
+
+        if newImage:
+            event_data['image'] = newImage
+            Event.upload_image(newImage, newImage.name)
 
         event = Event.create_event(event_data)
 
@@ -219,3 +232,5 @@ class EventView(viewsets.ModelViewSet):
         events = queryset[:20]
         serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
+    
+    

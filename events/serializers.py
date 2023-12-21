@@ -12,7 +12,7 @@ class EventSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Event
-        exclude = ['enllac', 'imatge']
+        exclude = ['enllac', 'imatge', 'image']
 
     def get_espai(self, obj):
         return obj.espai_info

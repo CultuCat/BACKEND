@@ -1,8 +1,10 @@
 from django.db import models
 from spaces.models import Space
 from tags.models import Tag
-from tags.serializers import TagSerializer
 from django.utils.translation import gettext_lazy as _
+from storages.backends.gcloud import GoogleCloudStorage
+from django.core.files.storage import default_storage
+storage = GoogleCloudStorage()
 
 def split_colon(obj):
     if obj:
@@ -21,6 +23,7 @@ class Event(models.Model):
     enllac = models.CharField(null=True, blank=True)
     adreca = models.CharField(null=True, blank=True)
     imatge = models.CharField(null=True, blank=True)
+    image = models.ImageField(upload_to='images/',default='images/eventDefault.jpg')
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     espai = models.ForeignKey(Space, on_delete=models.CASCADE, null=True, blank=True)
@@ -32,16 +35,23 @@ class Event(models.Model):
         return split_colon(self.enllac)
 
     def get_imatge(self):
-        imatges = split_colon(self.imatge)
         enllac_imatges = []
-        if imatges:
-            for imatge in imatges:
-                img_split = imatge.split('://')[0]
-                if img_split != 'http' and img_split != 'https':
-                    enllac_imatges.append('http://agenda.cultura.gencat.cat' + imatge)
-                else:
-                    enllac_imatges.append(imatge) 
-        enllac_imatges.append('https://th.bing.com/th/id/R.78f9298564b10c30b16684861515c670?rik=zpQaqTcSRIc4jA&pid=ImgRaw&r=0')
+        if self.imatge:
+            imatges = split_colon(self.imatge)
+            if imatges:
+                for imatge in imatges:
+                    img_split = imatge.split('://')[0]
+                    if img_split != 'http' and img_split != 'https':
+                        enllac_imatges.append('http://agenda.cultura.gencat.cat' + imatge)
+                    else:
+                        enllac_imatges.append(imatge) 
+        elif self.image:
+            try:
+                url = default_storage.url(self.image.name)
+                enllac_imatges.append(url)
+            except Exception as e:
+                print("Failed to retrieve image URL:", e)
+
         return enllac_imatges
 
     @property
@@ -94,3 +104,12 @@ class Event(models.Model):
                 event.tags.add(tag)
 
         return event
+
+    @staticmethod
+    def upload_image(file, filename):
+        try:
+            target_path = '/images/' + filename
+            path = storage.save(target_path, file)
+            return storage.url(path)
+        except Exception as e:
+            print("Failed to upload!")
