@@ -65,4 +65,9 @@ class PerfilSerializer(serializers.ModelSerializer):
     
     class Meta(object):
         model = Perfil
-        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'wantsNotifications', 'isVisible', 'language', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
+        fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'wantsNotifications', 'isVisible', 'isGoogleUser', 'language', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
+
+class PerfilCreateSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Perfil
+        fields = ('id', 'username', 'password', 'usernameGoogle', 'email', 'first_name', 'isGoogleUser')

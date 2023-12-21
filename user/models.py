@@ -52,13 +52,16 @@ class SpacePreferit(models.Model):
         ]
 
 class Perfil(User):
-    imatge = models.ImageField(upload_to='images/',default='images/avatarDefault.png')    
+    usernameGoogle = models.CharField(max_length=150, null=True, verbose_name='Username pels usuaris de Google')
+    imatge = models.ImageField(upload_to='images/',default='images/avatarDefault.png')
     bio = models.CharField(max_length=200, default="Hey there, I'm using CultuCat", null=True, blank=True, verbose_name=_('Bio'))
     puntuacio = models.IntegerField(null=False, default=0, verbose_name=_('Puntuacio'))
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
     wantsToTalk = models.BooleanField(default=True, verbose_name=_('La resta dels usuaris poden parlar amb ell'))
     isVisible = models.BooleanField(default=True,verbose_name=_('La resta dels usuaris el poden trobar'))
     wantsNotifications = models.BooleanField(default=True, verbose_name=_('Permet notificacions'))
+    isGoogleUser = models.BooleanField(default=False, verbose_name=('L\'usuari és de Google'))
+
     class LanguageChoices(Enum):
         ENGLISH = 'en'
         SPANISH = 'es'

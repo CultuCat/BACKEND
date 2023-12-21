@@ -10,7 +10,7 @@ from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 
-from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer
+from user.serializers import PerfilSerializer, PerfilShortSerializer, FriendshipRequestSerializer, FriendshipCreateSerializer, FriendshipAcceptSerializer, PerfilCreateSerializer
 from user.models import Perfil, FriendshipRequest, TagPreferit, SpacePreferit
 from tags.models import Tag
 from spaces.models import Space
@@ -30,6 +30,8 @@ class PerfilView(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return PerfilShortSerializer
+        elif self.action == 'signup_perfil':
+            return PerfilCreateSerializer
         elif self.action == 'send_friend_request':
             return FriendshipCreateSerializer
         elif self.action == 'accept_friend_request':
@@ -175,15 +177,21 @@ class PerfilView(viewsets.ModelViewSet):
     
 @api_view(['POST'])
 def signup_perfil(request):
-    request.data['wantsNotifications'] = True
-    request.data['Language'] = Perfil.LanguageChoices("cat").value
-    serializer = PerfilSerializer(data=request.data)
     email = request.data.get('email')
     if Perfil.objects.filter(email=email).exists():
         return Response({'email: This email is already used'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    data = request.data
+
+    data['wantsNotifications'] = True
+    data['language'] = Perfil.LanguageChoices("cat").value
+    serializer = PerfilCreateSerializer(data=data)
+
     if serializer.is_valid():
         serializer.save()
-        user = Perfil.objects.get(username=request.data['username'])
+        user = Perfil.objects.get(username=data['username'])
+        if user.isGoogleUser:
+            user.usernameGoogle = user.username
         user.set_password(request.data['password'])
         user.save()
         token = Token.objects.create(user=user)
@@ -193,7 +201,11 @@ def signup_perfil(request):
 
 @api_view(['POST'])
 def login_perfil(request):
-    user = get_object_or_404(Perfil, username=request.data['username'])
+    isGoogleUser = request.data.get('isGoogleUser')
+    if isGoogleUser:
+        user = get_object_or_404(Perfil, usernameGoogle=request.data['username'])
+    else:
+        user = get_object_or_404(Perfil, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response({"detail":"L'usuari o el password no són correctes"}, status=status.HTTP_404_NOT_FOUND)
     if user.isBlocked:
