@@ -31,20 +31,20 @@ def insertar_trofeos():
         },
         {
             'nom':"Més esdeveniments",
-            'descripcio':"Nombre de esdeveniments que has assistit, és a dir, nombre de entrades comprades",
+            'descripcio':"Nombre d'esdeveniments que has assistit, és a dir, nombre d'entrades comprades",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
             'nom':"El més amigable",
-            'descripcio':"Nombre de amics que tens afegits a l'aplicació",
+            'descripcio':"Nombre d'amics que tens afegits a l'aplicació",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
-            'nom':"Coleccionista d'or",
+            'nom':"Col·leccionista d'or",
             'descripcio':"Nombre de trofeus de nivell d'or que tens",
             'punts_nivell1':'1',
             'punts_nivell2':'3',

@@ -32,6 +32,14 @@ class TestUsers(TestCase):
             punts_nivell2 = 2,
             punts_nivell3 = 3
         )
+        
+        self.trophy2 = Trophy.objects.create(
+            nom = "Col·leccionista d'or",
+            descripcio = "Quants trofeus d'or",
+            punts_nivell1 = 1,
+            punts_nivell2 = 2,
+            punts_nivell3 = 3
+        )
 
     def test_creations_self(self):
         self.assertEqual(Space.objects.count(), 2)

@@ -47,12 +47,20 @@ class TestTicketsPost(TestCase):
             punts_nivell2 = 3,
             punts_nivell3 = 5
         )
+        
+        self.trophy2 = Trophy.objects.create(
+            nom = "Col·leccionista d'or",
+            descripcio = "Quants trofeus d'or",
+            punts_nivell1 = 1,
+            punts_nivell2 = 2,
+            punts_nivell3 = 3
+        )
 
     def test_creations_self(self):
         self.assertEqual(Event.objects.count(), 2)
         self.assertEqual(Perfil.objects.count(), 2)
         self.assertEqual(Ticket.objects.count(), 2)
-        self.assertEqual(Trophy.objects.count(), 1)
+        self.assertEqual(Trophy.objects.count(), 2)
         
     def test_post_ticket(self):
         #creamos un ticket para el user 1 en evento 1, deja crear
