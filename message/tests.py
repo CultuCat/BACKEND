@@ -26,12 +26,19 @@ class TestMessages(TestCase):
             punts_nivell2 = 2,
             punts_nivell3 = 3
         )
+        self.trophy2 = Trophy.objects.create(
+            nom = "Coleccionista d'or",
+            descripcio = "Quants trofeus d'or",
+            punts_nivell1 = 1,
+            punts_nivell2 = 2,
+            punts_nivell3 = 3
+        )
 
     #First TestCase, checking everything OK on setUp
     def test_creations_self(self):
         self.assertEqual(Perfil.objects.count(), 3)
         self.assertEqual(Message.objects.count(), 2)
-        self.assertEqual(Trophy.objects.count(), 1)
+        self.assertEqual(Trophy.objects.count(), 2)
     
     #POST TestCase  
     def test_post_message(self):
