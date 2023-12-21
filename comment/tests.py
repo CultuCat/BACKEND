@@ -35,6 +35,13 @@ class TestComments(TestCase):
             punts_nivell2 = 3,
             punts_nivell3 = 5
         )
+        self.trophy2 = Trophy.objects.create(
+            nom = "Coleccionista d'or",
+            descripcio = "Quants trofeus d'or",
+            punts_nivell1 = 1,
+            punts_nivell2 = 2,
+            punts_nivell3 = 3
+        )
 
     #First TestCase, checking everything OK on setUp
     def test_creations_self(self):
