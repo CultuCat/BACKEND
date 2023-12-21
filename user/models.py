@@ -6,6 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from tags.models import Tag
 from spaces.models import Space
 from enum import Enum
+from storages.backends.gcloud import GoogleCloudStorage
+storage = GoogleCloudStorage()
+
 
 class FriendshipRequest(models.Model):
     id = models.AutoField(primary_key=True)
@@ -49,7 +52,7 @@ class SpacePreferit(models.Model):
         ]
 
 class Perfil(User):
-    imatge = models.CharField(default='https://www.calfruitos.com/es/fotos/pr_223_20190304145434.png')    
+    imatge = models.ImageField(upload_to='images/',default='images/avatarDefault.png')    
     bio = models.CharField(max_length=200, default="Hey there, I'm using CultuCat", null=True, blank=True, verbose_name=_('Bio'))
     puntuacio = models.IntegerField(null=False, default=0, verbose_name=_('Puntuacio'))
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
@@ -118,3 +121,12 @@ class Perfil(User):
         if is_visible != self.isVisible:
             self.isVisible = is_visible
             self.save()
+
+    @staticmethod
+    def upload_image(file, filename):
+        try:
+            target_path = '/images/' + filename
+            path = storage.save(target_path, file)
+            return storage.url(path)
+        except Exception as e:
+            print("Failed to upload!")

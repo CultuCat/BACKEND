@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Event
+from user.serializers import PerfilShortSerializer
 from ticket.models import Ticket
 
 class EventSerializer(serializers.ModelSerializer):
@@ -23,7 +24,8 @@ class EventSerializer(serializers.ModelSerializer):
         ts = Ticket.objects.filter(event=obj.id)
         assistents = []
         for t in ts:
-            assistents.append(t.user.id)
+            user_serialized = PerfilShortSerializer(t.user)
+            assistents.append(user_serialized.data)
         return assistents
         
 
@@ -43,7 +45,8 @@ class EventListSerializer(serializers.ModelSerializer):
         ts = Ticket.objects.filter(event=obj.id)
         assistents = []
         for t in ts:
-            assistents.append(t.user.id)
+            user_serialized = PerfilShortSerializer(t.user)
+            assistents.append(user_serialized.data)
         return assistents
     
 class EventCreateSerializer(serializers.ModelSerializer):

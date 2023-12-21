@@ -3,5 +3,10 @@
 *.pyc
 */pyc
 
-#Ignora el directorio /.vscode
+#Directorios
 .vscode/
+.venv/
+myenv/
+staticfiles_prod/
+
+cultucat-serviceAcc.json

@@ -98,4 +98,3 @@ def getEventsDadesObertes(where=None):
         except Exception as e:
             print(f"Error al procesar el evento {r.get('codi', 'Desconocido')}: {str(e)}")
             print(f"Event details: {r}")
-    subprocess.run(['python', 'scripts/clean.py'])
