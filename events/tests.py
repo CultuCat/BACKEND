@@ -30,7 +30,6 @@ class EventViewTestCase(TestCase):
             horaris='10:00 AM - 2:00 PM',
             enllac='https://ejemplo.com',
             adreca='Dirección del evento',
-            imatge='https://imagen.com/imagen.jpg',
             latitud=40.7128,
             longitud=-74.0060,
             espai=Space.objects.create(nom='Espacio de Prueba', latitud=40.7128, longitud=-74.0060)
@@ -71,7 +70,6 @@ class EventViewTestCase(TestCase):
             'horaris': '10:00 AM - 2:00 PM',
             'enllac': 'https://ejemplo.com',
             'adreca': 'Dirección del evento',
-            'imatge': 'https://imagen.com/imagen.jpg',
             'latitud': 41.7128,
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba 2',
@@ -95,7 +93,6 @@ class EventViewTestCase(TestCase):
             'horaris': '10:00 AM - 2:00 PM',
             'enllac': 'https://ejemplo.com',
             'adreca': 'Dirección del evento',
-            'imatge': 'https://imagen.com/imagen.jpg',
             'latitud': 41.7128,
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba',
@@ -107,9 +104,6 @@ class EventViewTestCase(TestCase):
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(Space.objects.count(), 2)
         self.assertEqual(Tag.objects.count(), 5)
-
-    def tearDown(self):
-        EventView.apply_permissions = True
     
     def test_list_events(self):
         response = self.client.get('/events/?ordering=-dataIni')
