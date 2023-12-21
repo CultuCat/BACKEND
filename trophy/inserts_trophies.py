@@ -17,35 +17,35 @@ def insertar_trofeos():
     trofeos = [
         {
             'nom':"Xerraire",
-            'descripcio':"Quants missatges has enviat, no siguis pesat...",
+            'descripcio':"Nombre de missatges que has enviat",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
             'nom':"Reviewer",
-            'descripcio':"Quants comentaris has escrit",
+            'descripcio':"Nombre de comentaris que has escrit",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
             'nom':"Més esdeveniments",
-            'descripcio':"A quants esdeveniments has comprat entrada",
+            'descripcio':"Nombre d'esdeveniments que has assistit, és a dir, nombre d'entrades comprades",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
             'nom':"El més amigable",
-            'descripcio':"Quants amics tens",
+            'descripcio':"Nombre d'amics que tens afegits a l'aplicació",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
-            'nom':"Coleccionista d'or",
-            'descripcio':"Quants trofeus de nivell d'or tens",
+            'nom':"Col·leccionista d'or",
+            'descripcio':"Nombre de trofeus de nivell d'or que tens",
             'punts_nivell1':'1',
             'punts_nivell2':'3',
             'punts_nivell3':'4'

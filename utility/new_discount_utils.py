@@ -35,7 +35,7 @@ def verificar_y_otorgar_descuento(user_id, trofeo_nombre, count_check):
         #trofeo dorado mirar si gana trofeo para el coleccionista  
         if nivell == 3:
             count_trophies_gold = Discount.objects.filter(nivellTrofeu=3, userDiscount=user_id).count()+1 #+1 pq todavía no se ha creado el descuento anterior
-            t_trophies_gold = Trophy.objects.get(nom="Coleccionista d'or")
+            t_trophies_gold = Trophy.objects.get(nom="Col·leccionista d'or")
             new_points2 = 0
             
             if count_trophies_gold == t_trophies_gold.punts_nivell1:
@@ -58,7 +58,7 @@ def verificar_y_otorgar_descuento(user_id, trofeo_nombre, count_check):
                 while Discount.objects.filter(codi=codigo_descuento2).exists():
                     codigo_descuento2 = ''.join(random.choice(caracteres_validos_codigo) for _ in range(8))
                 
-                Discount.objects.create(codi=codigo_descuento2,userDiscount=Perfil.objects.get(id=user_id),nivellTrofeu=nivell2,nomTrofeu="Coleccionista d'or",usat=False)
+                Discount.objects.create(codi=codigo_descuento2,userDiscount=Perfil.objects.get(id=user_id),nivellTrofeu=nivell2,nomTrofeu="Col·leccionista d'or",usat=False)
          
                 
         Discount.objects.create(codi=codigo_descuento,userDiscount=Perfil.objects.get(id=user_id),nivellTrofeu=nivell,nomTrofeu=trofeo_nombre,usat=False)
