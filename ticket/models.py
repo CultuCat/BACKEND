@@ -4,10 +4,10 @@ from user.models import Perfil
 import random
 
 IMAGE_CHOICES = [
-        'https://storage.cloud.google.com/cultucat_bucket/images/EncontradoQR.png',
-        'https://storage.cloud.google.com/cultucat_bucket/images/NanoQR.png',
-        'https://storage.cloud.google.com/cultucat_bucket/images/GolasoQR.png',
-        'https://storage.cloud.google.com/cultucat_bucket/images/PatacasQR.png',
+        'images/EncontradoQR.png',
+        'images/NanoQR.png',
+        'images/GolasoQR.png',
+        'images/PatacasQR.png',
     ]
 
 def get_random_image():
