@@ -41,7 +41,7 @@ class TestTicketsPost(TestCase):
         )
         
         self.trophy = Trophy.objects.create(
-            nom = "Més esdeveniments",
+            nom = "Explorador cultural",
             descripcio = "Quants esdeveniments has assist",
             punts_nivell1 = 2,
             punts_nivell2 = 3,
