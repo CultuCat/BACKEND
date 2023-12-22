@@ -9,7 +9,6 @@ class EventSerializer(serializers.ModelSerializer):
     enllacos_list = serializers.ListField(read_only=True, required=False, source='get_enllac')
     imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
     assistents = serializers.SerializerMethodField()
-    pregunta = serializers.SerializerMethodField()
     
     class Meta:
         model = Event
@@ -20,9 +19,6 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_tags(self, obj):
         return obj.tags_info
-    
-    def get_pregunta(self, obj):
-        return obj.pregunta_externa_info
     
     def get_assistents(self, obj):
         ts = Ticket.objects.filter(event=obj.id)
