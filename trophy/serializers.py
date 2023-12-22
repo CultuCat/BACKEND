@@ -32,10 +32,10 @@ class TrophySerializer(serializers.ModelSerializer):
         elif obj.nom == "Reviewer":
             prog = Comment.objects.filter(user = user_id).count()
             
-        elif obj.nom == "Més esdeveniments":
+        elif obj.nom == "Explorador cultural":
             prog = Ticket.objects.filter(user = user_id).count()
         
-        elif obj.nom == "El més amigable":
+        elif obj.nom == "Popular":
             prog = FriendshipRequest.objects.filter(from_user=user_id, is_accepted=True).count()+FriendshipRequest.objects.filter(to_user=user_id, is_accepted=True).count()
         
         elif obj.nom == "Col·leccionista d'or":

@@ -76,7 +76,7 @@ class TicketsView(viewsets.ModelViewSet):
             descuento.usat = True
             descuento.save()
             
-        verificar_y_otorgar_descuento(ticket['user'], "Més esdeveniments", Ticket.objects.filter(user= ticket['user']).count())  
+        verificar_y_otorgar_descuento(ticket['user'], "Explorador cultural", Ticket.objects.filter(user= ticket['user']).count())  
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
    
     

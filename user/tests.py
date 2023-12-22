@@ -26,7 +26,7 @@ class TestUsers(TestCase):
         self.espai_preferit2 = SpacePreferit.objects.create(user=self.user, space=self.space2, count=1)
         
         self.trophy = Trophy.objects.create(
-            nom = "El més amigable",
+            nom = "Popular",
             descripcio = "Quants amics tens",
             punts_nivell1 = 1,
             punts_nivell2 = 2,

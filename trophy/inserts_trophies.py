@@ -30,22 +30,22 @@ def insertar_trofeos():
             'punts_nivell3':'3'
         },
         {
-            'nom':"Més esdeveniments",
-            'descripcio':"Nombre d'esdeveniments que has assistit, és a dir, nombre d'entrades comprades",
+            'nom':"Explorador cultural",
+            'descripcio':"Nombre d'entrades comprades",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
-            'nom':"El més amigable",
-            'descripcio':"Nombre d'amics que tens afegits a l'aplicació",
+            'nom':"Popular",
+            'descripcio':"Nombre d'amics afegits",
             'punts_nivell1':'1',
             'punts_nivell2':'2',
             'punts_nivell3':'3'
         },
         {
             'nom':"Col·leccionista d'or",
-            'descripcio':"Nombre de trofeus de nivell d'or que tens",
+            'descripcio':"Nombre de trofeus d'or que tens",
             'punts_nivell1':'1',
             'punts_nivell2':'3',
             'punts_nivell3':'4'
