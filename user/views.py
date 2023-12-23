@@ -19,6 +19,8 @@ from rest_framework import filters
 from django.core.exceptions import ObjectDoesNotExist
 
 from utility.new_discount_utils import verificar_y_otorgar_descuento
+import requests
+from django.core.files.base import ContentFile
 
 
 class PerfilView(viewsets.ModelViewSet):
@@ -195,6 +197,7 @@ def signup_perfil(request):
         user.set_password(request.data['password'])
         user.save()
         token = Token.objects.create(user=user)
+        serializer = PerfilSerializer(instance=user)
         return Response({'token': token.key, 'user': serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

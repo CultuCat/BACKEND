@@ -31,6 +31,7 @@ class PerfilSerializer(serializers.ModelSerializer):
     pending_friend_requests = serializers.SerializerMethodField()
     pending_friend_requests_sent = serializers.SerializerMethodField()
     friends = serializers.SerializerMethodField()
+    imatge = serializers.SerializerMethodField()
 
     def get_pending_friend_requests(self, obj):
         pending_requests = obj.get_pending_friend_requests()
@@ -63,6 +64,9 @@ class PerfilSerializer(serializers.ModelSerializer):
     def get_tags_preferits(self, obj):
         return obj.get_tags_preferits()
     
+    def get_imatge(self, obj):
+        return obj.get_imatge()
+    
     class Meta(object):
         model = Perfil
         fields = ('id', 'username','email', 'first_name','is_staff','imatge', 'bio', 'puntuacio', 'isBlocked', 'wantsToTalk', 'wantsNotifications', 'isVisible', 'isGoogleUser', 'language', 'tags_preferits', 'espais_preferits', 'pending_friend_requests', 'pending_friend_requests_sent', 'friends')
@@ -70,4 +74,4 @@ class PerfilSerializer(serializers.ModelSerializer):
 class PerfilCreateSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Perfil
-        fields = ('id', 'username', 'password', 'usernameGoogle', 'email', 'first_name', 'isGoogleUser')
+        fields = ('id', 'username', 'password', 'usernameGoogle', 'email', 'first_name', 'isGoogleUser', 'imatge_url')

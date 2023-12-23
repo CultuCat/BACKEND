@@ -7,6 +7,7 @@ from tags.models import Tag
 from spaces.models import Space
 from enum import Enum
 from storages.backends.gcloud import GoogleCloudStorage
+from django.core.files.storage import default_storage
 storage = GoogleCloudStorage()
 
 
@@ -54,6 +55,7 @@ class SpacePreferit(models.Model):
 class Perfil(User):
     usernameGoogle = models.CharField(max_length=150, null=True, verbose_name='Username pels usuaris de Google')
     imatge = models.ImageField(upload_to='images/',default='images/avatarDefault.png')
+    imatge_url = models.CharField(null=True, verbose_name=('Imatge si es fa log in de Google'))
     bio = models.CharField(max_length=200, default="Hey there, I'm using CultuCat", null=True, blank=True, verbose_name=_('Bio'))
     puntuacio = models.IntegerField(null=False, default=0, verbose_name=_('Puntuacio'))
     isBlocked = models.BooleanField(default=False, verbose_name=_('Està bloquejat a la aplicacio'))
@@ -68,6 +70,11 @@ class Perfil(User):
         CATALAN = 'cat'
 
     language = models.CharField(max_length=3, choices=[(language.value, language.name) for language in LanguageChoices], default=LanguageChoices.CATALAN.value)
+
+    def get_imatge(self):
+        if self.imatge_url and 'images/avatarDefault.png' == self.imatge.name:
+            return self.imatge_url
+        return default_storage.url(self.imatge.name)
 
     def send_friend_request(self, to_user):
         if not FriendshipRequest.objects.filter(from_user=self, to_user=to_user, is_accepted=True).exists() and \
