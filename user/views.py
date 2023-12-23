@@ -41,15 +41,14 @@ class PerfilView(viewsets.ModelViewSet):
         return PerfilSerializer
 
     def get_parser_classes(self):
-        if self.action == 'update_profile':
+        if self.action == 'update':
             return [MultiPartParser]
         else:
             return super().get_parser_classes()
 
-    @action(methods=['PUT'], detail=True)
-    def update_profile(self, request, pk=None):
+    def update(self, request, pk=None):
         perfil = self.get_object()
-        newImage = request.FILES['imatge', None]
+        newImage = request.FILES.get('imatge', None)
         newBio = request.data.get('bio', None)
 
         if request.user.id != int(pk):
