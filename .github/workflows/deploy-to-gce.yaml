@@ -30,8 +30,8 @@ jobs:
           id: 'compute-ssh'
           uses: 'google-github-actions/ssh-compute@v1'
           with:
-            instance_name: ${{ env.GCE_INSTANCE }}
-            zone: ${{ env.GCE_INSTANCE_ZONE }}
+            instance_name: '${{ env.GCE_INSTANCE }}'
+            zone: '${{ env.GCE_INSTANCE_ZONE }}'
             ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
             script: '${{ github.workspace }}/script-deploy/script.sh'
 
