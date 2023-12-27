@@ -1,4 +1,4 @@
-su emanuel.cuevas03
+sudo -u emanuel.cuevas03 bash
 cd backend/
 source myenv/bin/activate
 git pull
