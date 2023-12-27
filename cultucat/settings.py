@@ -27,7 +27,11 @@ SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
+                 'cultucat.netlify.app',
+                 'localhost:8000',
+                 'localhost:3000',
+                 'deploy-preview-59--cultucat.netlify.app']
 
 
 
