@@ -37,4 +37,3 @@ jobs:
         - name: 'Show Output'
           run: |-
             echo '${{ steps.ssh.outputs.stdout }}'
-            echo '${{ steps.ssh.outputs.stderr }}'
