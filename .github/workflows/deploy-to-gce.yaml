@@ -23,15 +23,10 @@ jobs:
           uses: 'google-github-actions/auth@v2'
           with:
             credentials_json: '${{ secrets.GCE_SA_KEY }}'
-        - name: 'SSH to GCP instance'
-          id: 'compute-ssh'
-          uses: 'google-github-actions/ssh-compute@v1'
-          with:
-            instance_name: 'cultucat-back'
-            project_id: 'cultucat-405114'
-            zone: 'us-central1-a'
-            ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
-            command: 'echo Hello'
+        - name: Run Deployment Script
+          run: |
+            chmod +x ${{ github.workspace }}/script-deploy/script.sh
+            ${{ github.workspace }}/script-deploy/script.sh
 
         - name: 'Show Output'
           run: |-
