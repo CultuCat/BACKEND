@@ -9,6 +9,9 @@ gcloud compute ssh cultucat-back --zone=us-central1-a --tunnel-through-iap --pro
 pwd
 whoami
 sudo -i -u emanuel.cuevas03
+pwd
+whoami
+echo "soy yo"
 cd backend/
 source myenv/bin/activate
 git pull
