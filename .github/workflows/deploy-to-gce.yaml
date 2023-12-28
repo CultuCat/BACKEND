@@ -31,7 +31,7 @@ jobs:
             project_id: 'cultucat-405114'
             zone: 'us-central1-a'
             ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
-            script: '${{ github.workspace }}/script-deploy/script.sh'
+            command: 'echo Hello'
 
         - name: 'Show Output'
           run: |-
