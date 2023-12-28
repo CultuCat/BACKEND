@@ -1,0 +1,29 @@
+name: Build and Deploy to Google Compute Engine
+
+on:
+  push:
+    branches: ["master"]
+
+env:
+  PROJECT_ID: ${{ secrets.GCE_PROJECT }}
+
+jobs:
+  ssh:
+      runs-on: 'ubuntu-latest'
+      permissions:
+        contents: 'read'
+        id-token: 'write'
+
+      steps:
+        - name: 'Checkout'
+          uses: 'actions/checkout@v3'
+
+        - id: 'auth'
+          name: 'Authenticate to Google Cloud'
+          uses: 'google-github-actions/auth@v2'
+          with:
+            credentials_json: '${{ secrets.GCE_SA_KEY }}'
+        - name: Run Deployment Script
+          run: |
+            chmod +x ${{ github.workspace }}/script-deploy/script.sh
+            ${{ github.workspace }}/script-deploy/script.sh
