@@ -2,7 +2,7 @@ name: Build and Deploy to Google Compute Engine
 
 on:
   push:
-    branches: ["master", "#177-Deploy-backend-automatic"]
+    branches: ["master"]
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
@@ -27,8 +27,3 @@ jobs:
           run: |
             chmod +x ${{ github.workspace }}/script-deploy/script.sh
             ${{ github.workspace }}/script-deploy/script.sh
-
-        - name: 'Show Output'
-          run: |-
-            echo '${{ steps.ssh.outputs.stdout }}'
-            echo '${{ steps.compute-ssh.outputs.stderr }}'
