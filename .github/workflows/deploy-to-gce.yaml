@@ -6,8 +6,6 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  GCE_INSTANCE: cultucat-back
-  GCE_INSTANCE_ZONE: us-central1-a
 
 jobs:
   ssh:
@@ -29,11 +27,12 @@ jobs:
           id: 'compute-ssh'
           uses: 'google-github-actions/ssh-compute@v1'
           with:
-            instance_name: '${{ env.GCE_INSTANCE }}'
-            zone: '${{ env.GCE_INSTANCE_ZONE }}'
+            instance_name: 'cultucat-back'
+            zone: 'us-central1-a'
             ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
             script: '${{ github.workspace }}/script-deploy/script.sh'
 
         - name: 'Show Output'
           run: |-
             echo '${{ steps.ssh.outputs.stdout }}'
+            echo '${{ steps.compute-ssh.outputs.stderr }}'

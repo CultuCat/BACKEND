@@ -1,5 +1,3 @@
-sudo -u emanuel.cuevas03 bash
-cd backend/
-source myenv/bin/activate
-git pull
-sudo service apache2 restart
+echo -n 1
+echo -n 2
+echo 3
