@@ -3,9 +3,13 @@ from .models import Perfil, FriendshipRequest,  TagPreferit, SpacePreferit
 from discount.models import Discount
 
 class PerfilShortSerializer(serializers.ModelSerializer):
+    imatge = serializers.SerializerMethodField()
     class Meta:
         model = Perfil
         fields = ('id', 'username', 'first_name', 'imatge', 'puntuacio', 'isBlocked', 'wantsToTalk', 'isVisible')
+
+    def get_imatge(self, obj):
+        return obj.get_imatge()
         
 class FriendshipRequestSerializer(serializers.ModelSerializer):
     from_user = PerfilShortSerializer(source='from_user.perfil', read_only=True)
