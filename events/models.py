@@ -4,6 +4,7 @@ from tags.models import Tag
 from django.utils.translation import gettext_lazy as _
 from storages.backends.gcloud import GoogleCloudStorage
 from django.core.files.storage import default_storage
+import requests
 storage = GoogleCloudStorage()
 
 def split_colon(obj):
@@ -53,6 +54,19 @@ class Event(models.Model):
                 print("Failed to retrieve image URL:", e)
 
         return enllac_imatges
+    
+    @property
+    def pregunta_externa_info(self):
+        url = f'http://nattech.fib.upc.edu:40520/api/questions/municipi/{self.municipi}?type=random'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except ValueError as e:
+                print("Error decoding JSON:", e)
+        else:
+            print("Unexpected response from the server:", response.status_code)
 
     @property
     def espai_info(self):
