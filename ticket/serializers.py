@@ -2,26 +2,14 @@ from rest_framework import serializers
 from .models import Ticket
 
 class TicketSerializer(serializers.ModelSerializer):
-    imatgeEvent = serializers.SerializerMethodField()
+    imatges_list = serializers.SerializerMethodField()
     
     class Meta:
         model = Ticket
-        fields = ['user', 'event', 'imatgeEvent', 'image']
+        fields = ['user', 'event', 'imatges_list', 'image']
         
-    def get_imatgeEvent(self, obj):
-        imatges = split_colon(obj.event.imatge if obj.event else None)
-        enllac_imatges = []
-        if imatges:
-            for imatge in imatges:
-                img_split = imatge.split('://')[0]
-                if img_split != 'http' and img_split != 'https':
-                    return 'http://agenda.cultura.gencat.cat' + imatge
-                else:
-                    return imatge
-            return enllac_imatges
-        enllac_imatges.append('https://th.bing.com/th/id/R.78f9298564b10c30b16684861515c670?rik=zpQaqTcSRIc4jA&pid=ImgRaw&r=0')
-        return enllac_imatges
-
+    def get_imatges_list(self, obj):
+        return obj.event.get_imatge() if obj.event else None
 class TicketSerializer_byEvent(serializers.ModelSerializer):
     idUser = serializers.SerializerMethodField()
     nickname = serializers.SerializerMethodField()
@@ -52,34 +40,27 @@ def split_colon(obj):
         
 class TicketSerializer_byUser(serializers.ModelSerializer):
     nomEvent = serializers.SerializerMethodField()
-    data = serializers.SerializerMethodField()
+    dataIni = serializers.SerializerMethodField()
+    dataFi = serializers.SerializerMethodField()
     espai = serializers.SerializerMethodField()
-    imatge = serializers.SerializerMethodField()
+    imatges_list = serializers.SerializerMethodField()
     
     class Meta:
         model = Ticket
-        fields = ['id', 'nomEvent', 'data', 'espai', 'imatge']
+        fields = ['id', 'nomEvent', 'dataIni', 'dataFi', 'espai', 'imatges_list', 'image']
         
     def get_nomEvent(self, obj):
         return obj.event.nom if obj.event else None
 
-    def get_data(self, obj):
+    def get_dataIni(self, obj):
         return obj.event.dataIni if obj.event else None
+    
+    def get_dataFi(self, obj):
+        return obj.event.dataFi if obj.event else None
     
     def get_espai(self, obj):
         return obj.event.espai.nom if obj.event else None
     
-    def get_imatge(self, obj):
-        imatges = split_colon(obj.event.imatge if obj.event else None)
-        enllac_imatges = []
-        if imatges:
-            for imatge in imatges:
-                img_split = imatge.split('://')[0]
-                if img_split != 'http' and img_split != 'https':
-                    return 'http://agenda.cultura.gencat.cat' + imatge
-                else:
-                    return imatge
-            return enllac_imatges
-        enllac_imatges.append('https://th.bing.com/th/id/R.78f9298564b10c30b16684861515c670?rik=zpQaqTcSRIc4jA&pid=ImgRaw&r=0')
-        return enllac_imatges
+    def get_imatges_list(self, obj):
+        return obj.event.get_imatge() if obj.event else None
     
