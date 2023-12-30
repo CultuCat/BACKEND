@@ -40,7 +40,7 @@ class EventListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Event
-        fields = ['id', 'nom', 'descripcio', 'dataIni', 'imatges_list', 'espai', 'preu', 'assistents']
+        fields = ['id', 'nom', 'descripcio', 'dataIni', 'dataFi', 'imatges_list', 'espai', 'preu', 'assistents']
 
     def get_espai(self, obj):
         return obj.espai_info
