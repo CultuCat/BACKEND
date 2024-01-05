@@ -56,18 +56,12 @@ class PerfilView(viewsets.ModelViewSet):
         if request.user.id != int(pk):
             return Response({'detail': 'No tens permisos per fer aquesta acció'}, status=status.HTTP_403_FORBIDDEN)
 
-        if new_image is not None:
-            perfil.imatge = new_image
-            Perfil.upload_image(new_image, new_image.name)
+        if newImage is not None:
+            perfil.imatge = newImage
+            Perfil.upload_image(newImage, newImage.name)
 
-        if new_bio is not None:
-            perfil.bio = new_bio
-
-        if new_username is not None:
-            perfil.username = new_username
-
-        if new_first_name is not None:
-            perfil.first_name = new_first_name
+        if newBio is not None:
+            perfil.bio = newBio
 
         perfil.save()
 
