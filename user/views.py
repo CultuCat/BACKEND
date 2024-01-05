@@ -48,6 +48,8 @@ class PerfilView(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         perfil = self.get_object()
+        newUsername = request.get('username', None)
+        newFirstName = request.get('first_name', None)
         newImage = request.FILES.get('imatge', None)
         newBio = request.data.get('bio', None)
 
@@ -60,6 +62,12 @@ class PerfilView(viewsets.ModelViewSet):
 
         if newBio is not None:
             perfil.bio = newBio
+
+        if newUsername is not None:
+            perfil.username = newUsername
+
+        if newFirstName is not None:
+            perfil.first_name = newFirstName
 
         perfil.save()
 
