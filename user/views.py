@@ -48,18 +48,26 @@ class PerfilView(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         perfil = self.get_object()
-        newImage = request.FILES.get('imatge', None)
-        newBio = request.data.get('bio', None)
+        new_username = request.get('username', None)
+        new_first_name = request.get('first_name', None)
+        new_image = request.FILES.get('imatge', None)
+        new_bio = request.data.get('bio', None)
 
         if request.user.id != int(pk):
             return Response({'detail': 'No tens permisos per fer aquesta acció'}, status=status.HTTP_403_FORBIDDEN)
 
-        if newImage is not None:
-            perfil.imatge = newImage
-            Perfil.upload_image(newImage, newImage.name)
+        if new_image is not None:
+            perfil.imatge = new_image
+            Perfil.upload_image(new_image, new_image.name)
 
-        if newBio is not None:
-            perfil.bio = newBio
+        if new_bio is not None:
+            perfil.bio = new_bio
+
+        if new_username is not None:
+            perfil.username = new_username
+
+        if new_first_name is not None:
+            perfil.first_name = new_first_name
 
         perfil.save()
 
