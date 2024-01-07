@@ -121,11 +121,11 @@ class Event(models.Model):
             horaris=event_data.get('horaris'),
             enllac=event_data.get('enllac'),
             adreca=event_data.get('adreca'),
-            imatge=event_data.get('imatge'),
             latitud=latitud,
             longitud=longitud,
             espai=espai,
-            isAdminCreated=True
+            isAdminCreated=True,
+            image=event_data.get('image'),
         )
 
         tags_data = event_data.get('tags')
