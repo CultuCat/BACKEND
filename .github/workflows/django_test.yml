@@ -23,7 +23,6 @@ jobs:
 
       - name: Retrieve GS_CREDENTIALS secret
         run: |
-          echo "Current working directory: ${{ github.workspace }}"
           echo "${{ secrets.GS_CREDENTIALS }}" > cultucat-serviceAcc.json
 
       - name: Print contents of cultucat-serviceAcc.json
