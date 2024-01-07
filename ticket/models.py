@@ -40,7 +40,7 @@ def make_pdf(user, event, image):
     my_canvas.drawString(120, 659, event.adreca)
     
     
-    my_canvas.drawImage(image.url, 100, 210, width=400, height=400)
+    my_canvas.drawImage(image.url, 110, 210, width=400, height=400)
     
     my_canvas.save()
     
