@@ -2,7 +2,7 @@ name: Django Tests
 
 on:
   push:
-    branches: [ "master", "#239-imatges-secrets-al-github" ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -23,9 +23,6 @@ jobs:
 
       - name: Retrieve GS_CREDENTIALS secret
         run: echo '${{ secrets.GS_CREDENTIALS }}' > cultucat-serviceAcc.json
-
-      - name: Print contents of cultucat-serviceAcc.json
-        run: cat cultucat-serviceAcc.json
 
       - name: Install dependencies
         run: |
