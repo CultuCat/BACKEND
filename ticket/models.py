@@ -27,7 +27,7 @@ def make_pdf(user, event, image):
     my_canvas.drawString(500, 750, event.dataIni.strftime("%Y-%m-%d"))
     my_canvas.line(490, 747, 580, 747)
     my_canvas.drawString(370, 725,'ORIGINAL PRICE:') #(275, 725,'ORIGINAL PRICE:')
-    my_canvas.drawString(500, 725, event.preu)
+    my_canvas.drawString(500, 725, str(event.preu))
     my_canvas.line(490,723, 580, 723)
     my_canvas.drawString(30, 703,'OWNER:')
     my_canvas.line(120, 700, 580, 700)
