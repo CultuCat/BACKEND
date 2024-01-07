@@ -10,7 +10,7 @@ class TicketSerializer(serializers.ModelSerializer):
         
     def get_imatges_list(self, obj):
         return obj.event.get_imatge() if obj.event else None
-    
+
 class TicketSerializerByEvent(serializers.ModelSerializer):
     idUser = serializers.SerializerMethodField()
     nickname = serializers.SerializerMethodField()

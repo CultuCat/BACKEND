@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from .models import Event
 from user.models import TagPreferit, SpacePreferit
-from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer
+from .serializers import EventSerializer, EventListSerializer, EventCreateSerializer, EventAltreGrupSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from user.permissions import IsAdmin
@@ -47,7 +47,7 @@ class EventView(viewsets.ModelViewSet):
             distancia = self.request.query_params.get('distancia')
 
             if latitud and longitud and distancia:
-                return EventSerializer
+                return EventAltreGrupSerializer
             else:
                 return EventListSerializer
         elif self.action == 'create':    

@@ -31,7 +31,12 @@ class EventSerializer(serializers.ModelSerializer):
             user_serialized = PerfilShortSerializer(t.user)
             assistents.append(user_serialized.data)
         return assistents
-        
+    
+class EventAltreGrupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ['nom', 'dataIni', 'adreca']
+
 
 class EventListSerializer(serializers.ModelSerializer):
     imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
