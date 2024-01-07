@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: 3.10.6
 
+      - name: Retrieve GS_CREDENTIALS secret
+        run: echo '${{ secrets.GS_CREDENTIALS }}' > cultucat-serviceAcc.json
+
       - name: Install dependencies
         run: |
           echo "Installing dependencies..."
@@ -32,4 +35,3 @@ jobs:
           echo "Running Django tests with coverage..."
           coverage run manage.py test
           coverage report -m --fail-under=80
-  
