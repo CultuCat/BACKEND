@@ -9,7 +9,6 @@ from tags.models import Tag
 from .models import Ticket
 from .views import TicketsView
 from rest_framework.authtoken.models import Token
-from datetime import datetime
 
 ruta = '/tickets/'
 
@@ -17,18 +16,18 @@ class TestTicketsPost(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         
-        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, first_name="manolo")
+        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
-        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, first_name="manolo")
+        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True)
         self.token2 = Token.objects.create(user=self.user2)
         self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
         self.tag1 = Tag.objects.create(id=1, nom="tag1")
         self.tag2 = Tag.objects.create(id=2, nom="tag2")
 
-        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni=datetime(2024, 12, 25, 10, 30), espai=self.space, imatge="a", adreca="Bcn", preu=5)
+        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni="2023-11-01 01:00:00+01", espai=self.space, imatge="a")
         self.esdeveniment1.tags.set([self.tag1, self.tag2])
-        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni=datetime(2024, 12, 25, 10, 30), espai=self.space, imatge="a", adreca="Md", preu=5) #esdeveniment2 es posterior a esdeveniment1
+        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni="2024-11-01 01:00:00+01", espai=self.space, imatge="a") #esdeveniment2 es posterior a esdeveniment1
         #creamos ticket para user 1 en evento 2
         self.ticket1 = Ticket.objects.create(
             user = self.user,
