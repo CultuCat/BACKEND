@@ -138,5 +138,5 @@ class Perfil(User):
             target_path = '/images/' + filename
             path = storage.save(target_path, file)
             return storage.url(path)
-        except Exception as e:
+        except Exception:
             print("Failed to upload!")

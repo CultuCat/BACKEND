@@ -136,11 +136,11 @@ class EventView(viewsets.ModelViewSet):
             id = 99999999999
         event_data['id'] = id
 
-        newImage = request.FILES.get('image', None)
+        new_image = request.FILES.get('image', None)
 
-        if newImage:
-            event_data['image'] = newImage
-            Event.upload_image(newImage, newImage.name)
+        if new_image:
+            event_data['image'] = new_image
+            Event.upload_image(new_image, new_image.name)
         else:
             event_data['image'] = "images/eventDefault.jpg"
 

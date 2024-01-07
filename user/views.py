@@ -211,8 +211,8 @@ def signup_perfil(request):
 
 @api_view(['POST'])
 def login_perfil(request):
-    isGoogleUser = request.data.get('isGoogleUser')
-    if isGoogleUser:
+    is_google_user = request.data.get('isGoogleUser')
+    if is_google_user:
         user = get_object_or_404(Perfil, usernameGoogle=request.data['username'])
     else:
         user = get_object_or_404(Perfil, username=request.data['username'])
