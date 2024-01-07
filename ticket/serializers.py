@@ -11,7 +11,7 @@ class TicketSerializer(serializers.ModelSerializer):
     def get_imatges_list(self, obj):
         return obj.event.get_imatge() if obj.event else None
     
-class TicketSerializer_byEvent(serializers.ModelSerializer):
+class TicketSerializerByEvent(serializers.ModelSerializer):
     idUser = serializers.SerializerMethodField()
     nickname = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
@@ -39,7 +39,7 @@ def split_colon(obj):
         else:
             return None
         
-class TicketSerializer_byUser(serializers.ModelSerializer):
+class TicketSerializerByUser(serializers.ModelSerializer):
     nomEvent = serializers.SerializerMethodField()
     dataIni = serializers.SerializerMethodField()
     dataFi = serializers.SerializerMethodField()
