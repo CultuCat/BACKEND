@@ -76,6 +76,14 @@ class Event(models.Model):
                 'nom': self.espai.nom
             }
         return None
+    
+    @property
+    def espai_info_altre_grup(self):
+        if self.espai:
+            return {
+                'nom': self.espai.nom
+            }
+        return None
 
     @property
     def tags_info(self):
@@ -83,6 +91,15 @@ class Event(models.Model):
         if tags:
             return [
                 {'id': tag.id, 'nom': tag.nom} for tag in tags
+            ]
+        return None
+    
+    @property
+    def tags_info_altre_grup(self):
+        tags = self.tags.all()
+        if tags:
+            return [
+                {'nom': tag.nom} for tag in tags
             ]
         return None
 
