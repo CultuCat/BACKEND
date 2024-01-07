@@ -33,20 +33,10 @@ class EventSerializer(serializers.ModelSerializer):
         return assistents
     
 class EventAltreGrupSerializer(serializers.ModelSerializer):
-    espai = serializers.SerializerMethodField()
-    tags = serializers.SerializerMethodField()
-    enllacos_list = serializers.ListField(read_only=True, required=False, source='get_enllac')
-    imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
-    
     class Meta:
         model = Event
-        exclude = ['id', 'enllac', 'imatge', 'image', 'isAdminCreated']
+        fields = ['nom', 'dataIni', 'adreca']
 
-    def get_espai(self, obj):
-        return obj.espai_info_altre_grup
-
-    def get_tags(self, obj):
-        return obj.tags_info_altre_grup
 
 class EventListSerializer(serializers.ModelSerializer):
     imatges_list = serializers.ListField(read_only=True, required=False, source='get_imatge')
