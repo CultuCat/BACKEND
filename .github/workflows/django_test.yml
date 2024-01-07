@@ -22,8 +22,7 @@ jobs:
           python-version: 3.10.6
 
       - name: Retrieve GS_CREDENTIALS secret
-        run: |
-          echo "${{ secrets.GS_CREDENTIALS }}" > cultucat-serviceAcc.json
+        run: echo '${{ secrets.GS_CREDENTIALS }}' > cultucat-serviceAcc.json
 
       - name: Print contents of cultucat-serviceAcc.json
         run: cat cultucat-serviceAcc.json
