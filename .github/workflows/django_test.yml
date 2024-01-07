@@ -26,6 +26,9 @@ jobs:
           echo "Current working directory: ${{ github.workspace }}"
           echo "${{ secrets.GS_CREDENTIALS }}" > cultucat-serviceAcc.json
 
+      - name: Print contents of cultucat-serviceAcc.json
+        run: cat cultucat-serviceAcc.json
+
       - name: Install dependencies
         run: |
           echo "Installing dependencies..."
