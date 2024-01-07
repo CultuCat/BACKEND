@@ -28,11 +28,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Set up Google Cloud credentials
-        run: echo "$GOOGLE_APPLICATION_CREDENTIALS" > gcp_key.json
+        run: echo "$GOOGLE_APPLICATION_CREDENTIALS" > cultucat-serviceAcc.json
 
       - name: Run Django Tests with Coverage
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcp_key.json
+          GOOGLE_APPLICATION_CREDENTIALS: cultucat-serviceAcc.json
         run: |
           echo "Running Django tests with coverage..."
           coverage run manage.py test
