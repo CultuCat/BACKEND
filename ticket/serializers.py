@@ -6,10 +6,11 @@ class TicketSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Ticket
-        fields = ['user', 'event', 'imatges_list', 'image']
+        fields = ['user', 'event', 'imatges_list', 'image', 'pdf_url']
         
     def get_imatges_list(self, obj):
         return obj.event.get_imatge() if obj.event else None
+    
 class TicketSerializer_byEvent(serializers.ModelSerializer):
     idUser = serializers.SerializerMethodField()
     nickname = serializers.SerializerMethodField()
