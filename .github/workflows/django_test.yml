@@ -2,7 +2,7 @@ name: Django Tests
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "#239-imatges-secrets-al-github" ]
   pull_request:
     branches: [ "master" ]
 
@@ -27,9 +27,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Set up Google Cloud credentials
+        run: echo "$GOOGLE_APPLICATION_CREDENTIALS" > gcp_key.json
+
       - name: Run Django Tests with Coverage
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcp_key.json
         run: |
           echo "Running Django tests with coverage..."
           coverage run manage.py test
           coverage report -m --fail-under=80
-  
