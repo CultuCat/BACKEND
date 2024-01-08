@@ -19,7 +19,7 @@ class Event(models.Model):
     dataFi = models.DateTimeField(null=True, blank=True)
     nom = models.CharField(null=False, blank=False)
     descripcio = models.TextField(blank=True)
-    preu = models.CharField(null=True, blank=True)
+    preu = models.CharField(blank=True)
     horaris = models.TextField(blank=True)
     enllac = models.CharField(blank=True)
     adreca = models.CharField(blank=True)

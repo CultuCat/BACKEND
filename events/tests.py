@@ -9,6 +9,11 @@ from .views import EventView
 from rest_framework.authtoken.models import Token
 
 class EventViewTestCase(TestCase):
+    DESCRIPCIO = 'Descripción del evento de prueba'
+    HORARI = '10:00 AM - 2:00 PM'
+    ENLLAC = 'https://ejemplo.com'
+    ADRECA = 'Dirección del evento'
+
     def setUp(self):
         self.client = APIClient()
 
@@ -25,11 +30,11 @@ class EventViewTestCase(TestCase):
             dataIni='2023-10-22T10:00:00Z',
             dataFi='2023-10-22T14:00:00Z',
             nom='Evento 1',
-            descripcio='Descripción del evento de prueba',
+            descripcio=self.DESCRIPCIO,
             preu='Gratis',
-            horaris='10:00 AM - 2:00 PM',
-            enllac='https://ejemplo.com',
-            adreca='Dirección del evento',
+            horaris=self.HORARI,
+            enllac=self.ENLLAC,
+            adreca=self.ADRECA,
             latitud=40.7128,
             longitud=-74.0060,
             espai=Space.objects.create(nom='Espacio de Prueba', latitud=40.7128, longitud=-74.0060)
@@ -65,11 +70,11 @@ class EventViewTestCase(TestCase):
             'dataIni': '2023-10-25T10:00:00Z',
             'dataFi': '2023-10-25T14:00:00Z',
             'nom': 'Evento de Prueba',
-            'descripcio': 'Descripción del evento de prueba',
+            'descripcio': self.DESCRIPCIO,
             'preu': 'Gratis',
-            'horaris': '10:00 AM - 2:00 PM',
-            'enllac': 'https://ejemplo.com',
-            'adreca': 'Dirección del evento',
+            'horaris': self.HORARI,
+            'enllac': self.ENLLAC,
+            'adreca': self.ADRECA,
             'latitud': 41.7128,
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba 2',
@@ -88,11 +93,11 @@ class EventViewTestCase(TestCase):
             'dataIni': '2023-10-26T10:00:00Z',
             'dataFi': '2023-10-26T14:00:00Z',
             'nom': 'Evento de Prueba',
-            'descripcio': 'Descripción del evento de prueba',
+            'descripcio': self.DESCRIPCIO,
             'preu': 'Gratis',
-            'horaris': '10:00 AM - 2:00 PM',
-            'enllac': 'https://ejemplo.com',
-            'adreca': 'Dirección del evento',
+            'horaris': self.HORARI,
+            'enllac': self.ENLLAC,
+            'adreca': self.ADRECA,
             'latitud': 41.7128,
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba',
