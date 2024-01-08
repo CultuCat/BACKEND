@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Ticket
-from .serializers import TicketSerializer, TicketSerializer_byEvent, TicketSerializer_byUser
+from .serializers import TicketSerializer, TicketSerializerByEvent, TicketSerializerByUser
 from discount.models import Discount
 from user.permissions import IsAuthenticated 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -32,9 +32,9 @@ class TicketsView(viewsets.ModelViewSet):
 
         # Determinar el serializer basado en la solicitud
         if user_param is not None and event_param is None:
-            return TicketSerializer_byUser
+            return TicketSerializerByUser
         elif event_param is not None and user_param is None:
-            return TicketSerializer_byEvent
+            return TicketSerializerByEvent
         else:
             return TicketSerializer
 
