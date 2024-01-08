@@ -33,10 +33,6 @@ ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
                  'localhost:3000',
                  'deploy-preview-59--cultucat.netlify.app']
 
-
-
-
-
 # Application definition
 
 INSTALLED_APPS = [
