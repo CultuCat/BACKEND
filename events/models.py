@@ -18,17 +18,17 @@ class Event(models.Model):
     dataIni = models.DateTimeField(null=True, blank=True)
     dataFi = models.DateTimeField(null=True, blank=True)
     nom = models.CharField(null=False, blank=False)
-    descripcio = models.TextField(null=True, blank=True)
+    descripcio = models.TextField(blank=True)
     preu = models.CharField(null=True, blank=True)
-    horaris = models.TextField(null=True, blank=True)
-    enllac = models.CharField(null=True, blank=True)
-    adreca = models.CharField(null=True, blank=True)
-    imatge = models.CharField(null=True, blank=True)
+    horaris = models.TextField(blank=True)
+    enllac = models.CharField(blank=True)
+    adreca = models.CharField(blank=True)
+    imatge = models.CharField(blank=True)
     image = models.ImageField(upload_to='images/',default='images/eventDefault.jpg')
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     espai = models.ForeignKey(Space, on_delete=models.CASCADE, null=True, blank=True)
-    municipi = models.CharField(null=True, blank=True)
+    municipi = models.CharField(blank=True)
     tags = models.ManyToManyField(Tag)
     isAdminCreated = models.BooleanField(null=False, default=False, blank=True)
 
@@ -142,5 +142,5 @@ class Event(models.Model):
             target_path = '/images/' + filename
             path = storage.save(target_path, file)
             return storage.url(path)
-        except Exception as e:
+        except Exception:
             print("Failed to upload!")

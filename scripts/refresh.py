@@ -17,7 +17,7 @@ from spaces.models import Space
 from tags.models import Tag
 
 def run():
-    getEventsDadesObertes()
+    get_events_dades_obertes()
 
 def get_municipi(r, event):
     comarca_i_municipi = r.get('comarca_i_municipi', None)
@@ -25,12 +25,12 @@ def get_municipi(r, event):
         event.municipi = comarca_i_municipi.split('/')[-1]
 
 def get_dates(r, event):
-    dataIni = r.get('data_inici', None)
-    if dataIni:
-        event.dataIni = timezone.make_aware(parse_datetime(dataIni), timezone.get_current_timezone())
-    dataFi = r.get('data_fi', None)
-    if dataFi:
-        event.dataFi = timezone.make_aware(parse_datetime(dataFi), timezone.get_current_timezone())
+    data_ini = r.get('data_inici', None)
+    if data_ini:
+        event.dataIni = timezone.make_aware(parse_datetime(data_ini), timezone.get_current_timezone())
+    data_fi = r.get('data_fi', None)
+    if data_fi:
+        event.dataFi = timezone.make_aware(parse_datetime(data_fi), timezone.get_current_timezone())
 
 def get_espai(r, event):
     e = r.get('espai', None)
@@ -63,7 +63,7 @@ def get_tags(r, event):
         event.save()
         event.tags.set(tags)
     
-def getEventsDadesObertes(where=None):
+def get_events_dades_obertes(where=None):
     if not where:
         yesterday = datetime.today() - timedelta(days=1)
         y_code = yesterday.strftime('%Y%m%d') + '000'

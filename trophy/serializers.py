@@ -17,11 +17,11 @@ class TrophySerializer(serializers.ModelSerializer):
     def get_level_achived_user(self, obj):
         user_id = self.context['request'].user.id
         ds = Discount.objects.filter(userDiscount=user_id, nomTrofeu=obj.nom)
-        max = -1
+        max_level = -1
         for d in ds:
-            if d.nivellTrofeu > max:
-                max = d.nivellTrofeu
-        return max
+            if d.nivellTrofeu > max_level:
+                max_level = d.nivellTrofeu
+        return max_level
     
     def get_progress(self, obj):
         user_id = self.context['request'].user.id

@@ -129,18 +129,18 @@ class EventView(viewsets.ModelViewSet):
         event_data = request.data.copy()
 
         # Per asegurar-se que l'id no es repeteix, agafarem el mes antic i li restarem 1
-        last_event = Event.objects.all().order_by('id').first()
-        if last_event:
-            id = last_event.id - 1
+        first_event = Event.objects.all().order_by('id').first()
+        if first_event:
+            id_event = first_event.id - 1
         else:
-            id = 99999999999
-        event_data['id'] = id
+            id_event = 99999999999
+        event_data['id'] = id_event
 
-        newImage = request.FILES.get('image', None)
+        new_image = request.FILES.get('image', None)
 
-        if newImage:
-            event_data['image'] = newImage
-            Event.upload_image(newImage, newImage.name)
+        if new_image:
+            event_data['image'] = new_image
+            Event.upload_image(new_image, new_image.name)
         else:
             event_data['image'] = "images/eventDefault.jpg"
 
