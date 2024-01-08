@@ -47,7 +47,7 @@ class TicketSerializerByUser(serializers.ModelSerializer):
     
     class Meta:
         model = Ticket
-        fields = ['id', 'nomEvent', 'dataIni', 'dataFi', 'espai', 'imatges_list', 'image']
+        fields = ['id', 'nomEvent', 'dataIni', 'dataFi', 'espai', 'imatges_list', 'image', 'pdf_url']
         
     def get_nomEvent(self, obj):
         return obj.event.nom if obj.event else None
