@@ -23,7 +23,7 @@ def make_pdf(user, event, image):
     my_canvas.drawString(30, 750,'TICKET')
     my_canvas.drawString(30, 735,'CULTUCAT')
     my_canvas.setFont('Helvetica', 12)
-    my_canvas.drawImage('images/CultuCat.png', 120, 735, width=30, height=30)
+    #my_canvas.drawImage('images/CultuCat.png', 120, 735, width=30, height=30)
     my_canvas.drawString(437, 750,'DATE:')
     my_canvas.drawString(500, 750, event.dataIni.strftime('%d-%m-%Y'))
     my_canvas.line(490, 747, 580, 747)
