@@ -9,6 +9,7 @@ from tags.models import Tag
 from .models import Ticket
 from .views import TicketsView
 from rest_framework.authtoken.models import Token
+from datetime import datetime
 
 ruta = '/tickets/'
 
@@ -16,10 +17,10 @@ class TestTicketsPost(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         
-        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True)
+        self.user = Perfil.objects.create(id=1,username='test_user', is_active=True, first_name="manolo")
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
-        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True)
+        self.user2 = Perfil.objects.create(id=2,username='test_user2', is_active=True, first_name="manolo")
         self.token2 = Token.objects.create(user=self.user2)
         self.space = Space.objects.create(id=1, nom="Bcn", latitud=3.3, longitud=3.3)
         self.tag1 = Tag.objects.create(id=1, nom="tag1")
