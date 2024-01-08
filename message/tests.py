@@ -9,6 +9,8 @@ from rest_framework.authtoken.models import Token
 
 #class Test for model Message
 class TestMessages(TestCase):
+    ENDPOINT = '/messages/'
+
     def setUp(self) -> None:
         self.client = APIClient()
         
@@ -48,7 +50,7 @@ class TestMessages(TestCase):
             'text': "qtal1"
         }
         headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
-        response = self.client.post('/messages/', data, format='json', **headers)
+        response = self.client.post(self.ENDPOINT, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Message.objects.count(), 3)
         
@@ -58,7 +60,7 @@ class TestMessages(TestCase):
             'text': "tasbien1?"
         }
         headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
-        response = self.client.post('/messages/', data, format='json', **headers)
+        response = self.client.post(self.ENDPOINT, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Message.objects.count(), 4)
         
@@ -76,7 +78,7 @@ class TestMessages(TestCase):
             'text': "qtal1"
         }
         headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
-        response = self.client.post('/messages/', data, format='json', **headers)
+        response = self.client.post(self.ENDPOINT, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         data = {
             'user_to': 3, 
@@ -84,7 +86,7 @@ class TestMessages(TestCase):
             'text': "qtal1"
         }
         headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
-        response = self.client.post('/messages/', data, format='json', **headers)
+        response = self.client.post(self.ENDPOINT, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
         #ahora se obtienen 3 mensajes
