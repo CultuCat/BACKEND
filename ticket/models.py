@@ -48,10 +48,10 @@ def make_pdf(user, event, image):
     buffer.close()
     name = user.username+"_"+str(event.id)+".pdf"
 
-    Reviewer(pdf_bytes, name)
+    reviewer(pdf_bytes, name)
     return "docs/"+name
 
-def Reviewer(file, filename):
+def reviewer(file, filename):
     try:
         target_path = '/docs/' + filename
         file_object = BytesIO(file)
