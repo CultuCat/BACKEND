@@ -26,9 +26,9 @@ class TestTicketsPost(TestCase):
         self.tag1 = Tag.objects.create(id=1, nom="tag1")
         self.tag2 = Tag.objects.create(id=2, nom="tag2")
 
-        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni="2023-11-01 01:00:00+01", espai=self.space, imatge="a")
+        self.esdeveniment1 = Event.objects.create(id=1, nom="test_event1", dataIni=datetime(2024, 12, 25, 10, 30), espai=self.space, imatge="a", adreca="Bcn", preu=5)
         self.esdeveniment1.tags.set([self.tag1, self.tag2])
-        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni="2024-11-01 01:00:00+01", espai=self.space, imatge="a") #esdeveniment2 es posterior a esdeveniment1
+        self.esdeveniment2 = Event.objects.create(id=2, nom="test_event2", dataIni=datetime(2024, 12, 25, 10, 30), espai=self.space, imatge="a", adreca="Md", preu=5) #esdeveniment2 es posterior a esdeveniment1
         #creamos ticket para user 1 en evento 2
         self.ticket1 = Ticket.objects.create(
             user = self.user,

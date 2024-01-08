@@ -3,6 +3,7 @@ from django.db import models
 from events.models import Event
 from user.models import Perfil
 import random
+from datetime import datetime
 from django.template import Context, Template
 from storages.backends.gcloud import GoogleCloudStorage
 from django.core.files.storage import default_storage
@@ -24,7 +25,7 @@ def make_pdf(user, event, image):
     my_canvas.setFont('Helvetica', 12)
     my_canvas.drawImage('images/CultuCat.png', 120, 735, width=30, height=30)
     my_canvas.drawString(437, 750,'DATE:')
-    my_canvas.drawString(500, 750, event.dataIni.strftime("%Y-%m-%d"))
+    my_canvas.drawString(500, 750, event.dataIni.strftime('%d-%m-%Y'))
     my_canvas.line(490, 747, 580, 747)
     my_canvas.drawString(370, 725,'ORIGINAL PRICE:') #(275, 725,'ORIGINAL PRICE:')
     my_canvas.drawString(500, 725, str(event.preu))
@@ -35,7 +36,7 @@ def make_pdf(user, event, image):
     my_canvas.drawString(30, 681,'EVENT:')
     my_canvas.line(120, 678, 580, 678)
     my_canvas.drawString(120, 681, event.nom)
-    my_canvas.drawString(30, 659,'ADRESS:')
+    my_canvas.drawString(30, 659,'ADDRESS:')
     my_canvas.line(120, 656, 580, 656)
     my_canvas.drawString(120, 659, event.adreca)
 
