@@ -18,30 +18,30 @@ def insertar_trofeos():
         {
             'nom':"Xerraire",
             'descripcio':"Nombre de missatges que has enviat",
-            'punts_nivell1':'1',
-            'punts_nivell2':'2',
-            'punts_nivell3':'3'
+            'punts_nivell1':'25',
+            'punts_nivell2':'50',
+            'punts_nivell3':'100'
         },
         {
             'nom':"Reviewer",
             'descripcio':"Nombre de comentaris que has escrit",
-            'punts_nivell1':'1',
-            'punts_nivell2':'2',
-            'punts_nivell3':'3'
+            'punts_nivell1':'25',
+            'punts_nivell2':'50',
+            'punts_nivell3':'100'
         },
         {
             'nom':"Explorador cultural",
             'descripcio':"Nombre d'entrades comprades",
-            'punts_nivell1':'1',
-            'punts_nivell2':'2',
-            'punts_nivell3':'3'
+            'punts_nivell1':'25',
+            'punts_nivell2':'50',
+            'punts_nivell3':'100'
         },
         {
             'nom':"Popular",
             'descripcio':"Nombre d'amics afegits",
-            'punts_nivell1':'1',
-            'punts_nivell2':'2',
-            'punts_nivell3':'3'
+            'punts_nivell1':'25',
+            'punts_nivell2':'50',
+            'punts_nivell3':'100'
         },
         {
             'nom':"Col·leccionista d'or",

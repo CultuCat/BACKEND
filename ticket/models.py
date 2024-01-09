@@ -23,7 +23,7 @@ def make_pdf(user, event, image):
     my_canvas.drawString(30, 750,'TICKET')
     my_canvas.drawString(30, 735,'CULTUCAT')
     my_canvas.setFont('Helvetica', 12)
-    my_canvas.drawImage("https://storage.googleapis.com/cultucat_bucket/images/CultuCat.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=cultucatserviceaccount%40cultucat-405114.iam.gserviceaccount.com%2F20240108%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20240108T170810Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&X-Goog-Signature=5b9c2580d700f7b898e7b609e145e72bdc7897ef5d069599b1d236562e7f465d269c30f73605fd3e340ecf56e361d7ac9d331ca1fae03127e64825860350853835569b3248e9dec6943e11e58995a96daed9e91c5c8715ee7ed33b606ab3fe9c3507883e82fb7ccb7783a010b7bd6a726c2a6bb7c16c07818fbf67d25c04cbd2d159acea9c18e0adeb512ea401d1006c3d12c3230a885477d7eda74dec88132046e7796bdaa2dbf0930bf8aac253968518319ba99b0ebc048e01cee299ed106b57d190ddf5d9cb33fe1930c47e65d69d9cab04d5f3762fc9a9778b2531b6e04c56a1b31ee16ec304f41c917f7cbcd81da688189b56863408a2e36f98d6d56d5b", 120, 735, width=30, height=30)
+    my_canvas.drawImage("https://pbs.twimg.com/media/GDboTfUXUAA2Ps6?format=jpg&name=medium", 120, 735, width=30, height=30)
     my_canvas.drawString(437, 750,'DATE:')
     my_canvas.drawString(500, 750, event.dataIni.strftime('%d-%m-%Y'))
     my_canvas.line(490, 747, 580, 747)
