@@ -32,16 +32,16 @@ def insertar_trofeos():
         {
             'nom':"Explorador cultural",
             'descripcio':"Nombre d'entrades comprades",
-            'punts_nivell1':'25',
-            'punts_nivell2':'50',
-            'punts_nivell3':'100'
+            'punts_nivell1':'10',
+            'punts_nivell2':'20',
+            'punts_nivell3':'40'
         },
         {
             'nom':"Popular",
             'descripcio':"Nombre d'amics afegits",
-            'punts_nivell1':'25',
-            'punts_nivell2':'50',
-            'punts_nivell3':'100'
+            'punts_nivell1':'5',
+            'punts_nivell2':'10',
+            'punts_nivell3':'20'
         },
         {
             'nom':"Col·leccionista d'or",
