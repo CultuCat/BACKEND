@@ -164,8 +164,8 @@ class EventView(viewsets.ModelViewSet):
             serializer = self.get_serializer(events, many=True)
             return Response(serializer.data)
 
-        favorite_tags = TagPreferit.objects.filter(user=user).values_list('tag_id', flat=True)
-        favorite_espais = SpacePreferit.objects.filter(user=user).values_list('space_id', flat=True)
+        favorite_tags = TagPreferit.objects.filter(user=user, show=True).values_list('tag_id', flat=True)
+        favorite_espais = SpacePreferit.objects.filter(user=user, show=True).values_list('space_id', flat=True)
 
         if not favorite_tags and not favorite_espais:
             queryset = queryset.order_by('-dataIni')
