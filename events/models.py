@@ -128,7 +128,7 @@ class Event(models.Model):
             image=event_data.get('image'),
         )
 
-        tags_data = event_data.get('tags')
+        tags_data = event_data.get('tags').split(',')
         if tags_data:
             for tag_name in tags_data:
                 tag = Tag.get_or_createTag(nom=tag_name)
