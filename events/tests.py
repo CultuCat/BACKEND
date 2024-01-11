@@ -78,7 +78,7 @@ class EventViewTestCase(TestCase):
             'latitud': 41.7128,
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba 2',
-            'tags': ['tag4', 'tag5']
+            'tags': 'tag4,tag5'
         }
         headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
         response = self.client.post('/events/', data, format='json', **headers)
@@ -101,7 +101,7 @@ class EventViewTestCase(TestCase):
             'latitud': 41.7128,
             'longitud': -74.1060,
             'espai': 'Espacio de Prueba',
-            'tags': ['tag4', 'tag5']
+            'tags': 'tag4,tag5'
         }
         headers = {'HTTP_AUTHORIZATION': f'Token {self.token.key}'}
         response = self.client.post('/events/', data, format='json', **headers)
