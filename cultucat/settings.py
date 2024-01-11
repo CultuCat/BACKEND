@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-qsx$x#5d3h+z&aq$%bt4+agt2rzpnr&zxj@$%$!b@bu7@-7ray'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['cultucat.hemanuelpc.es',
                  'cultucat.netlify.app',
